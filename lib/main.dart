@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:tar_form/Basic_info.dart';
 import 'package:tar_form/login_page.dart';
+import 'package:tar_form/registration.dart';
 
 void main() => runApp(MyApp());
 
@@ -9,11 +11,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      theme: ThemeData(
 
-        primarySwatch: Colors.blue,
-      ),
-      home: LoginPage(),
+      home: RegistrationPage(),
     );
   }
 }
