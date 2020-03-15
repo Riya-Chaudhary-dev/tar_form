@@ -113,6 +113,19 @@ class _RegistrationPageState extends State<RegistrationPage> {
                               child: TextField(
                                 decoration: InputDecoration(
                                     border: InputBorder.none,
+                                    hintText: "Employee ID",
+                                    hintStyle: TextStyle(color: Colors.grey[400])
+                                ),
+                              ),
+                            ),
+                            Container(
+                              padding: EdgeInsets.all(8.0),
+                              decoration: BoxDecoration(
+                                  border: Border(bottom: BorderSide(color: Colors.grey[100]))
+                              ),
+                              child: TextField(
+                                decoration: InputDecoration(
+                                    border: InputBorder.none,
                                     hintText: "Email",
                                     hintStyle: TextStyle(color: Colors.grey[400])
                                 ),
