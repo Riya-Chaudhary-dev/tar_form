@@ -7,6 +7,19 @@ class RegistrationPage extends StatefulWidget {
 }
 
 class _RegistrationPageState extends State<RegistrationPage> {
+  final _text = TextEditingController();
+  bool _autoValidate = false;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  String _name;
+  String _email;
+  String _empid;
+
+  @override
+  void dispose() {
+    _text.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,58 +103,74 @@ class _RegistrationPageState extends State<RegistrationPage> {
                               )
                             ]
                         ),
-                        child: Column(
-                          children: <Widget>[
-                            Container(
-                              padding: EdgeInsets.all(8.0),
-                              decoration: BoxDecoration(
-                                  border: Border(bottom: BorderSide(color: Colors.grey[100]))
-                              ),
-                              child: TextField(
-                                decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: "Name",
-                                    hintStyle: TextStyle(color: Colors.grey[400])
+                        child: Form(
+                          key: _formKey,
+                          autovalidate: _autoValidate,
+                          child: Column(
+                            children: <Widget>[
+                              Container(
+                                padding: EdgeInsets.all(8.0),
+                                decoration: BoxDecoration(
+                                    border: Border(bottom: BorderSide(color: Colors.grey[100]))
+                                ),
+                                child: TextFormField(
+                                  validator: (String arg) {
+                                    if(arg.length < 3)
+                                      return 'Name must be more than 2 charater';
+                                    else
+                                      return null;
+                                  },
+                                  onSaved: (String val) {
+                                    _name = val;
+                                  },
+                                  decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      hintText: "Name",
+                                      hintStyle: TextStyle(color: Colors.grey[400])
+                                  ),
                                 ),
                               ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.all(8.0),
-                              decoration: BoxDecoration(
-                                  border: Border(bottom: BorderSide(color: Colors.grey[100]))
-                              ),
-                              child: TextField(
-                                decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: "Employee ID",
-                                    hintStyle: TextStyle(color: Colors.grey[400])
+                              Container(
+                                padding: EdgeInsets.all(8.0),
+                                decoration: BoxDecoration(
+                                    border: Border(bottom: BorderSide(color: Colors.grey[100]))
+                                ),
+                                child: TextFormField(
+                                  decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      hintText: "Employee ID",
+                                      hintStyle: TextStyle(color: Colors.grey[400])
+                                  ),
                                 ),
                               ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.all(8.0),
-                              decoration: BoxDecoration(
-                                  border: Border(bottom: BorderSide(color: Colors.grey[100]))
-                              ),
-                              child: TextField(
-                                decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: "Email",
-                                    hintStyle: TextStyle(color: Colors.grey[400])
+                              Container(
+                                padding: EdgeInsets.all(8.0),
+                                decoration: BoxDecoration(
+                                    border: Border(bottom: BorderSide(color: Colors.grey[100]))
+                                ),
+                                child: TextFormField(
+                                  keyboardType: TextInputType.emailAddress,
+                                  decoration: InputDecoration(
+                                      border: InputBorder.none,
+                                      hintText: "Email",
+                                      hintStyle: TextStyle(color: Colors.grey[400])
+                                  ),
                                 ),
                               ),
-                            ),
-                            Container(
-                              padding: EdgeInsets.all(8.0),
-                              child: TextField(
-                                decoration: InputDecoration(
-                                    border: InputBorder.none,
-                                    hintText: "Password",
-                                    hintStyle: TextStyle(color: Colors.grey[400])
+                              Container(
+                                padding: EdgeInsets.all(8.0),
+                                child: TextFormField(
+                                  obscureText: true,
+                                  decoration: InputDecoration(
+                                      prefixIcon: Icon(Icons.lock_open, color: Colors.grey[400]),
+                                      border: InputBorder.none,
+                                      hintText: "Password",
+                                      hintStyle: TextStyle(color: Colors.grey[400])
+                                  ),
                                 ),
-                              ),
-                            )
-                          ],
+                              )
+                            ],
+                          ),
                         ),
                       )),
                       SizedBox(height: 20,),
@@ -156,8 +185,11 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                 ]
                             )
                         ),
-                        child: Center(
-                          child: Text("Register", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
+                        child: GestureDetector(
+
+                          child: Center(
+                            child: Text("Register", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),),
+                          ),
                         ),
                       )),
                       SizedBox(height: 30,),
