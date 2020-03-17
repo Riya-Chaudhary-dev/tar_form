@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'Animation/FadeAnimation.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 class TextFieldCustom extends StatefulWidget {
   TextFieldCustom({this.title,this.keyboardstyle,this.validator,this.text});
   final String title;
   TextInputType keyboardstyle;
-  Function validator;
+  List validator;
   final String text;
 
   @override
@@ -44,8 +45,8 @@ class _TextFieldCustomState extends State<TextFieldCustom> {
               child:
                 Container(
                   padding: EdgeInsets.all(5.0),
-                  child: TextFormField(
-                    validator: widget.validator,
+                  child: FormBuilderTextField(
+                    validators: widget.validator,
                     keyboardType: widget.keyboardstyle,
                     decoration: InputDecoration(
                         border: InputBorder.none,
