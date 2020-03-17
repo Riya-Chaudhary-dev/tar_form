@@ -10,7 +10,7 @@ class BasicInfo extends StatefulWidget {
 
 class _BasicInfoState extends State<BasicInfo> {
   DateTime _dateTime;
-  final _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
   Color ktextcolor = Color.fromRGBO(143, 148, 251, 1);
 
   @override
@@ -35,8 +35,8 @@ class _BasicInfoState extends State<BasicInfo> {
                 children: <Widget>[
                   FadeAnimation(
                     1.8,
-                    Form(
-                      key: _formKey,
+                    FormBuilder(
+                      key: _fbKey,
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
@@ -159,7 +159,7 @@ class _BasicInfoState extends State<BasicInfo> {
                               2,
                               GestureDetector(
                                 onTap: () {
-                                  if (_formKey.currentState.validate()) {
+                                  if (_fbKey.currentState.saveAndValidate()) {
                                     print('yooo');
                                     Scaffold.of(context).showSnackBar(SnackBar(
                                         content: Text('Processing Data')));
@@ -175,22 +175,29 @@ class _BasicInfoState extends State<BasicInfo> {
                                   }
                                 },
                                 child: Center(
-                                  child: Container(
-                                    height: 45,
-                                    width: 150,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(30),
-                                        gradient: LinearGradient(colors: [
-                                          Color.fromRGBO(143, 148, 251, 1),
-                                          Color.fromRGBO(143, 148, 251, .6),
-                                        ])),
-                                    child: Center(
-                                      child: Text(
-                                        "Next",
-                                        style: TextStyle(
-                                            fontSize: 18,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.w600),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      if (_fbKey.currentState.saveAndValidate()) {
+                                        print(_fbKey.currentState.value);
+                                      }
+                                    },
+                                    child: Container(
+                                      height: 45,
+                                      width: 150,
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.circular(30),
+                                          gradient: LinearGradient(colors: [
+                                            Color.fromRGBO(143, 148, 251, 1),
+                                            Color.fromRGBO(143, 148, 251, .6),
+                                          ])),
+                                      child: Center(
+                                        child: Text(
+                                          "Next",
+                                          style: TextStyle(
+                                              fontSize: 18,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w600),
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -209,10 +216,5 @@ class _BasicInfoState extends State<BasicInfo> {
     );
   }
 
-  bool isNumeric(String s) {
-    if (s == null) {
-      return false;
-    }
-    return double.tryParse(s) != null;
-  }
+
 }

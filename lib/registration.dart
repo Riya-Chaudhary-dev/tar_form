@@ -226,6 +226,11 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                     Color.fromRGBO(143, 148, 251, .6),
                                   ])),
                               child: GestureDetector(
+                                onTap: () {
+                                  if (_fbKey.currentState.saveAndValidate()) {
+                                    print(_fbKey.currentState.value);
+                                  }
+                                },
                                 child: Center(
                                   child: Text(
                                     "Register",
