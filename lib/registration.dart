@@ -119,6 +119,24 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                               bottom: BorderSide(
                                                   color: Colors.grey[100]))),
                                       child: FormBuilderTextField(
+                                        attribute: "empid",
+                                        validators: [
+                                          FormBuilderValidators.required(),
+                                        ],
+                                        decoration: InputDecoration(
+                                            border: InputBorder.none,
+                                            hintText: "Employee ID",
+                                            hintStyle: TextStyle(
+                                                color: Colors.grey[400])),
+                                      ),
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.all(8.0),
+                                      decoration: BoxDecoration(
+                                          border: Border(
+                                              bottom: BorderSide(
+                                                  color: Colors.grey[100]))),
+                                      child: FormBuilderTextField(
                                         attribute: "name",
                                         maxLines: 1,
                                         validators: [
@@ -172,6 +190,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                                 color: Colors.grey[400])),
                                       ),
                                     ),
+
                                     Container(
                                       padding: EdgeInsets.all(8.0),
                                       decoration: BoxDecoration(
@@ -179,13 +198,31 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                               bottom: BorderSide(
                                                   color: Colors.grey[100]))),
                                       child: FormBuilderTextField(
-                                        attribute: "empid",
+                                        attribute: "Location",
                                         validators: [
                                           FormBuilderValidators.required(),
                                         ],
                                         decoration: InputDecoration(
                                             border: InputBorder.none,
-                                            hintText: "Employee ID",
+                                            hintText: "Location",
+                                            hintStyle: TextStyle(
+                                                color: Colors.grey[400])),
+                                      ),
+                                    ),
+                                    Container(
+                                      padding: EdgeInsets.all(8.0),
+                                      decoration: BoxDecoration(
+                                          border: Border(
+                                              bottom: BorderSide(
+                                                  color: Colors.grey[100]))),
+                                      child: FormBuilderTextField(
+                                        attribute: "supervisor",
+                                        validators: [
+                                          FormBuilderValidators.required(),
+                                        ],
+                                        decoration: InputDecoration(
+                                            border: InputBorder.none,
+                                            hintText: "Supervisor\'s Email ID:",
                                             hintStyle: TextStyle(
                                                 color: Colors.grey[400])),
                                       ),

@@ -6,7 +6,7 @@ class TextFieldCustom extends StatefulWidget {
   TextFieldCustom({this.title,this.keyboardstyle,this.validator,this.text});
   final String title;
   TextInputType keyboardstyle;
-  List validator;
+  List<String Function(dynamic)> validator;
   final String text;
 
   @override

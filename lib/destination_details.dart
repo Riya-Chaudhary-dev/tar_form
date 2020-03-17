@@ -10,7 +10,21 @@ class _DestinationPageState extends State<DestinationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
+      appBar: AppBar(
+        backgroundColor: Color.fromRGBO(143, 148, 251, 1),
+        title: Text(
+          'Tarvel Authorization Form',
+          style: TextStyle(color: Colors.white),
+        ),
+      ),
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).requestFocus(new FocusNode());
+        },
+        child: SingleChildScrollView(
+          child: Column(),
+        ),
+      ),
     );
   }
 }
