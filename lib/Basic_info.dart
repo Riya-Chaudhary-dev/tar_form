@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'Animation/FadeAnimation.dart';
 import 'textfieldcustom.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:date_range_picker/date_range_picker.dart' as DateRagePicker;
+import 'package:intl/intl.dart';
 
 class BasicInfo extends StatefulWidget {
   @override
@@ -12,7 +14,40 @@ class _BasicInfoState extends State<BasicInfo> {
   DateTime _dateTime;
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
   Color ktextcolor = Color.fromRGBO(143, 148, 251, 1);
+  DateTime fromDate = new DateTime.now();
+  DateTime toDate = new DateTime.now().add(Duration(days: 1));
+  String fromDay = 'Today';
+  String toDay = 'Tomorrow';
+  selectDate() async {
+    final List<DateTime> picked = await DateRagePicker.showDatePicker(
+        context: context,
+        initialFirstDate: fromDate,
+        initialLastDate: toDate,
+        firstDate: (new DateTime.now()).subtract(new Duration(days: 1)),
+        lastDate: new DateTime(2022)
+    );
+    if (picked != null && picked.length == 2) {
+      setState(() {
+        fromDate = picked[0];
+        toDate = picked[1];
+        fromDay = whichDay(picked[0]);
+        toDay = whichDay(picked[1]);
+      });
+    }
+  }
 
+  String whichDay(DateTime date) {
+    if (DateFormat.yMMMd().format(date).toString() ==
+        DateFormat.yMMMd().format(DateTime.now()).toString()) {
+      return 'Today';
+    } else if (DateFormat.yMMMd().format(date).toString() == DateFormat.yMMMd()
+        .format(DateTime.now().add(Duration(days: 1)))
+        .toString()) {
+      return 'Tomorrow';
+    } else {
+      return new DateFormat.E().format(date).toString();
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,6 +94,9 @@ class _BasicInfoState extends State<BasicInfo> {
                             title: 'Department',
                             keyboardstyle: TextInputType.text,
                             text: 'Department:',
+                            validator: [
+                              FormBuilderValidators.required(),
+                            ],
                           ),
                           TextFieldCustom(
                             title: 'Supervisor\'s Email',
@@ -94,29 +132,42 @@ class _BasicInfoState extends State<BasicInfo> {
                                         fontWeight: FontWeight.w600),
                                   ),
                                   RaisedButton(
+                                    onPressed: (){
+                                    },
                                     color: Color.fromRGBO(143, 148, 251, 1),
                                     shape: StadiumBorder(),
                                     child: Text(
-                                      'Pick a date',
+                                      DateFormat.d().format(fromDate).toString()+' ' +DateFormat.MMM().format(fromDate).toString()+', '+DateFormat.y().format(fromDate).toString(),
                                       style: TextStyle(color: Colors.white),
                                     ),
-                                    onPressed: () {
-                                      showDatePicker(
-                                              context: context,
-                                              initialDate: _dateTime == null
-                                                  ? DateTime.now()
-                                                  : _dateTime,
-                                              firstDate: DateTime.now(),
-                                              lastDate: DateTime(2021))
-                                          .then((date) {
-                                        setState(() {
-                                          _dateTime = date;
-                                        });
-                                      });
-                                    },
                                   ),
+                                  Text(fromDay,style: TextStyle(color: Colors.blueGrey[700],fontWeight: FontWeight.w600)),
                                 ],
                               ),
+                              GestureDetector(
+                                onTap: selectDate,
+                                child: Container(
+                                  height: 45,
+                                  width: 45,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10),
+                                      gradient: LinearGradient(colors: [
+                                        Color.fromRGBO(143, 148, 251, 1),
+                                        Color.fromRGBO(143, 148, 251, .6),
+                                      ]),
+                                    border: Border.all(
+                                      color: Color.fromRGBO(143, 148, 251, 8), //                   <--- border color
+                                      width: 3.0,
+                                    ),
+                                  ),
+                                  child: Center(
+                                    child: Text(toDate.difference(fromDate).inDays.toString()+' N',
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                  ),
+                                ),
+                              ),
+
                               Column(
                                 children: <Widget>[
                                   Text(
@@ -127,27 +178,17 @@ class _BasicInfoState extends State<BasicInfo> {
                                         fontWeight: FontWeight.w600),
                                   ),
                                   RaisedButton(
+                                    onPressed: (){
+                                    },
                                     color: Color.fromRGBO(143, 148, 251, 1),
                                     shape: StadiumBorder(),
                                     child: Text(
-                                      'Pick a date',
+                                      DateFormat.d().format(toDate).toString()+' ' +DateFormat.MMM().format(toDate).toString()+', '+DateFormat.y().format(toDate).toString(),
                                       style: TextStyle(color: Colors.white),
                                     ),
-                                    onPressed: () {
-                                      showDatePicker(
-                                              context: context,
-                                              initialDate: _dateTime == null
-                                                  ? DateTime.now()
-                                                  : _dateTime,
-                                              firstDate: DateTime.now(),
-                                              lastDate: DateTime(2021))
-                                          .then((date) {
-                                        setState(() {
-                                          _dateTime = date;
-                                        });
-                                      });
-                                    },
                                   ),
+                                  Text(toDay,style: TextStyle(color: Colors.blueGrey[700],fontWeight: FontWeight.w600),),
+
                                 ],
                               ),
                             ],
