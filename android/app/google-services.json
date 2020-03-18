@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "517498978067",
+    "firebase_url": "https://tar-form.firebaseio.com",
+    "project_id": "tar-form",
+    "storage_bucket": "tar-form.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:517498978067:android:267fa60e036972385de4e6",
+        "android_client_info": {
+          "package_name": "com.tar_form.tar_form"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "517498978067-v50jf0bhs67sct3fp6b424k8dk2qlss6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDpWXnL5eHiNgj_2DHpdWhESGdYYNhcOYM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "517498978067-v50jf0bhs67sct3fp6b424k8dk2qlss6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
