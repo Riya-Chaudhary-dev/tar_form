@@ -22,7 +22,11 @@ class _DestinationPageState extends State<DestinationPage> {
           FocusScope.of(context).requestFocus(new FocusNode());
         },
         child: SingleChildScrollView(
-          child: Column(),
+          child: Column(
+            children: <Widget>[
+              
+            ],
+          ),
         ),
       ),
     );

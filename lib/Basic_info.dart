@@ -71,11 +71,14 @@ class _BasicInfoState extends State<BasicInfo> {
             FocusScope.of(context).requestFocus(new FocusNode());
           },
           child: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                children: <Widget>[
-                  FadeAnimation(
+            child: Column(
+              children: <Widget>[
+                LinearProgressIndicator( value: 0.3,
+                  valueColor:
+                  new AlwaysStoppedAnimation<Color>(Colors.orangeAccent.shade200),),
+                Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: FadeAnimation(
                     1.8,
                     FormBuilder(
                       key: _fbKey,
@@ -270,8 +273,8 @@ class _BasicInfoState extends State<BasicInfo> {
                       ),
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
