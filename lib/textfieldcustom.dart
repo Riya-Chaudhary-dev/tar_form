@@ -3,12 +3,12 @@ import 'Animation/FadeAnimation.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 class TextFieldCustom extends StatefulWidget {
-  TextFieldCustom({this.title,this.keyboardstyle,this.validator,this.text});
+  TextFieldCustom({this.title,this.keyboardstyle,this.validator,this.text,this.onsaved});
   final String title;
   TextInputType keyboardstyle;
   List<String Function(dynamic)> validator;
   final String text;
-
+  Function onsaved;
   @override
   _TextFieldCustomState createState() => _TextFieldCustomState();
 }
@@ -31,8 +31,8 @@ class _TextFieldCustomState extends State<TextFieldCustom> {
         FadeAnimation(
             1.8,
             Container(
-              height: 55,
-              padding: EdgeInsets.all(3),
+              padding: EdgeInsets.only(left:5.0),
+              height: 65,
               decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10),
@@ -44,15 +44,16 @@ class _TextFieldCustomState extends State<TextFieldCustom> {
                   ]),
               child:
                 Container(
-                  padding: EdgeInsets.all(5.0),
+                  padding: EdgeInsets.only(left:5.0,bottom: 1),
                   child: FormBuilderTextField(
+                    onSaved: widget.onsaved,
                     validators: widget.validator,
                     keyboardType: widget.keyboardstyle,
                     decoration: InputDecoration(
                         border: InputBorder.none,
                         hintText: widget.title,
                         hintStyle:
-                        TextStyle(color: Colors.grey[600])),
+                        TextStyle(color: Colors.grey[600],fontSize: 18)),
                   ),
                 ),
             )

@@ -18,6 +18,13 @@ class _BasicInfoState extends State<BasicInfo> {
   DateTime toDate = new DateTime.now().add(Duration(days: 1));
   String fromDay = 'Today';
   String toDay = 'Tomorrow';
+  String name;
+  String email;
+  String supEmail;
+  String dept;
+  String div;
+  String project;
+
   selectDate() async {
     final List<DateTime> picked = await DateRagePicker.showDatePicker(
         context: context,
@@ -83,12 +90,19 @@ class _BasicInfoState extends State<BasicInfo> {
                               FormBuilderValidators.required(),
                               FormBuilderValidators.minLength(3),
                             ],
+                            onsaved: (value){
+                              name=value;
+                              print(name);
+                            },
                           ),
                           TextFieldCustom(
                             title: 'Email',
                             keyboardstyle: TextInputType.emailAddress,
                             text: 'Traveler\'s Email: ',
                             validator: [FormBuilderValidators.required()],
+                            onsaved: (value){
+                              email=value;
+                            },
                           ),
                           TextFieldCustom(
                             title: 'Department',
@@ -97,6 +111,10 @@ class _BasicInfoState extends State<BasicInfo> {
                             validator: [
                               FormBuilderValidators.required(),
                             ],
+                            onsaved: (value){
+                              dept=value;
+                              print(dept);
+                            },
                           ),
                           TextFieldCustom(
                             title: 'Supervisor\'s Email',
@@ -106,18 +124,33 @@ class _BasicInfoState extends State<BasicInfo> {
                               FormBuilderValidators.required(),
                               FormBuilderValidators.email(),
                             ],
+                            onsaved: (value){
+                              setState(() {
+                                supEmail=value;
+                                print(supEmail);
+                              });
+
+                            },
                           ),
                           TextFieldCustom(
                             title: 'Division',
                             keyboardstyle: TextInputType.text,
                             text: 'Division:',
                             validator: [FormBuilderValidators.required()],
+                            onsaved: (value){
+                              div=value;
+                              print(div);
+                            },
                           ),
                           TextFieldCustom(
                             title: 'Project',
                             keyboardstyle: TextInputType.text,
                             text: 'Project:',
                             validator: [FormBuilderValidators.required()],
+                            onsaved: (value){
+                              project=value;
+                              print(project);
+                            },
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -131,14 +164,21 @@ class _BasicInfoState extends State<BasicInfo> {
                                         color: ktextcolor,
                                         fontWeight: FontWeight.w600),
                                   ),
-                                  RaisedButton(
-                                    onPressed: (){
-                                    },
-                                    color: Color.fromRGBO(143, 148, 251, 1),
-                                    shape: StadiumBorder(),
-                                    child: Text(
-                                      DateFormat.d().format(fromDate).toString()+' ' +DateFormat.MMM().format(fromDate).toString()+', '+DateFormat.y().format(fromDate).toString(),
+                                  Container(
+                                    height: 35,
+                                    padding: EdgeInsets.symmetric(horizontal: 7),
+//                                    width: 150,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(30),
+                                        gradient: LinearGradient(colors: [
+                                          Color.fromRGBO(143, 148, 251, 1),
+                                          Color.fromRGBO(143, 148, 251, .6),
+                                        ])),
+                                    child: Center(
+                                      child: Text(
+                                        DateFormat.d().format(fromDate).toString()+' ' +DateFormat.MMM().format(fromDate).toString()+', '+DateFormat.y().format(fromDate).toString(),
                                       style: TextStyle(color: Colors.white),
+                                      ),
                                     ),
                                   ),
                                   Text(fromDay,style: TextStyle(color: Colors.blueGrey[700],fontWeight: FontWeight.w600)),
@@ -177,14 +217,21 @@ class _BasicInfoState extends State<BasicInfo> {
                                         color: ktextcolor,
                                         fontWeight: FontWeight.w600),
                                   ),
-                                  RaisedButton(
-                                    onPressed: (){
-                                    },
-                                    color: Color.fromRGBO(143, 148, 251, 1),
-                                    shape: StadiumBorder(),
-                                    child: Text(
+                                  Container(
+                                    height: 35,
+                                    padding: EdgeInsets.symmetric(horizontal: 7),
+//                                    width: 150,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(30),
+                                        gradient: LinearGradient(colors: [
+                                          Color.fromRGBO(143, 148, 251, 1),
+                                          Color.fromRGBO(143, 148, 251, .6),
+                                        ])),
+                                    child: Center(
+                                      child: Text(
                                       DateFormat.d().format(toDate).toString()+' ' +DateFormat.MMM().format(toDate).toString()+', '+DateFormat.y().format(toDate).toString(),
                                       style: TextStyle(color: Colors.white),
+                                    ),
                                     ),
                                   ),
                                   Text(toDay,style: TextStyle(color: Colors.blueGrey[700],fontWeight: FontWeight.w600),),
@@ -198,49 +245,24 @@ class _BasicInfoState extends State<BasicInfo> {
                           ),
                           FadeAnimation(
                               2,
-                              GestureDetector(
-                                onTap: () {
-                                  if (_fbKey.currentState.saveAndValidate()) {
-                                    print('yooo');
-                                    Scaffold.of(context).showSnackBar(SnackBar(
-                                        content: Text('Processing Data')));
-//                                  // If the form is valid, we want to show a Snackbar
-////                                  Scaffold.of(context)
-////                                      .showSnackBar(SnackBar(
-////                                        content: Text('Processing Data'),
-////                                      ))
-////                                      .closed
-////                                      .then((SnackBarClosedReason reason) {
-////                                    _opennewpage();
-////                                  });
-                                  }
-                                },
-                                child: Center(
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      if (_fbKey.currentState.saveAndValidate()) {
-                                        print(_fbKey.currentState.value);
-                                      }
-                                    },
-                                    child: Container(
-                                      height: 45,
-                                      width: 150,
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(30),
-                                          gradient: LinearGradient(colors: [
-                                            Color.fromRGBO(143, 148, 251, 1),
-                                            Color.fromRGBO(143, 148, 251, .6),
-                                          ])),
-                                      child: Center(
-                                        child: Text(
-                                          "Next",
-                                          style: TextStyle(
-                                              fontSize: 18,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w600),
-                                        ),
-                                      ),
-                                    ),
+                              Center(
+                                child: RaisedButton(
+                                  padding: EdgeInsets.all(8),
+                                  onPressed: (){
+                                    if (_fbKey.currentState.saveAndValidate()) {
+                                      print(_fbKey.currentState.value);
+                                      Scaffold.of(context).showSnackBar(SnackBar(
+                                          content: Text('Processing Data')));
+                                    }
+                                  },
+                                  color: Color.fromRGBO(143, 148, 251, 1),
+                                  shape: StadiumBorder(),
+                                  child: Text(
+                                    "Next",
+                                      style: TextStyle(
+                                          fontSize: 18,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w600),
                                   ),
                                 ),
                               )),
