@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tar_form/Basic_info.dart';
+import 'package:tar_form/authorizationform.dart';
+import 'package:tar_form/destination_details.dart';
 import 'package:tar_form/login_page.dart';
 import 'package:tar_form/registration.dart';
 
@@ -18,7 +20,7 @@ class MyApp extends StatelessWidget {
         accentColor: Color.fromRGBO(143, 148, 251, 1),
         splashColor:  Color.fromRGBO(143, 148, 251, 1),
       ),
-      home: BasicInfo(),
+      home: AuthorizationForm(),
 
     );
   }

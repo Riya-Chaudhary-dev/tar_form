@@ -109,7 +109,6 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                   ]),
                               child: FormBuilder(
                                 key: _fbKey,
-                                autovalidate: true,
                                 child: Column(
                                   children: <Widget>[
                                     Container(

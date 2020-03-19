@@ -73,7 +73,7 @@ class _BasicInfoState extends State<BasicInfo> {
           child: SafeArea(
             child: Column(
               children: <Widget>[
-                LinearProgressIndicator( value: 0.3,
+                LinearProgressIndicator( value: 0.2,
                   valueColor:
                   new AlwaysStoppedAnimation<Color>(Colors.orangeAccent.shade200),),
                 Padding(
