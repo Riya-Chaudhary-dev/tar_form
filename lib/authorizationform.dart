@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'Animation/FadeAnimation.dart';
+import 'dropDownMenu.dart';
 
 class AuthorizationForm extends StatefulWidget {
   @override
@@ -9,6 +11,7 @@ class AuthorizationForm extends StatefulWidget {
 
 class _AuthorizationFormState extends State<AuthorizationForm> {
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
+  bool checkboxValue = false;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +29,7 @@ class _AuthorizationFormState extends State<AuthorizationForm> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 LinearProgressIndicator(
-                  value: 0.8,
+                  value: 0.9,
                   valueColor: new AlwaysStoppedAnimation<Color>(
                       Colors.orangeAccent.shade200),
                 ),
@@ -122,63 +125,39 @@ class _AuthorizationFormState extends State<AuthorizationForm> {
                   endIndent: 10,
                   indent: 10,
                 ),
-                FadeAnimation(
-                  2,
-                  Padding(
-                    padding: const EdgeInsets.all(12.0),
-                    child: Text(
-                      'Requested By: ',
-                      style: TextStyle(
-                          fontSize: 18,
-                          color: Color.fromRGBO(143, 148, 251, 1),
-                          fontWeight: FontWeight.w600),
-                    ),
-                  ),
+                DescriptionTag('Request Description'),
+                SizedBox(
+                  height: 4,
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                  child: Container(
-                    padding: EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                              color: Color.fromRGBO(143, 148, 251, .2),
-                              blurRadius: 20.0,
-                              offset: Offset(0, 10))
-                        ]),
-                    child: FormBuilderDropdown(
-                      attribute: "requester",
-//                    decoration: InputDecoration(labelText: "Gender"),
-                      initialValue: 'Male',
-                      hint: Text('Select'),
-                      validators: [FormBuilderValidators.required()],
-                      items: ['Male', 'Female', 'Other']
-                          .map((requester) => DropdownMenuItem(
-                              value: requester, child: Text("$requester")))
-                          .toList(),
-                    ),
-                  ),
+                TitleBox(text: 'Requested By: '),
+                dropDownMenuBox(
+                  attribute: "requester",
+                  initialval: "ggg",
+                  items: ['dhdhdh', 'kkkk', 'ggg'],
                 ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal:8.0),
-                  child: Card(
-                    elevation: 2,
-                    child: Container(
-                      width: MediaQuery.of(context).size.width-15,
-                      padding: EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(4),
-                          gradient: LinearGradient(colors: [
-                            Color.fromRGBO(143, 148, 251, 1),
-                            Color.fromRGBO(143, 148, 251, .6),
-                          ])),
-                      child: Text('Travel Description',style: TextStyle(color: Colors.white, fontSize: 17),),
-                    ),
-                  ),
+                TitleBox(text: 'Requester\'s Email ID: '),
+                InfoBox(context: this.context, text: 'riya@gmail.com'),
+                TitleBox(text: 'Department:'),
+                InfoBox(context: this.context, text: 'HR'),
+                TitleBox(text: 'Accounts Email ID:'),
+                dropDownMenuBox(
+                  items: ['jj', 'kkk', 'pune'],
+                  initialval: 'pune',
+                  attribute: "accEmail",
                 ),
-
+                TitleBox(text: 'Approver\'s Email ID'),
+                dropDownMenuBox(
+                  items: ['pune', 'kkk'],
+                  initialval: 'kkk',
+                  attribute: "apprEmail",
+                ),
+                TitleBox(text: 'Office:'),
+                dropDownMenuBox(
+                  items: ['Pune', 'Dahej'],
+                  initialval: 'Pune',
+                  attribute: "office",
+                ),
+                DescriptionTag('Travel Description'),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Card(
@@ -206,35 +185,126 @@ class _AuthorizationFormState extends State<AuthorizationForm> {
                               info:
                                   'jdjjdjdjdjdjjdjdjdjjdjjdjdjdjdjdjdjdjdjdjdj'),
                           Divider(),
-                          authDetailCard(text: 'Estimated Travel Cost:', info:'123'),
+                          authDetailCard(
+                              text: 'Estimated Travel Cost:', info: '123'),
                           Divider(),
-                          authDetailCard(text: 'Accommodation Costs:', info:'ghghgh')
+                          authDetailCard(
+                              text: 'Accommodation Costs:', info: 'ghghgh')
                         ],
                       ),
                     ),
                   ),
                 ),
+                DescriptionTag('Expenses Description'),
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal:8.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
                   child: Card(
-                    elevation: 2,
-                    child: Container(
-                      width: MediaQuery.of(context).size.width-15,
-                      padding: EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(4),
-                          gradient: LinearGradient(colors: [
-                            Color.fromRGBO(143, 148, 251, 1),
-                            Color.fromRGBO(143, 148, 251, .6),
-                          ])),
-                      child: Text('Expenses Description',style: TextStyle(color: Colors.white, fontSize: 17),),
+                    child: CheckboxListTile(
+                      value: checkboxValue,
+                      onChanged: (val) {
+                        if (checkboxValue == false) {
+                          setState(() {
+                            checkboxValue = true;
+                          });
+                        } else if (checkboxValue == true) {
+                          setState(() {
+                            checkboxValue = false;
+                          });
+                        }
+                      },
+                      subtitle: !checkboxValue
+                          ? Text(
+                              'Required.',
+                              style: TextStyle(color: Colors.red),
+                            )
+                          : null,
+                      title: new Text(
+                        'Check this box to submit this request for using HA Corporate credit card.',
+                        style: TextStyle(
+                            fontSize: 14.0, fontWeight: FontWeight.w600),
+                      ),
+                      controlAffinity: ListTileControlAffinity.leading,
+                      activeColor: Colors.deepPurple.shade400,
                     ),
                   ),
                 ),
+                Divider(),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                  child: Container(
+                    padding: EdgeInsets.all(6),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(5),
+                      border: Border.all(
+                        color: Color.fromRGBO(143, 148, 251, 8),
+                        //                   <--- border color
+                        width: 3.0,
+                      ),
+                    ),
+                    child: Text(
+                      'NOTE: THIS TRAVEL AUTHORIZATION IS REQUIRED TO BE APPROVED ATLEAST TWO WEEKS IN ADVANCE OF THE'
+                      ' TRAVEL DATE. FAILURE TO HAVE THIS FORM SIGNED PRIOR TO ANY TRAVEL ARRANGEMENTS,'
+                      'MAY RESULT IN THE REJECTION OF YOUR EXPENSE REIMBURSEMENT REQUEST.',
+                      style: TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                ),
+                SizedBox(
+                  height: 19,
+                )
               ],
             ),
           ),
         ));
+  }
+
+  FadeAnimation TitleBox({String text}) {
+    return FadeAnimation(
+      2,
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 2),
+        child: Text(
+          text,
+          style: TextStyle(
+              fontSize: 17,
+              color: Color.fromRGBO(143, 148, 251, 1),
+              fontWeight: FontWeight.w600),
+        ),
+      ),
+    );
+  }
+
+  Padding InfoBox({BuildContext context, var text}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 2),
+      child: Column(
+        children: <Widget>[
+          Container(
+            height: 45,
+            width: MediaQuery.of(context).size.width,
+            padding: EdgeInsets.all(7),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(5),
+              border: Border.all(
+                color: Color.fromRGBO(143, 148, 251, 8),
+                //                   <--- border color
+                width: 3.0,
+              ),
+            ),
+            child: Text(
+              text,
+              style: TextStyle(fontWeight: FontWeight.w400, fontSize: 17),
+            ),
+          ),
+          Divider(
+            endIndent: 10,
+            indent: 10,
+          ),
+        ],
+      ),
+    );
   }
 
   Row authDetailCard({String text, var info}) {
@@ -245,7 +315,9 @@ class _AuthorizationFormState extends State<AuthorizationForm> {
           text,
           style: TextStyle(fontWeight: FontWeight.w600),
         ),
-        SizedBox(width: 8,),
+        SizedBox(
+          width: 8,
+        ),
         Expanded(
           child: Container(
             padding: EdgeInsets.all(4),
@@ -269,3 +341,35 @@ class _AuthorizationFormState extends State<AuthorizationForm> {
     );
   }
 }
+
+class DescriptionTag extends StatelessWidget {
+  DescriptionTag(this.title);
+
+  String title;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+      child: Card(
+        elevation: 2,
+        child: Container(
+          width: MediaQuery.of(context).size.width - 15,
+          padding: EdgeInsets.all(8),
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(4),
+              gradient: LinearGradient(colors: [
+                Color.fromRGBO(143, 148, 251, 1),
+                Color.fromRGBO(143, 148, 251, .6),
+              ])),
+          child: Text(
+            title,
+            style: TextStyle(color: Colors.white, fontSize: 17),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+

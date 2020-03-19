@@ -4,6 +4,7 @@ import 'package:tar_form/authorizationform.dart';
 import 'package:tar_form/destination_details.dart';
 import 'package:tar_form/login_page.dart';
 import 'package:tar_form/registration.dart';
+import 'package:tar_form/travelItinerary.dart';
 
 void main() => runApp(MyApp());
 
@@ -20,7 +21,7 @@ class MyApp extends StatelessWidget {
         accentColor: Color.fromRGBO(143, 148, 251, 1),
         splashColor:  Color.fromRGBO(143, 148, 251, 1),
       ),
-      home: AuthorizationForm(),
+      home: TravelItinerary(),
 
     );
   }
