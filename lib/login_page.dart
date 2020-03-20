@@ -1,8 +1,11 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'Animation/FadeAnimation.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 class LoginPage extends StatefulWidget {
+  static String id = 'login_page';
+
   @override
   _LoginPageState createState() => _LoginPageState();
 }
@@ -109,7 +112,6 @@ class _LoginPageState extends State<LoginPage> {
                                   ]),
                               child: FormBuilder(
                                 key: _fbKey,
-                                autovalidate: true,
                                 child: Column(
                                   children: <Widget>[
                                     Container(
@@ -155,20 +157,58 @@ class _LoginPageState extends State<LoginPage> {
                               ),
                             )),
                         SizedBox(
-                          height: 20,
+                          height: 40,
                         ),
                         FadeAnimation(
                             2,
                             GestureDetector(
-                              onTap: () {
+                              onTap: () async {
                                 if (_fbKey.currentState.saveAndValidate()) {
-                                  print(_fbKey.currentState.value);
+//                                  if(_fbKey.currentState.value['email'].toString().endsWith('holtec.com')){
+//                                  }
+                                  await FirebaseAuth.instance
+                                      .signInWithEmailAndPassword(
+                                          email: _fbKey
+                                              .currentState.value['email'],
+                                          password: _fbKey
+                                              .currentState.value['password']);
+                                  FirebaseUser user =
+                                      await FirebaseAuth.instance.currentUser();
+                                  if (user.isEmailVerified) {
+                                    Navigator.pop(context, true);
+                                  } else {
+                                    showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          return AlertDialog(
+                                              title: Text(
+                                                  "Please verify with email"),
+                                              content: Text(
+                                                  "An email has been sent to your account for verfication, Please verify email to continue.\n if you have not recieved an email click on resend email"),
+                                              actions: <Widget>[
+                                                FlatButton(
+                                                    child: Text("Resend email"),
+                                                    onPressed: () async {
+                                                      await user
+                                                          .sendEmailVerification();
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    }),
+                                                FlatButton(
+                                                    child: Text("Close"),
+                                                    onPressed: () {
+                                                      Navigator.of(context)
+                                                          .pop();
+                                                    }),
+                                              ]);
+                                        });
+                                  }
                                 }
                               },
                               child: Container(
                                 height: 50,
                                 decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
+                                    borderRadius: BorderRadius.circular(100),
                                     gradient: LinearGradient(colors: [
                                       Color.fromRGBO(143, 148, 251, 1),
                                       Color.fromRGBO(143, 148, 251, .6),
@@ -177,6 +217,7 @@ class _LoginPageState extends State<LoginPage> {
                                   child: Text(
                                     "Login",
                                     style: TextStyle(
+                                        fontSize: 25,
                                         color: Colors.white,
                                         fontWeight: FontWeight.bold),
                                   ),
