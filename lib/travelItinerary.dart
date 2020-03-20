@@ -10,6 +10,7 @@ class TravelItinerary extends StatefulWidget {
 
 class _TravelItineraryState extends State<TravelItinerary> {
   bool checkboxValue=false;
+  bool advVal=false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -98,6 +99,110 @@ class _TravelItineraryState extends State<TravelItinerary> {
                           ),
                         ],
                       ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                  child: Card(
+                    child: CheckboxListTile(
+                      value: advVal,
+                      onChanged: (val) {
+                        if (advVal == false) {
+                          setState(() {
+                            advVal = true;
+                          });
+                        } else if (advVal == true) {
+                          setState(() {
+                            advVal = false;
+                          });
+                        }
+                      },
+                      subtitle: advVal
+                          ? Padding(
+                            padding: const EdgeInsets.all(2.0),
+                            child: Container(
+                        padding: EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            border: Border.all(
+                              color: Color.fromRGBO(143, 148, 251, 8),
+                              width: 3.0,
+                            ),
+                        ),
+                              child: Column(
+                                children: <Widget>[
+                                  Row(
+                                    children: <Widget>[
+                                      Text(
+                                        'Amount: ',
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                      Expanded(
+                                        child: Container(
+                                          height: 43,
+//                width: 170,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(5),
+                                            border: Border.all(
+                                              color: Color.fromRGBO(143, 148, 251, 8),
+                                              width: 3.0,
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  Divider(),
+                                  Row(
+                                    children: <Widget>[
+                                      Text(
+                                        '*Description: ',
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                      Expanded(
+                                        child: Container(
+                                          height: 43,
+//                width: 170,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(5),
+                                            border: Border.all(
+                                              color: Color.fromRGBO(143, 148, 251, 8),
+                                              width: 3.0,
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                  Divider(),
+                                  Text(
+                        'Advance for business travel will be handed on case-by-case basis. Travel advances will be '
+                                    'NOT be issued to:\n'
+                                    'a. Employees with outstanding Expense Reimbursement Statements over 30 days.\n'
+                                    'b. Employees who have taken advance for previous tour and not returned the unused advance'
+                                    ' or not submitted the Expense Reimbursement Statement.\n'
+                                    'c. Employees who have a Company credit card.\n'
+                                    'd. Employees who choose to use their personal credit card for business travel.\n'
+                                    'Ref: *HA-Travel Policy *page-2(HA/16-17/001 Date:21/05/2016)',
+                        style: TextStyle(color: Colors.red),
+                      ),
+                                ],
+                              ),
+                            ),
+                          )
+                          : null,
+                      title: new Text(
+                        'Do you require Travel Advance?',
+                        style: TextStyle(
+                            fontSize: 14.0, fontWeight: FontWeight.w600),
+                      ),
+                      controlAffinity: ListTileControlAffinity.leading,
+                      activeColor: Colors.deepPurple.shade400,
                     ),
                   ),
                 ),

@@ -933,8 +933,42 @@ class _DestinationPageState extends State<DestinationPage> {
                                   ],
                                 ),
                               ),
-                            )
-                          ],
+                            ),
+                            SizedBox(height: 4,),
+
+                            Column(
+                              children: <Widget>[
+                                Container(
+                                  width: MediaQuery.of(context).size.width - 15,
+                                  padding: EdgeInsets.all(8),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(4),
+                                      gradient: LinearGradient(colors: [
+                                        Colors.red[600],
+                                        Colors.red[200],
+                                      ])),
+                                  child:  Text(
+                                    'Expense Summary',
+                                    style: TextStyle(color: Colors.white, fontSize: 17),
+                                  ),
+                                ),
+                                Card(
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Column(
+                                      children: <Widget>[
+                                        InfoRows(title: 'Travel:',),
+                                        SizedBox(height: 5,),
+                                        InfoRows(title: 'Lodging:',),
+                                        SizedBox(height: 5,),
+                                        InfoRows(title: 'Meal:',),
+
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),                          ],
                         ),
                       )),
                 )
@@ -943,6 +977,48 @@ class _DestinationPageState extends State<DestinationPage> {
           ),
         ),
       ),
+    );
+  }
+}
+class InfoRows extends StatelessWidget {
+  InfoRows({this.title});
+  String title;
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: <Widget>[
+
+        Text(
+          title,
+          style: TextStyle(
+
+              fontWeight: FontWeight.w600,
+              fontSize: 16),
+        ),
+        SizedBox(
+          width: 4,
+        ),
+        Container(
+          height: 35,
+width: 70,
+//                                padding: EdgeInsets.only(left:5.0),
+          padding: EdgeInsets.all(4),
+          decoration: BoxDecoration(
+            color: Colors.white30,
+            borderRadius: BorderRadius.circular(5),
+            border: Border.all(
+              color: Color.fromRGBO(143, 148, 251, 20),
+              //                   <--- border color
+              width: 3.0,
+            ),
+          ),
+          child: Text(
+            'hhh',
+            style: TextStyle(fontWeight: FontWeight.w600),
+          ),
+        ),
+      ],
     );
   }
 }
