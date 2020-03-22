@@ -12,13 +12,15 @@ class BasicInfo extends StatefulWidget {
 }
 
 class _BasicInfoState extends State<BasicInfo> {
-  DateTime _dateTime;
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
-  Color ktextcolor = Color.fromRGBO(143, 148, 251, 1);
-  DateTime fromDate = new DateTime.now();
-  DateTime toDate = new DateTime.now().add(Duration(days: 1));
+  Map formDetails = {};
+  Color kTextColor = Color.fromRGBO(143, 148, 251, 1);
+  DateTime fromDate = DateTime.now();
+  DateTime toDate = DateTime.now();
   String fromDay = 'Today';
   String toDay = 'Tomorrow';
+  int noOfDays = 1;
+
   String name;
   String email;
   String supEmail;
@@ -32,13 +34,22 @@ class _BasicInfoState extends State<BasicInfo> {
         initialFirstDate: fromDate,
         initialLastDate: toDate,
         firstDate: (new DateTime.now()).subtract(new Duration(days: 1)),
-        lastDate: new DateTime(2022));
+        lastDate: new DateTime(2030));
     if (picked != null && picked.length == 2) {
       setState(() {
         fromDate = picked[0];
         toDate = picked[1];
         fromDay = whichDay(picked[0]);
         toDay = whichDay(picked[1]);
+        noOfDays = (toDate.difference(fromDate).inDays + 1);
+      });
+    } else if (picked != null && picked.length == 1) {
+      setState(() {
+        fromDate = picked[0];
+        toDate = picked[0];
+        fromDay = whichDay(picked[0]);
+        toDay = whichDay(picked[0]);
+        noOfDays = (toDate.difference(fromDate).inDays + 1);
       });
     }
   }
@@ -88,6 +99,7 @@ class _BasicInfoState extends State<BasicInfo> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         TextFieldCustom(
+                          attribute: 'name',
                           title: 'Name',
                           keyboardstyle: TextInputType.text,
                           text: 'Traveler\'s Name: ',
@@ -97,10 +109,10 @@ class _BasicInfoState extends State<BasicInfo> {
                           ],
                           onsaved: (value) {
                             name = value;
-                            print(name);
                           },
                         ),
                         TextFieldCustom(
+                          attribute: 'email',
                           title: 'Email',
                           keyboardstyle: TextInputType.emailAddress,
                           text: 'Traveler\'s Email: ',
@@ -110,6 +122,7 @@ class _BasicInfoState extends State<BasicInfo> {
                           },
                         ),
                         TextFieldCustom(
+                          attribute: 'department',
                           title: 'Department',
                           keyboardstyle: TextInputType.text,
                           text: 'Department:',
@@ -118,10 +131,10 @@ class _BasicInfoState extends State<BasicInfo> {
                           ],
                           onsaved: (value) {
                             dept = value;
-                            print(dept);
                           },
                         ),
                         TextFieldCustom(
+                          attribute: 'supEmail',
                           title: 'Supervisor\'s Email',
                           keyboardstyle: TextInputType.emailAddress,
                           text: 'Supervisor\'s Email: ',
@@ -132,28 +145,27 @@ class _BasicInfoState extends State<BasicInfo> {
                           onsaved: (value) {
                             setState(() {
                               supEmail = value;
-                              print(supEmail);
                             });
                           },
                         ),
                         TextFieldCustom(
+                          attribute: 'division',
                           title: 'Division',
                           keyboardstyle: TextInputType.text,
                           text: 'Division:',
                           validator: [FormBuilderValidators.required()],
                           onsaved: (value) {
                             div = value;
-                            print(div);
                           },
                         ),
                         TextFieldCustom(
+                          attribute: 'project',
                           title: 'Project',
                           keyboardstyle: TextInputType.text,
                           text: 'Project:',
                           validator: [FormBuilderValidators.required()],
                           onsaved: (value) {
                             project = value;
-                            print(project);
                           },
                         ),
                         Row(
@@ -165,19 +177,19 @@ class _BasicInfoState extends State<BasicInfo> {
                                   'Start Date:',
                                   style: TextStyle(
                                       fontSize: 18,
-                                      color: ktextcolor,
+                                      color: kTextColor,
                                       fontWeight: FontWeight.w600),
                                 ),
                                 Container(
                                   height: 35,
                                   padding: EdgeInsets.symmetric(horizontal: 7),
-//                                    width: 150,
                                   decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(30),
-                                      gradient: LinearGradient(colors: [
-                                        Color.fromRGBO(143, 148, 251, 1),
-                                        Color.fromRGBO(143, 148, 251, .6),
-                                      ])),
+                                    borderRadius: BorderRadius.circular(30),
+                                    border: Border.all(
+                                      color: Color.fromRGBO(143, 148, 251, 8),
+                                      width: 3.0,
+                                    ),
+                                  ),
                                   child: Center(
                                     child: Text(
                                       DateFormat.d()
@@ -187,48 +199,53 @@ class _BasicInfoState extends State<BasicInfo> {
                                           DateFormat.MMM()
                                               .format(fromDate)
                                               .toString() +
-                                          ', ' +
+                                          ' ' +
                                           DateFormat.y()
                                               .format(fromDate)
                                               .toString(),
-                                      style: TextStyle(color: Colors.white),
+                                      style: TextStyle(color: kTextColor),
                                     ),
                                   ),
                                 ),
-                                Text(fromDay,
-                                    style: TextStyle(
-                                        color: Colors.blueGrey[700],
-                                        fontWeight: FontWeight.w600)),
                               ],
                             ),
-                            GestureDetector(
-                              onTap: selectDate,
-                              child: Container(
-                                height: 45,
-                                width: 45,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  gradient: LinearGradient(colors: [
-                                    Color.fromRGBO(143, 148, 251, 1),
-                                    Color.fromRGBO(143, 148, 251, .6),
-                                  ]),
-                                  border: Border.all(
-                                    color: Color.fromRGBO(143, 148, 251, 8),
-                                    //                   <--- border color
-                                    width: 3.0,
+                            Column(
+                              children: <Widget>[
+                                SizedBox(
+                                  height: 20,
+                                ),
+                                GestureDetector(
+                                  onTap: selectDate,
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 15, vertical: 8),
+//
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(100),
+                                      gradient: LinearGradient(colors: [
+                                        Color.fromRGBO(143, 148, 251, 1),
+                                        Color.fromRGBO(143, 148, 251, .6),
+                                      ]),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        'Select Dates',
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 19),
+                                      ),
+                                    ),
                                   ),
                                 ),
-                                child: Center(
-                                  child: Text(
-                                    toDate
-                                            .difference(fromDate)
-                                            .inDays
-                                            .toString() +
-                                        ' N',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
+                                SizedBox(
+                                  height: 5,
                                 ),
-                              ),
+                                Text(
+                                  'No of days : ' + noOfDays.toString(),
+                                  style: TextStyle(
+                                      color: Colors.blueGrey[700],
+                                      fontWeight: FontWeight.w600),
+                                )
+                              ],
                             ),
                             Column(
                               children: <Widget>[
@@ -236,19 +253,21 @@ class _BasicInfoState extends State<BasicInfo> {
                                   'End Date:',
                                   style: TextStyle(
                                       fontSize: 18,
-                                      color: ktextcolor,
+                                      color: kTextColor,
                                       fontWeight: FontWeight.w600),
                                 ),
                                 Container(
                                   height: 35,
                                   padding: EdgeInsets.symmetric(horizontal: 7),
 //                                    width: 150,
+
                                   decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(30),
-                                      gradient: LinearGradient(colors: [
-                                        Color.fromRGBO(143, 148, 251, 1),
-                                        Color.fromRGBO(143, 148, 251, .6),
-                                      ])),
+                                    border: Border.all(
+                                      color: Color.fromRGBO(143, 148, 251, 8),
+                                      width: 3.0,
+                                    ),
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
                                   child: Center(
                                     child: Text(
                                       DateFormat.d().format(toDate).toString() +
@@ -256,19 +275,13 @@ class _BasicInfoState extends State<BasicInfo> {
                                           DateFormat.MMM()
                                               .format(toDate)
                                               .toString() +
-                                          ', ' +
+                                          ' ' +
                                           DateFormat.y()
                                               .format(toDate)
                                               .toString(),
-                                      style: TextStyle(color: Colors.white),
+                                      style: TextStyle(color: kTextColor),
                                     ),
                                   ),
-                                ),
-                                Text(
-                                  toDay,
-                                  style: TextStyle(
-                                      color: Colors.blueGrey[700],
-                                      fontWeight: FontWeight.w600),
                                 ),
                               ],
                             ),
@@ -279,12 +292,29 @@ class _BasicInfoState extends State<BasicInfo> {
                         ),
                         Center(
                           child: RaisedButton(
-                            padding: EdgeInsets.all(8),
+                            padding: EdgeInsets.symmetric(
+                                vertical: 10, horizontal: 150),
                             onPressed: () {
                               if (_fbKey.currentState.saveAndValidate()) {
-                                print(_fbKey.currentState.value);
-                                Scaffold.of(context).showSnackBar(
-                                    SnackBar(content: Text('Processing Data')));
+                                formDetails = _fbKey.currentState.value;
+                                formDetails['fromDate'] = DateFormat.d()
+                                        .format(fromDate)
+                                        .toString() +
+                                    ' ' +
+                                    DateFormat.MMM()
+                                        .format(fromDate)
+                                        .toString() +
+                                    ' ' +
+                                    DateFormat.y().format(fromDate).toString();
+                                formDetails['toDate'] = DateFormat.d()
+                                        .format(toDate)
+                                        .toString() +
+                                    ' ' +
+                                    DateFormat.MMM().format(toDate).toString() +
+                                    ' ' +
+                                    DateFormat.y().format(toDate).toString();
+
+                                print(formDetails);
                               }
                             },
                             color: Color.fromRGBO(143, 148, 251, 1),
