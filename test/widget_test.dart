@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:date_range_picker/date_range_picker.dart' as DateRagePicker;
 import 'package:intl/intl.dart';
+import 'package:flutter_form_builder/flutter_form_builder.dart';
 
-class TravelCard extends StatefulWidget {
-  TravelCard({this.FromPlace, this.ToDate, this.ToPlace,@required this.legNo});
+class Trial extends StatefulWidget {
+  Trial({this.FromPlace, this.ToDate, this.ToPlace,@required this.legNo});
 
   final String ToPlace;
   final String FromPlace;
@@ -11,10 +12,10 @@ class TravelCard extends StatefulWidget {
   final int legNo;
 
   @override
-  _TravelCardState createState() => _TravelCardState();
+  _TrialState createState() => _TrialState();
 }
 
-class _TravelCardState extends State<TravelCard> {
+class _TrialState extends State<Trial> {
   String mode;
 
   @override
@@ -208,6 +209,7 @@ class descrBox extends StatefulWidget {
 }
 
 class _descrBoxState extends State<descrBox> {
+  final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
   List service = [
     'Return',
     'Drop only',
@@ -253,358 +255,176 @@ class _descrBoxState extends State<descrBox> {
 
   @override
   Widget build(BuildContext context) {
-    if (widget.mode == 'Rental Car') {
-      return Column(
-        children: <Widget>[
-          Divider(),
-          Text(
-            'Car Rental Details',
-            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
-          ),
-          SizedBox(
-            height: 8,
-          ),
-          Row(
+    return Scaffold(
+        body :Column(
+      children: <Widget>[
+        FormBuilder(
+          key: _fbKey,
+          initialValue: {
+            'date': DateTime.now(),
+            'accept_terms': false,
+          },
+          autovalidate: true,
+          child: Column(
             children: <Widget>[
-              Text(
-                'Rental Company Name: ',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              FormBuilderDateTimePicker(
+                attribute: "date",
+                inputType: InputType.date,
+                format: DateFormat("yyyy-MM-dd"),
+                decoration:
+                InputDecoration(labelText: "Appointment Time"),
               ),
-              Expanded(
-                child: Container(
-                  height: 43,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    border: Border.all(
-                      color: Color.fromRGBO(143, 148, 251, 8),
-                      width: 3.0,
-                    ),
-                  ),
-                ),
-              )
-            ],
-          ),
-          Divider(),
-          Row(
-            children: <Widget>[
-              Text(
-                'Pickup Address: ',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              FormBuilderSlider(
+                attribute: "slider",
+                validators: [FormBuilderValidators.min(6)],
+                min: 0.0,
+                max: 10.0,
+                initialValue: 1.0,
+                divisions: 20,
+                decoration:
+                InputDecoration(labelText: "Number of things"),
               ),
-              Expanded(
-                child: Container(
-                  height: 43,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    border: Border.all(
-                      color: Color.fromRGBO(143, 148, 251, 8),
-                      width: 3.0,
-                    ),
-                  ),
-                ),
-              )
-            ],
-          ),
-          Divider(),
-          Row(
-            children: <Widget>[
-              Text(
-                'Dropoff Address: ',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-              ),
-              Expanded(
-                child: Container(
-                  height: 43,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    border: Border.all(
-                      color: Color.fromRGBO(143, 148, 251, 8),
-                      width: 3.0,
-                    ),
-                  ),
-                ),
-              )
-            ],
-          ),
-          Divider(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              Column(
-                children: <Widget>[
-                  Text(
-                    'Vehicle Type: ',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                  ),
-                  DropdownButton(
-                    hint: Text("Select item"),
-                    value: vehicleType,
-                    onChanged: (Value) {
-                      setState(() {
-                        vehicleType = Value;
-                        print(vehicleType);
-                      });
-                    },
-                    items: vehicle.map((user) {
-                      return DropdownMenuItem(
-                        value: user,
-                        child: Row(
-                          children: <Widget>[
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              user,
-                              style: TextStyle(color: Colors.black),
-                            ),
-                          ],
-                        ),
-                      );
-                    }).toList(),
+              FormBuilderCheckbox(
+                attribute: 'accept_terms',
+                label: Text(
+                    "I have read and agree to the terms and conditions"),
+                validators: [
+                  FormBuilderValidators.requiredTrue(
+                    errorText:
+                    "You must accept terms and conditions to continue",
                   ),
                 ],
               ),
-              Column(
-                children: <Widget>[
-                  Text(
-                    'Service Type: ',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+              FormBuilderDropdown(
+                attribute: "gender",
+                decoration: InputDecoration(labelText: "Gender"),
+                // initialValue: 'Male',
+                hint: Text('Select Gender'),
+                validators: [FormBuilderValidators.required()],
+                items: ['Male', 'Female', 'Other']
+                    .map((gender) => DropdownMenuItem(
+                    value: gender,
+                    child: Text("$gender")
+                )).toList(),
+              ),
+              FormBuilderTextField(
+                attribute: "age",
+                decoration: InputDecoration(labelText: "Age"),
+                validators: [
+                  FormBuilderValidators.numeric(),
+                  FormBuilderValidators.max(70),
+                ],
+              ),
+              FormBuilderSegmentedControl(
+                decoration:
+                InputDecoration(labelText: "Movie Rating (Archer)"),
+                attribute: "movie_rating",
+                options: List.generate(5, (i) => i + 1)
+                    .map(
+                        (number) => FormBuilderFieldOption(value: number))
+                    .toList(),
+              ),
+              FormBuilderSwitch(
+                label: Text('I Accept the tems and conditions'),
+                attribute: "accept_terms_switch",
+                initialValue: true,
+              ),
+              FormBuilderStepper(
+                decoration: InputDecoration(labelText: "Stepper"),
+                attribute: "stepper",
+                initialValue: 10,
+                step: 1,
+              ),
+              FormBuilderRate(
+                decoration: InputDecoration(labelText: "Rate this form"),
+                attribute: "rate",
+                iconSize: 32.0,
+                initialValue: 1,
+                max: 5,
+              ),
+              FormBuilderCheckboxList(
+                decoration:
+                InputDecoration(labelText: "The language of my people"),
+                attribute: "languages",
+                initialValue: ["Dart"],
+                options: [
+                  FormBuilderFieldOption(value: "Dart"),
+                  FormBuilderFieldOption(value: "Kotlin"),
+                  FormBuilderFieldOption(value: "Java"),
+                  FormBuilderFieldOption(value: "Swift"),
+                  FormBuilderFieldOption(value: "Objective-C"),
+                ],
+              ),
+              FormBuilderChoiceChip(
+                attribute: "favorite_ice_cream",
+                options: [
+                  FormBuilderFieldOption(
+                      child: Text("Vanilla"),
+                      value: "vanilla"
                   ),
-                  DropdownButton(
-                    hint: Text("Select item"),
-                    value: serviceType,
-                    onChanged: (Value) {
-                      setState(() {
-                        serviceType = Value;
-                        print(serviceType);
-                      });
-                    },
-                    items: service.map((user) {
-                      return DropdownMenuItem(
-                        value: user,
-                        child: Row(
-                          children: <Widget>[
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text(
-                              user,
-                              style: TextStyle(color: Colors.black),
-                            ),
-                          ],
-                        ),
-                      );
-                    }).toList(),
+                  FormBuilderFieldOption(
+                      child: Text("Chocolate"),
+                      value: "chocolate"
+                  ),
+                  FormBuilderFieldOption(
+                      child: Text("Strawberry"),
+                      value: "strawberry"
+                  ),
+                  FormBuilderFieldOption(
+                      child: Text("Peach"),
+                      value: "peach"
                   ),
                 ],
+              ),
+              FormBuilderFilterChip(
+                attribute: "pets",
+                options: [
+                  FormBuilderFieldOption(
+                      child: Text("Cats"),
+                      value: "cats"
+                  ),
+                  FormBuilderFieldOption(
+                      child: Text("Dogs"),
+                      value: "dogs"
+                  ),
+                  FormBuilderFieldOption(
+                      child: Text("Rodents"),
+                      value: "rodents"
+                  ),
+                  FormBuilderFieldOption(
+                      child: Text("Birds"),
+                      value: "birds"
+                  ),
+                ],
+              ),
+              FormBuilderSignaturePad(
+                decoration: InputDecoration(labelText: "Signature"),
+                attribute: "signature",
+                height: 100,
               ),
             ],
           ),
-          Divider(),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: <Widget>[
-              Column(
-                children: <Widget>[
-                  Text(
-                    'Pickup Date ',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                  ),
-                  Text(
-                    DateFormat.d().format(fromDate).toString() +
-                        ' ' +
-                        DateFormat.MMM().format(fromDate).toString() +
-                        ', ' +
-                        DateFormat.y().format(fromDate).toString(),
-                    style: TextStyle(color: Colors.black),
-                  ),
-                ],
-              ),
-              GestureDetector(
-                onTap: selectDate,
-                child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
-//
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(100),
-                      color: Color.fromRGBO(143, 148, 251, 1)),
-                  child: Center(
-                    child: Text(
-                      'Select Dates',
-                      style: TextStyle(color: Colors.white, fontSize: 19),
-                    ),
-                  ),
-                ),
-              ),
-              Column(
-                children: <Widget>[
-                  Text(
-                    'Dropoff Date: ',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                  ),
-                  Text(
-                    DateFormat.d().format(toDate).toString() +
-                        ' ' +
-                        DateFormat.MMM().format(toDate).toString() +
-                        ', ' +
-                        DateFormat.y().format(toDate).toString(),
-                    style: TextStyle(color: Colors.black),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ],
-      );
-    } else if (widget.mode == 'Flight') {
-      return Row(
-        children: <Widget>[
-          Text(
-            'Flight No.: ',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-          ),
-          Expanded(
-            child: Container(
-              height: 43,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                border: Border.all(
-                  color: Color.fromRGBO(143, 148, 251, 8),
-                  width: 3.0,
-                ),
-              ),
+        ),
+        Row(
+          children: <Widget>[
+            MaterialButton(
+              child: Text("Submit"),
+              onPressed: () {
+                if (_fbKey.currentState.saveAndValidate()) {
+                  print(_fbKey.currentState.value);
+                }
+              },
             ),
-          )
-        ],
-      );
-    } else if (widget.mode == 'Train') {
-      return Row(
-        children: <Widget>[
-          Text(
-            'Train No. & Class: ',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-          ),
-          Expanded(
-            child: Container(
-              height: 43,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                border: Border.all(
-                  color: Color.fromRGBO(143, 148, 251, 8),
-                  width: 3.0,
-                ),
-              ),
+            MaterialButton(
+              child: Text("Reset"),
+              onPressed: () {
+                _fbKey.currentState.reset();
+              },
             ),
-          )
-        ],
-      );
-    } else if (widget.mode == 'Bus') {
-      return Row(
-        children: <Widget>[
-          Text(
-            'Bus Type: ',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-          ),
-          Expanded(
-            child: Container(
-              height: 43,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                border: Border.all(
-                  color: Color.fromRGBO(143, 148, 251, 8),
-                  width: 3.0,
-                ),
-              ),
-            ),
-          )
-        ],
-      );
-    } else if (widget.mode == 'Personal Car') {
-      return Column(
-        children: <Widget>[
-          Text(
-            'In case you are using your personal car for official purpose, please fill in the details below',
-            style: TextStyle(color: Colors.redAccent, fontSize: 13),
-          ),
-          SizedBox(
-            height: 8,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    'Distance Traveled(km): ',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Container(
-                    height: 40,
-                    width: 90,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      border: Border.all(
-                        color: Color.fromRGBO(143, 148, 251, 8),
-                        width: 3.0,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              Column(
-                children: <Widget>[
-                  Text(
-                    'Rate per km: ',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Container(
-                    height: 40,
-                    width: 90,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      border: Border.all(
-                        color: Color.fromRGBO(143, 148, 251, 8),
-                        width: 3.0,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Row(
-            children: <Widget>[
-              Text(
-                'Amount: ',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-              ),
-              Expanded(
-                child: Container(
-                  height: 43,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    border: Border.all(
-                      color: Color.fromRGBO(143, 148, 251, 8),
-                      width: 3.0,
-                    ),
-                  ),
-                ),
-              )
-            ],
-          )
-        ],
-      );
-    } else
-      return Divider();
+          ],
+        )
+      ],
+    )
+    );
   }
 }

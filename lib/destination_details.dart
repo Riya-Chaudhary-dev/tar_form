@@ -103,7 +103,7 @@ class _DestinationPageState extends State<DestinationPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
                               TextFieldCustom(
-                                title: 'Destination',
+                                hint: 'Destination',
                                 keyboardstyle: TextInputType.text,
                                 text: 'Destination:',
                                 validator: [

@@ -3,14 +3,14 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 
 class TextFieldCustom extends StatefulWidget {
   TextFieldCustom(
-      {this.title,
+      {this.hint,
       this.keyboardstyle,
       this.validator,
       this.text,
       this.onsaved,
       this.attribute});
 
-  final String title;
+  final String hint;
   final String attribute;
   TextInputType keyboardstyle;
   List<String Function(dynamic)> validator;
@@ -50,7 +50,7 @@ class _TextFieldCustomState extends State<TextFieldCustom> {
                     offset: Offset(0, 10))
               ]),
           child: Container(
-            padding: EdgeInsets.only(left: 5.0, bottom: 1),
+            padding: EdgeInsets.only(left: 5.0,),
             child: FormBuilderTextField(
               attribute: widget.attribute,
               onSaved: widget.onsaved,
@@ -58,7 +58,7 @@ class _TextFieldCustomState extends State<TextFieldCustom> {
               keyboardType: widget.keyboardstyle,
               decoration: InputDecoration(
                   border: InputBorder.none,
-                  hintText: widget.title,
+                  hintText: widget.hint,
                   hintStyle: TextStyle(color: Colors.grey[400], fontSize: 18)),
             ),
           ),

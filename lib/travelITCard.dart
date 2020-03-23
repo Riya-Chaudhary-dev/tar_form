@@ -122,9 +122,8 @@ class _TravelCardState extends State<TravelCard> {
                                     fontWeight: FontWeight.w600, fontSize: 16),
                               ),
                               Container(
-                                height:50,
+                                height:65,
                                 width: 120,
-
 //                                padding: EdgeInsets.only(left:5.0),
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 2, vertical: 1),
@@ -164,7 +163,7 @@ class _TravelCardState extends State<TravelCard> {
                                     fontWeight: FontWeight.w600, fontSize: 16),
                               ),
                               Container(
-                                height:50,
+                                height:65,
                                 width: 120,
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 2, vertical: 1),
@@ -286,7 +285,7 @@ class descrBox extends StatefulWidget {
 }
 
 class _descrBoxState extends State<descrBox> {
-  final GlobalKey<FormBuilderState> _fbKey1 = GlobalKey<FormBuilderState>();
+  final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
 
   List service = [
     'Return',
@@ -350,7 +349,7 @@ class _descrBoxState extends State<descrBox> {
   Widget build(BuildContext context) {
     if (widget.mode == 'Rental Car') {
       return FormBuilder(
-        key: _fbKey1,
+        key: _fbKey,
         child: Column(
           children: <Widget>[
             Divider(),
@@ -369,7 +368,7 @@ class _descrBoxState extends State<descrBox> {
                 ),
                 Expanded(
                   child: Container(
-                    height: 53,
+                    height: 65,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
                       border: Border.all(
@@ -405,7 +404,7 @@ class _descrBoxState extends State<descrBox> {
                 ),
                 Expanded(
                   child: Container(
-                    height: 53,
+                    height: 65,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
                       border: Border.all(
@@ -441,7 +440,7 @@ class _descrBoxState extends State<descrBox> {
                 ),
                 Expanded(
                   child: Container(
-                    height: 53,
+                    height: 65,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
                       border: Border.all(
@@ -601,7 +600,7 @@ class _descrBoxState extends State<descrBox> {
           ),
           Expanded(
             child: Container(
-              height: 53,
+              height: 65,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
                 border: Border.all(
@@ -637,7 +636,7 @@ class _descrBoxState extends State<descrBox> {
           ),
           Expanded(
             child: Container(
-              height: 53,
+              height: 65,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
                 border: Border.all(
@@ -673,7 +672,7 @@ class _descrBoxState extends State<descrBox> {
           ),
           Expanded(
             child: Container(
-              height: 53,
+              height: 65,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
                 border: Border.all(
@@ -724,7 +723,7 @@ class _descrBoxState extends State<descrBox> {
                     height: 8,
                   ),
                   Container(
-                    height: 53,
+                    height: 65,
                     width: 90,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
@@ -762,7 +761,7 @@ class _descrBoxState extends State<descrBox> {
                     height: 8,
                   ),
                   Container(
-                    height: 53,
+                    height: 65,
                     width: 90,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
@@ -803,7 +802,7 @@ class _descrBoxState extends State<descrBox> {
               ),
               Expanded(
                 child: Container(
-                  height: 53,
+                  height: 65,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
                     border: Border.all(

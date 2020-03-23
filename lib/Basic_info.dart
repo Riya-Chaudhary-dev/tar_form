@@ -100,7 +100,7 @@ class _BasicInfoState extends State<BasicInfo> {
                       children: <Widget>[
                         TextFieldCustom(
                           attribute: 'name',
-                          title: 'Name',
+                          hint: 'Name',
                           keyboardstyle: TextInputType.text,
                           text: 'Traveler\'s Name: ',
                           validator: [
@@ -113,7 +113,7 @@ class _BasicInfoState extends State<BasicInfo> {
                         ),
                         TextFieldCustom(
                           attribute: 'email',
-                          title: 'Email',
+                          hint: 'Email',
                           keyboardstyle: TextInputType.emailAddress,
                           text: 'Traveler\'s Email: ',
                           validator: [FormBuilderValidators.required()],
@@ -123,7 +123,7 @@ class _BasicInfoState extends State<BasicInfo> {
                         ),
                         TextFieldCustom(
                           attribute: 'department',
-                          title: 'Department',
+                          hint: 'Department',
                           keyboardstyle: TextInputType.text,
                           text: 'Department:',
                           validator: [
@@ -135,7 +135,7 @@ class _BasicInfoState extends State<BasicInfo> {
                         ),
                         TextFieldCustom(
                           attribute: 'supEmail',
-                          title: 'Supervisor\'s Email',
+                          hint: 'Supervisor\'s Email',
                           keyboardstyle: TextInputType.emailAddress,
                           text: 'Supervisor\'s Email: ',
                           validator: [
@@ -150,7 +150,7 @@ class _BasicInfoState extends State<BasicInfo> {
                         ),
                         TextFieldCustom(
                           attribute: 'division',
-                          title: 'Division',
+                          hint: 'Division',
                           keyboardstyle: TextInputType.text,
                           text: 'Division:',
                           validator: [FormBuilderValidators.required()],
@@ -160,7 +160,7 @@ class _BasicInfoState extends State<BasicInfo> {
                         ),
                         TextFieldCustom(
                           attribute: 'project',
-                          title: 'Project',
+                          hint: 'Project',
                           keyboardstyle: TextInputType.text,
                           text: 'Project:',
                           validator: [FormBuilderValidators.required()],
