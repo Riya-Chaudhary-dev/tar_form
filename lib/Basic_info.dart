@@ -67,7 +67,42 @@ class _BasicInfoState extends State<BasicInfo> {
       return new DateFormat.E().format(date).toString();
     }
   }
-
+  Widget autoFilledinfo(String text, String input){
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        Text(
+          text,
+          style: TextStyle(
+              fontSize: 18, color: kTextColor, fontWeight: FontWeight.w600),
+        ),
+        SizedBox(
+          height: 3,
+        ),
+        Container(
+          padding: EdgeInsets.only(left: 5.0),
+          height: 65,
+          width: MediaQuery.of(context).size.width-5,
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+              boxShadow: [
+                BoxShadow(
+                    color: Color.fromRGBO(143, 148, 251, .2),
+                    blurRadius: 15.0,
+                    offset: Offset(0, 10))
+              ]),
+          child: Container(
+            padding: EdgeInsets.only(left: 5.0,),
+            child: Text(input, style: TextStyle(fontSize: 17),)
+          ),
+        ),
+        SizedBox(
+          height: 10,
+        ),
+      ],
+    );
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -98,66 +133,12 @@ class _BasicInfoState extends State<BasicInfo> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        TextFieldCustom(
-                          attribute: 'name',
-                          hint: 'Name',
-                          keyboardstyle: TextInputType.text,
-                          text: 'Traveler\'s Name: ',
-                          validator: [
-                            FormBuilderValidators.required(),
-                            FormBuilderValidators.minLength(3),
-                          ],
-                          onsaved: (value) {
-                            name = value;
-                          },
-                        ),
-                        TextFieldCustom(
-                          attribute: 'email',
-                          hint: 'Email',
-                          keyboardstyle: TextInputType.emailAddress,
-                          text: 'Traveler\'s Email: ',
-                          validator: [FormBuilderValidators.required()],
-                          onsaved: (value) {
-                            email = value;
-                          },
-                        ),
-                        TextFieldCustom(
-                          attribute: 'department',
-                          hint: 'Department',
-                          keyboardstyle: TextInputType.text,
-                          text: 'Department:',
-                          validator: [
-                            FormBuilderValidators.required(),
-                          ],
-                          onsaved: (value) {
-                            dept = value;
-                          },
-                        ),
-                        TextFieldCustom(
-                          attribute: 'supEmail',
-                          hint: 'Supervisor\'s Email',
-                          keyboardstyle: TextInputType.emailAddress,
-                          text: 'Supervisor\'s Email: ',
-                          validator: [
-                            FormBuilderValidators.required(),
-                            FormBuilderValidators.email(),
-                          ],
-                          onsaved: (value) {
-                            setState(() {
-                              supEmail = value;
-                            });
-                          },
-                        ),
-                        TextFieldCustom(
-                          attribute: 'division',
-                          hint: 'Division',
-                          keyboardstyle: TextInputType.text,
-                          text: 'Division:',
-                          validator: [FormBuilderValidators.required()],
-                          onsaved: (value) {
-                            div = value;
-                          },
-                        ),
+                        autoFilledinfo('Traveler\'s Name:', 'bboyaa'),
+                        autoFilledinfo('Traveler\'s Email:', 'kk'),
+                        autoFilledinfo('Department:', 'kk'),
+                        autoFilledinfo('Supervisor\'s Email:', 'gg'),
+                        autoFilledinfo('Division:', 'll'),
+                        autoFilledinfo('Designation:', 'kk'),
                         TextFieldCustom(
                           attribute: 'project',
                           hint: 'Project',

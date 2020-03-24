@@ -53,17 +53,14 @@ class _TravelItineraryState extends State<TravelItinerary> {
                   LinearProgressIndicator(
                     value: 0.7,
                     valueColor:
-                    new AlwaysStoppedAnimation<Color>(Colors.orangeAccent),
+                        new AlwaysStoppedAnimation<Color>(Colors.orangeAccent),
                   ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 8.0),
                     child: Card(
                       elevation: 2,
                       child: Container(
-                        width: MediaQuery
-                            .of(context)
-                            .size
-                            .width - 15,
+                        width: MediaQuery.of(context).size.width - 15,
                         padding: EdgeInsets.all(8),
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(4),
@@ -152,7 +149,7 @@ class _TravelItineraryState extends State<TravelItinerary> {
                             borderRadius: BorderRadius.circular(5),
                             border: Border.all(
                               color: Color.fromRGBO(143, 148, 251, 8),
-                              width: 3.0,
+                              width: 2.0,
                             ),
                           ),
                           child: Column(
@@ -173,8 +170,8 @@ class _TravelItineraryState extends State<TravelItinerary> {
                                         borderRadius: BorderRadius.circular(5),
                                         border: Border.all(
                                           color:
-                                          Color.fromRGBO(143, 148, 251, 8),
-                                          width: 3.0,
+                                              Color.fromRGBO(143, 148, 251, 8),
+                                          width: 2.0,
                                         ),
                                       ),
                                       child: FormBuilderTextField(
@@ -212,15 +209,15 @@ class _TravelItineraryState extends State<TravelItinerary> {
                                   Expanded(
                                     child: Container(
                                       padding:
-                                      EdgeInsets.symmetric(horizontal: 2),
+                                          EdgeInsets.symmetric(horizontal: 2),
 //                                      height: 53,
 //                width: 170,
                                       decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(5),
                                         border: Border.all(
                                           color:
-                                          Color.fromRGBO(143, 148, 251, 8),
-                                          width: 3.0,
+                                              Color.fromRGBO(143, 148, 251, 8),
+                                          width: 2.0,
                                         ),
                                       ),
                                       child: FormBuilderTextField(
@@ -250,13 +247,13 @@ class _TravelItineraryState extends State<TravelItinerary> {
                               Divider(),
                               Text(
                                 'Advance for business travel will be handed on case-by-case basis. Travel advances will be '
-                                    'NOT be issued to:\n'
-                                    'a. Employees with outstanding Expense Reimbursement Statements over 30 days.\n'
-                                    'b. Employees who have taken advance for previous tour and not returned the unused advance'
-                                    ' or not submitted the Expense Reimbursement Statement.\n'
-                                    'c. Employees who have a Company credit card.\n'
-                                    'd. Employees who choose to use their personal credit card for business travel.\n'
-                                    'Ref: *HA-Travel Policy *page-2(HA/16-17/001 Date:21/05/2016)',
+                                'NOT be issued to:\n'
+                                'a. Employees with outstanding Expense Reimbursement Statements over 30 days.\n'
+                                'b. Employees who have taken advance for previous tour and not returned the unused advance'
+                                ' or not submitted the Expense Reimbursement Statement.\n'
+                                'c. Employees who have a Company credit card.\n'
+                                'd. Employees who choose to use their personal credit card for business travel.\n'
+                                'Ref: *HA-Travel Policy *page-2(HA/16-17/001 Date:21/05/2016)',
                                 style: TextStyle(color: Colors.red),
                               ),
                             ],
@@ -317,9 +314,9 @@ class _TravelItineraryState extends State<TravelItinerary> {
                         },
                         subtitle: !checkboxValue
                             ? Text(
-                          'Required.',
-                          style: TextStyle(color: Colors.red),
-                        )
+                                'Required.',
+                                style: TextStyle(color: Colors.red),
+                              )
                             : null,
                         title: new Text(
                           'I hereby confirm that the information filled in this TAR are as per Holtec\'s travel policy.',
@@ -339,12 +336,11 @@ class _TravelItineraryState extends State<TravelItinerary> {
                       Center(
                         child: RaisedButton(
                           padding:
-                          EdgeInsets.symmetric(horizontal: 60, vertical: 8),
+                              EdgeInsets.symmetric(horizontal: 60, vertical: 8),
                           onPressed: () {
                             if (_fbKey.currentState.saveAndValidate()) {
                               print(_fbKey.currentState.value);
-                            }
-                            else{
+                            } else {
                               print('that aint shit boi');
                             }
                           },
@@ -406,15 +402,22 @@ class _TravelCardState extends State<TravelCard> {
     List Modes = ['Rental Car', 'Train', 'Flight', 'Personal Car', 'Bus'];
     return Padding(
       padding: const EdgeInsets.all(8.0),
-      child: Container(
-//        padding: EdgeInsets.all(2),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(5),
-          color: Color.fromRGBO(143, 148, 251, 1),
-        ),
-        child: custom.ExpansionTile(
-          title: Container(
-            child: Row(
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            child: Column
+              (children: <Widget>[
+              Container(
+                width: MediaQuery.of(context).size.width-10,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(8),
+                  gradient: LinearGradient(colors: [
+                    Color.fromRGBO(143, 148, 251, 1),
+                    Color.fromRGBO(143, 148, 251, .6),
+                  ]),),
+       padding: EdgeInsets.all(10),
+       child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Text(
@@ -441,7 +444,7 @@ class _TravelCardState extends State<TravelCard> {
                         border: Border.all(
                           color: Color.fromRGBO(143, 148, 251, 150),
                           //                   <--- border color
-                          width: 3.0,
+                          width: 2.0,
                         ),
                       ),
                       child: GestureDetector(
@@ -461,11 +464,8 @@ class _TravelCardState extends State<TravelCard> {
                 ),
               ],
             ),
-          ),
-          headerBackgroundColor: Color.fromRGBO(143, 148, 251, 0.6),
-          iconColor: Colors.white,
-          children: <Widget>[
-            Padding(
+              ),
+        Padding(
               padding: const EdgeInsets.symmetric(horizontal: 1.0),
               child: Card(
                 child: Padding(
@@ -483,7 +483,7 @@ class _TravelCardState extends State<TravelCard> {
                                     fontWeight: FontWeight.w600, fontSize: 16),
                               ),
                               Container(
-                                height: 65,
+                                height: 53,
                                 width: 160,
 //                                padding: EdgeInsets.only(left:5.0),
                                 padding: EdgeInsets.symmetric(
@@ -493,7 +493,7 @@ class _TravelCardState extends State<TravelCard> {
                                   border: Border.all(
                                     color: Color.fromRGBO(143, 148, 251, 8),
                                     //                   <--- border color
-                                    width: 3.0,
+                                    width: 2.0,
                                   ),
                                 ),
                                 child: FormBuilderTextField(
@@ -525,13 +525,17 @@ class _TravelCardState extends State<TravelCard> {
                                     fontWeight: FontWeight.w600, fontSize: 16),
                               ),
                               Container(
-                                height: 68,
+                                height: 53,
                                 width: 160,
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 2, vertical: 1),
                                 decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(5),
                                   border: Border.all(
                                     color: Color.fromRGBO(143, 148, 251, 8),
+                                    //                   <--- border color
+                                    width: 2.0,
                                   ),
-                                  borderRadius: BorderRadius.circular(5),
                                 ),
                                 child: FormBuilderTextField(
                                   textAlign: TextAlign.center,
@@ -546,6 +550,7 @@ class _TravelCardState extends State<TravelCard> {
                                   ],
                                   keyboardType: TextInputType.text,
                                   decoration: InputDecoration(
+                                    border: InputBorder.none,
                                       hintText: 'Place',
                                       hintStyle: TextStyle(
                                           color: Colors.grey[300],
@@ -568,52 +573,37 @@ class _TravelCardState extends State<TravelCard> {
                         height: 10,
                       ),
                       Container(
-                        width: MediaQuery
-                            .of(context)
-                            .size
-                            .width - 12,
+                        width: MediaQuery.of(context).size.width - 12,
+                        padding: EdgeInsets.symmetric(horizontal: 4),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(5),
                           border: Border.all(
                             color: Color.fromRGBO(143, 148, 251, 8),
                             //                   <--- border color
-                            width: 3.0,
+                            width: 2.0,
                           ),
                         ),
                         child: Center(
-                          child: DropdownButton(
-                            isExpanded: true,
-                            hint: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-                                Text(
-                                  "Select item",
-                                ),
-                              ],
-                            ),
-                            value: mode,
-                            onChanged: (Value) {
+                          child: FormBuilderDropdown(
+                            attribute: "mode",
+                            onChanged: (val) {
                               setState(() {
-                                mode = Value;
-                                print(mode);
+                                mode = val;
                               });
                             },
-                            items: Modes.map((user) {
-                              return DropdownMenuItem(
-                                value: user,
-                                child: Row(
-                                  children: <Widget>[
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Text(
-                                      user,
-                                      style: TextStyle(color: Colors.black),
-                                    ),
-                                  ],
-                                ),
-                              );
-                            }).toList(),
+                            onSaved: (val) {
+                              setState(() {
+                                mode = val;
+                              });
+                            },
+                            decoration: InputDecoration(
+                              border: InputBorder.none,
+                            ),
+                            // initialValue: 'Male',
+                            hint: Text('Select mode of transportation'),
+                            validators: [FormBuilderValidators.required()],
+                            items: Modes.map((mode) => DropdownMenuItem(
+                                value: mode, child: Text("$mode"))).toList(),
                           ),
                         ),
                       ),
@@ -621,6 +611,9 @@ class _TravelCardState extends State<TravelCard> {
                         height: 10,
                       ),
                       descrBox(mode),
+                      SizedBox(
+                        height: 10,
+                      ),
                       GestureDetector(
                         onTap: () {
                           print(Legs);
@@ -639,10 +632,12 @@ class _TravelCardState extends State<TravelCard> {
                 ),
               ),
             ),
-          ],
+            ],),
+          ),
         ),
       ),
     );
+
   }
 }
 
@@ -739,12 +734,14 @@ class _descrBoxState extends State<descrBox> {
                 ),
                 Expanded(
                   child: Container(
-                    height: 65,
+                    padding: EdgeInsets.symmetric(horizontal: 4),
+
+                    height: 55,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
                       border: Border.all(
                         color: Color.fromRGBO(143, 148, 251, 8),
-                        width: 3.0,
+                        width: 2.0,
                       ),
                     ),
                     child: FormBuilderTextField(
@@ -758,7 +755,7 @@ class _descrBoxState extends State<descrBox> {
                           border: InputBorder.none,
                           hintText: 'Rental Company Name',
                           hintStyle:
-                          TextStyle(color: Colors.grey[300], fontSize: 15)),
+                              TextStyle(color: Colors.grey[300], fontSize: 15)),
                     ),
                   ),
                 )
@@ -773,12 +770,14 @@ class _descrBoxState extends State<descrBox> {
                 ),
                 Expanded(
                   child: Container(
-                    height: 65,
+                    height: 55,
+                    padding: EdgeInsets.symmetric(horizontal: 4),
+
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
                       border: Border.all(
                         color: Color.fromRGBO(143, 148, 251, 8),
-                        width: 3.0,
+                        width: 2.0,
                       ),
                     ),
                     child: FormBuilderTextField(
@@ -792,7 +791,7 @@ class _descrBoxState extends State<descrBox> {
                           border: InputBorder.none,
                           hintText: 'PickUp address',
                           hintStyle:
-                          TextStyle(color: Colors.grey[300], fontSize: 15)),
+                              TextStyle(color: Colors.grey[300], fontSize: 15)),
                     ),
                   ),
                 )
@@ -807,12 +806,14 @@ class _descrBoxState extends State<descrBox> {
                 ),
                 Expanded(
                   child: Container(
-                    height: 65,
+                    height: 55,
+                    padding: EdgeInsets.symmetric(horizontal: 4),
+
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
                       border: Border.all(
                         color: Color.fromRGBO(143, 148, 251, 8),
-                        width: 3.0,
+                        width: 2.0,
                       ),
                     ),
                     child: FormBuilderTextField(
@@ -822,11 +823,12 @@ class _descrBoxState extends State<descrBox> {
                           DropAdd = val;
                         });
                       },
+                      maxLines: 4,
                       decoration: InputDecoration(
                           border: InputBorder.none,
                           hintText: 'Dropoff address',
                           hintStyle:
-                          TextStyle(color: Colors.grey[600], fontSize: 15)),
+                              TextStyle(color: Colors.grey[300], fontSize: 15)),
                     ),
                   ),
                 )
@@ -844,33 +846,36 @@ class _descrBoxState extends State<descrBox> {
                     Text(
                       'Vehicle Type: ',
                       style:
-                      TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                     ),
-                    DropdownButton(
-                      hint: Text("Select item"),
-                      value: vehicleType,
-                      onChanged: (Value) {
-                        setState(() {
-                          vehicleType = Value;
-                          print(vehicleType);
-                        });
-                      },
-                      items: vehicle.map((user) {
-                        return DropdownMenuItem(
-                          value: user,
-                          child: Row(
-                            children: <Widget>[
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                user,
-                                style: TextStyle(color: Colors.black),
-                              ),
-                            ],
-                          ),
-                        );
-                      }).toList(),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 4),
+
+                      width: MediaQuery.of(context).size.width / 2.5,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        border: Border.all(
+                          color: Color.fromRGBO(143, 148, 251, 8),
+                          //                   <--- border color
+                          width: 2.0,
+                        ),
+                      ),
+                      child: FormBuilderDropdown(
+                        attribute: "vehicleType",
+                        onSaved: (val) {
+                          vehicleType = val;
+                        },
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                        ),
+                        // initialValue: 'Male',
+                        hint: Text('Select vehicle type'),
+                        validators: [FormBuilderValidators.required()],
+                        items: vehicle
+                            .map((vehicle) => DropdownMenuItem(
+                                value: vehicle, child: Text("$vehicle")))
+                            .toList(),
+                      ),
                     ),
                   ],
                 ),
@@ -879,34 +884,38 @@ class _descrBoxState extends State<descrBox> {
                     Text(
                       'Service Type: ',
                       style:
-                      TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                     ),
-                    DropdownButton(
-//                      itemHeight: ,
-                      hint: Text("Select item"),
-                      value: serviceType,
-                      onChanged: (Value) {
-                        setState(() {
-                          serviceType = Value;
-                          print(serviceType);
-                        });
-                      },
-                      items: service.map((user) {
-                        return DropdownMenuItem(
-                          value: user,
-                          child: Row(
-                            children: <Widget>[
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                user,
-                                style: TextStyle(color: Colors.black),
-                              ),
-                            ],
-                          ),
-                        );
-                      }).toList(),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 4),
+
+                      width: MediaQuery.of(context).size.width / 2.5,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        border: Border.all(
+                          color: Color.fromRGBO(143, 148, 251, 8),
+                          //                   <--- border color
+                          width: 2.0,
+                        ),
+                      ),
+                      child: FormBuilderDropdown(
+                        attribute: "serviceType",
+                        onSaved: (val) {
+                          setState(() {
+                            serviceType = val;
+                          });
+                        },
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                        ),
+                        // initialValue: 'Male',
+                        hint: Text('Select service type'),
+                        validators: [FormBuilderValidators.required()],
+                        items: service
+                            .map((service) => DropdownMenuItem(
+                                value: service, child: Text("$service")))
+                            .toList(),
+                      ),
                     ),
                   ],
                 ),
@@ -921,7 +930,7 @@ class _descrBoxState extends State<descrBox> {
                     Text(
                       'Pickup Date ',
                       style:
-                      TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                     ),
                     Text(
                       DateFormat.d().format(fromDate).toString() +
@@ -944,7 +953,7 @@ class _descrBoxState extends State<descrBox> {
                     Text(
                       'Dropoff Date: ',
                       style:
-                      TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                     ),
                     Text(
                       DateFormat.d().format(toDate).toString() +
@@ -962,41 +971,46 @@ class _descrBoxState extends State<descrBox> {
         ),
       );
     } else if (widget.mode == 'Flight') {
-      return Row(
-        children: <Widget>[
-          Text(
-            'Flight No.: ',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-          ),
-          Expanded(
-            child: Container(
-              height: 65,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                border: Border.all(
-                  color: Color.fromRGBO(143, 148, 251, 8),
-                  width: 3.0,
+      return FormBuilder(
+        key: _fbKey1,
+        child: Row(
+          children: <Widget>[
+            Text(
+              'Flight No.: ',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+            ),
+            Expanded(
+              child: Container(
+                height: 55,
+                padding: EdgeInsets.symmetric(horizontal: 4),
+
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  border: Border.all(
+                    color: Color.fromRGBO(143, 148, 251, 8),
+                    width: 2.0,
+                  ),
+                ),
+                child: FormBuilderTextField(
+                  attribute: "flightNo",
+                  onSaved: (val) {
+                    setState(() {
+                      flightdeets = val;
+                    });
+                  },
+                  validators: [
+                    FormBuilderValidators.required(),
+                  ],
+                  decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: 'Flight No.',
+                      hintStyle:
+                          TextStyle(color: Colors.grey[300], fontSize: 15)),
                 ),
               ),
-              child: FormBuilderTextField(
-                attribute: "flightNo",
-                onSaved: (val) {
-                  setState(() {
-                    flightdeets = val;
-                  });
-                },
-                validators: [
-                  FormBuilderValidators.required(),
-                ],
-                decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: 'Flight No.',
-                    hintStyle:
-                    TextStyle(color: Colors.grey[600], fontSize: 15)),
-              ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       );
     } else if (widget.mode == 'Train') {
       return Row(
@@ -1007,12 +1021,14 @@ class _descrBoxState extends State<descrBox> {
           ),
           Expanded(
             child: Container(
-              height: 65,
+              height: 55,
+              padding: EdgeInsets.symmetric(horizontal: 4),
+
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
                 border: Border.all(
                   color: Color.fromRGBO(143, 148, 251, 8),
-                  width: 3.0,
+                  width: 2.0,
                 ),
               ),
               child: FormBuilderTextField(
@@ -1026,7 +1042,7 @@ class _descrBoxState extends State<descrBox> {
                     border: InputBorder.none,
                     hintText: 'Train no. & Class',
                     hintStyle:
-                    TextStyle(color: Colors.grey[600], fontSize: 15)),
+                        TextStyle(color: Colors.grey[300], fontSize: 15)),
               ),
             ),
           )
@@ -1041,12 +1057,14 @@ class _descrBoxState extends State<descrBox> {
           ),
           Expanded(
             child: Container(
-              height: 65,
+              height: 55,
+              padding: EdgeInsets.symmetric(horizontal: 4),
+
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
                 border: Border.all(
                   color: Color.fromRGBO(143, 148, 251, 8),
-                  width: 3.0,
+                  width: 2.0,
                 ),
               ),
               child: FormBuilderTextField(
@@ -1060,7 +1078,7 @@ class _descrBoxState extends State<descrBox> {
                     border: InputBorder.none,
                     hintText: 'Luxury/Sleeper',
                     hintStyle:
-                    TextStyle(color: Colors.grey[600], fontSize: 15)),
+                        TextStyle(color: Colors.grey[300], fontSize: 15)),
               ),
             ),
           )
@@ -1090,13 +1108,15 @@ class _descrBoxState extends State<descrBox> {
                     height: 8,
                   ),
                   Container(
-                    height: 65,
+                    height: 55,
                     width: 90,
+                    padding: EdgeInsets.symmetric(horizontal: 4),
+
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
                       border: Border.all(
                         color: Color.fromRGBO(143, 148, 251, 8),
-                        width: 3.0,
+                        width: 2.0,
                       ),
                     ),
                     child: FormBuilderTextField(
@@ -1111,7 +1131,7 @@ class _descrBoxState extends State<descrBox> {
                           border: InputBorder.none,
                           hintText: 'Distance in km',
                           hintStyle:
-                          TextStyle(color: Colors.grey[600], fontSize: 15)),
+                              TextStyle(color: Colors.grey[600], fontSize: 15)),
                     ),
                   ),
                 ],
@@ -1126,13 +1146,15 @@ class _descrBoxState extends State<descrBox> {
                     height: 8,
                   ),
                   Container(
-                    height: 65,
+                    height: 55,
                     width: 90,
+                    padding: EdgeInsets.symmetric(horizontal: 4),
+
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
                       border: Border.all(
                         color: Color.fromRGBO(143, 148, 251, 8),
-                        width: 3.0,
+                        width: 2.0,
                       ),
                     ),
                     child: FormBuilderTextField(
@@ -1147,7 +1169,7 @@ class _descrBoxState extends State<descrBox> {
                           border: InputBorder.none,
                           hintText: 'Rate',
                           hintStyle:
-                          TextStyle(color: Colors.grey[600], fontSize: 15)),
+                              TextStyle(color: Colors.grey[600], fontSize: 15)),
                     ),
                   ),
                 ],
@@ -1165,12 +1187,14 @@ class _descrBoxState extends State<descrBox> {
               ),
               Expanded(
                 child: Container(
-                  height: 65,
+                  height: 55,
+                  padding: EdgeInsets.symmetric(horizontal: 4),
+
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
                     border: Border.all(
                       color: Color.fromRGBO(143, 148, 251, 8),
-                      width: 3.0,
+                      width: 2.0,
                     ),
                   ),
                   child: FormBuilderTextField(
@@ -1185,7 +1209,7 @@ class _descrBoxState extends State<descrBox> {
                         border: InputBorder.none,
                         hintText: 'Rate times cost per km',
                         hintStyle:
-                        TextStyle(color: Colors.grey[300], fontSize: 15)),
+                            TextStyle(color: Colors.grey[300], fontSize: 15)),
                   ),
                 ),
               )

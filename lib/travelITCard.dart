@@ -103,6 +103,7 @@ class _TravelCardState extends State<TravelCard> {
           ),
           headerBackgroundColor: Color.fromRGBO(143, 148, 251, 0.6),
           iconColor: Colors.white,
+          initiallyExpanded: true,
           children: <Widget>[
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 1.0),

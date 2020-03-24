@@ -51,9 +51,8 @@ class _HomePageState extends State<HomePage> {
                                     Navigator.pushNamed(context, BasicInfo.id);
                                   },
                                   color: Color.fromRGBO(143, 148, 251, 1),
-                                  shape: StadiumBorder(),
                                   child: Text(
-                                    "Fill Form",
+                                    "Fill a TAR Form",
                                     style: TextStyle(
                                         fontSize: 26,
                                         color: Colors.white,
@@ -87,7 +86,6 @@ class _HomePageState extends State<HomePage> {
                                     }
                                   },
                                   color: Color.fromRGBO(143, 148, 251, 1),
-                                  shape: StadiumBorder(),
                                   child: Text(
                                     "Sign Out",
                                     style: TextStyle(
@@ -125,7 +123,7 @@ class _HomePageState extends State<HomePage> {
                                   child: Stack(children: <Widget>[
                                     Positioned(
                                       left: 30,
-                                      width: 80,
+                                      width: 60,
                                       height: 200,
                                       child: FadeAnimation(
                                           1,
@@ -138,7 +136,7 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                     Positioned(
                                       left: 140,
-                                      width: 80,
+                                      width: 70,
                                       height: 150,
                                       child: FadeAnimation(
                                           1.3,
@@ -151,7 +149,7 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                     Positioned(
                                       right: 40,
-                                      top: 40,
+                                      top: 20,
                                       width: 80,
                                       height: 150,
                                       child: FadeAnimation(
@@ -168,13 +166,13 @@ class _HomePageState extends State<HomePage> {
                                             1.6,
                                             Container(
                                                 margin:
-                                                    EdgeInsets.only(top: 50),
+                                                    EdgeInsets.only(top: 100,left: 35),
                                                 child: Center(
                                                     child: Text(
-                                                  "Tar form",
+                                                  "Holtec Asia Travel Authorization Request Form",
                                                   style: TextStyle(
                                                       color: Colors.white,
-                                                      fontSize: 40,
+                                                      fontSize: 30,
                                                       fontWeight:
                                                           FontWeight.bold),
                                                 ))))),
@@ -228,7 +226,7 @@ class _HomePageState extends State<HomePage> {
                                         color: Color.fromRGBO(143, 148, 251, 1),
                                         shape: StadiumBorder(),
                                         child: Text(
-                                          "Regester",
+                                          "Register",
                                           style: TextStyle(
                                               fontSize: 26,
                                               color: Colors.white,
@@ -244,7 +242,38 @@ class _HomePageState extends State<HomePage> {
                     ));
               }
               return Scaffold(
-                body: Center(child: Text('hello there'),),
+                appBar: AppBar(
+                  backgroundColor: Color.fromRGBO(143, 148, 251, 1),
+                  leading: IconButton(icon: Icon(Icons.arrow_back_ios),color: Colors.white,onPressed: ()
+                    {
+                      Navigator.pushNamed(
+                          context, LoginPage.id);
+                    },),
+                  title:
+                  Text(
+                    'Tarvel Authorization Form',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+                body: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Container(
+                      height:80,
+                      width: 80,
+                      decoration: BoxDecoration(
+                        image: DecorationImage(
+                          image: AssetImage('assets/images/error.png'),
+                        )
+                      ),
+                    ),
+                    SizedBox(height: 10,),
+                    Center(child: Text('Please verify your email to continue.',style: TextStyle(
+                      fontSize: 17,
+                      fontWeight: FontWeight.w600
+                    ),),),
+                  ],
+                ),
               );
             } else if (user.connectionState == ConnectionState.waiting) {
               return Scaffold(
