@@ -8,6 +8,7 @@ class TextFieldCustom extends StatefulWidget {
       this.validator,
       this.text,
       this.onsaved,
+      this.height,
       this.attribute});
 
   final String hint;
@@ -15,6 +16,7 @@ class TextFieldCustom extends StatefulWidget {
   TextInputType keyboardstyle;
   List<String Function(dynamic)> validator;
   final String text;
+  final double height;
   Function onsaved;
 
   @override
@@ -23,6 +25,7 @@ class TextFieldCustom extends StatefulWidget {
 
 class _TextFieldCustomState extends State<TextFieldCustom> {
   Color ktextcolor = Color.fromRGBO(143, 148, 251, 1);
+  bool allGood = true;
 
   @override
   Widget build(BuildContext context) {
@@ -38,33 +41,36 @@ class _TextFieldCustomState extends State<TextFieldCustom> {
           height: 3,
         ),
         Container(
-          padding: EdgeInsets.only(left: 5.0),
-          height: 65,
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
-              boxShadow: [
-                BoxShadow(
-                    color: Color.fromRGBO(143, 148, 251, .2),
-                    blurRadius: 15.0,
-                    offset: Offset(0, 10))
-              ]),
-          child: Container(
-            padding: EdgeInsets.only(left: 5.0,),
-            child: FormBuilderTextField(
-              attribute: widget.attribute,
-              onSaved: widget.onsaved,
-              validators: widget.validator,
-              keyboardType: widget.keyboardstyle,
-              decoration: InputDecoration(
-                  border: InputBorder.none,
-                  hintText: widget.hint,
-                  hintStyle: TextStyle(color: Colors.grey[400], fontSize: 18)),
-            ),
-          ),
-        ),
+            height: widget.height,
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(4),
+                color: Color.fromRGBO(143, 148, 251, 1)),
+            child: Container(
+              height: 65,
+              padding: EdgeInsets.all(2),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(5),
+                border: Border.all(
+                  color: Color.fromRGBO(143, 148, 251, 8),
+                  width: 3.0,
+                ),
+              ),
+              child: FormBuilderTextField(
+                autovalidate: allGood ? false : true,
+                attribute: widget.attribute,
+                onSaved: widget.onsaved,
+                validators: widget.validator,
+                keyboardType: widget.keyboardstyle,
+                decoration: InputDecoration(
+                    border: InputBorder.none,
+                    hintText: widget.hint,
+                    hintStyle:
+                        TextStyle(color: Colors.grey[600], fontSize: 15)),
+              ),
+            )),
         SizedBox(
-          height: 10,
+          height: 20,
         ),
       ],
     );

@@ -1028,11 +1028,12 @@ class _DestinationPageState extends State<DestinationPage> {
                                               padding: EdgeInsets.only(
                                                   left: 5.0, bottom: 1),
                                               child: FormBuilderTextField(
-//                                                onSaved: (val) {
-//                                                  setState(() {
-//                                                    otherdescription = val;
-//                                                  });
-//                                                },
+                                                attribute: 'Description',
+                                                onSaved: (val) {
+                                                  setState(() {
+                                                    otherdescription = val;
+                                                  });
+                                                },
                                                 keyboardType:
                                                     TextInputType.text,
                                                 decoration: InputDecoration(

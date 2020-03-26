@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tar_form/travelItinerary.dart';
 import 'textfieldcustom.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:date_range_picker/date_range_picker.dart' as DateRagePicker;
@@ -12,7 +13,7 @@ class BasicInfo extends StatefulWidget {
 }
 
 class _BasicInfoState extends State<BasicInfo> {
-  final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
+  GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
   Map formDetails = {};
   Color kTextColor = Color.fromRGBO(143, 148, 251, 1);
   DateTime fromDate = DateTime.now();
@@ -27,6 +28,7 @@ class _BasicInfoState extends State<BasicInfo> {
   String dept;
   String div;
   String project;
+  bool allGood = true;
 
   selectDate() async {
     final List<DateTime> picked = await DateRagePicker.showDatePicker(
@@ -99,6 +101,7 @@ class _BasicInfoState extends State<BasicInfo> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         TextFieldCustom(
+                          height: allGood? 56 : 71,
                           attribute: 'name',
                           hint: 'Name',
                           keyboardstyle: TextInputType.text,
@@ -112,6 +115,8 @@ class _BasicInfoState extends State<BasicInfo> {
                           },
                         ),
                         TextFieldCustom(
+                          height: allGood? 56 : 71,
+
                           attribute: 'email',
                           hint: 'Email',
                           keyboardstyle: TextInputType.emailAddress,
@@ -122,6 +127,8 @@ class _BasicInfoState extends State<BasicInfo> {
                           },
                         ),
                         TextFieldCustom(
+                          height: allGood? 56 : 71,
+
                           attribute: 'department',
                           hint: 'Department',
                           keyboardstyle: TextInputType.text,
@@ -134,6 +141,8 @@ class _BasicInfoState extends State<BasicInfo> {
                           },
                         ),
                         TextFieldCustom(
+                          height: allGood? 56 : 71,
+
                           attribute: 'supEmail',
                           hint: 'Supervisor\'s Email',
                           keyboardstyle: TextInputType.emailAddress,
@@ -149,6 +158,8 @@ class _BasicInfoState extends State<BasicInfo> {
                           },
                         ),
                         TextFieldCustom(
+                          height: allGood? 56 : 71,
+
                           attribute: 'division',
                           hint: 'Division',
                           keyboardstyle: TextInputType.text,
@@ -158,7 +169,9 @@ class _BasicInfoState extends State<BasicInfo> {
                             div = value;
                           },
                         ),
-                        TextFieldCustom(
+                        TextFieldCustom(                          height: allGood? 56 : 71,
+
+
                           attribute: 'project',
                           hint: 'Project',
                           keyboardstyle: TextInputType.text,
@@ -297,24 +310,18 @@ class _BasicInfoState extends State<BasicInfo> {
                             onPressed: () {
                               if (_fbKey.currentState.saveAndValidate()) {
                                 formDetails = _fbKey.currentState.value;
-                                formDetails['fromDate'] = DateFormat.d()
-                                        .format(fromDate)
-                                        .toString() +
-                                    ' ' +
-                                    DateFormat.MMM()
-                                        .format(fromDate)
-                                        .toString() +
-                                    ' ' +
-                                    DateFormat.y().format(fromDate).toString();
-                                formDetails['toDate'] = DateFormat.d()
-                                        .format(toDate)
-                                        .toString() +
-                                    ' ' +
-                                    DateFormat.MMM().format(toDate).toString() +
-                                    ' ' +
-                                    DateFormat.y().format(toDate).toString();
-
+                                formDetails['fromDate'] = fromDate;
+                                formDetails['toDate'] = toDate;
                                 print(formDetails);
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                    builder: (context) => TravelItinerary(basicFormInfo: formDetails,),
+                              ),);
+                              }else{
+                                setState(() {
+                                  allGood =false;
+                                });
                               }
                             },
                             color: Color.fromRGBO(143, 148, 251, 1),
