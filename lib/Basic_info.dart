@@ -143,7 +143,7 @@ class _BasicInfoState extends State<BasicInfo> {
                         TextFieldCustom(
                           height: allGood? 56 : 71,
 
-                          attribute: 'supEmail',
+                          attribute: 'supervisor email',
                           hint: 'Supervisor\'s Email',
                           keyboardstyle: TextInputType.emailAddress,
                           text: 'Supervisor\'s Email: ',
@@ -310,9 +310,10 @@ class _BasicInfoState extends State<BasicInfo> {
                             onPressed: () {
                               if (_fbKey.currentState.saveAndValidate()) {
                                 formDetails = _fbKey.currentState.value;
-                                formDetails['fromDate'] = fromDate;
-                                formDetails['toDate'] = toDate;
-                                print(formDetails);
+                                formDetails['from date'] = fromDate;
+                                formDetails['to date'] = toDate;
+//
+//                                Navigator.popAndPushNamed(context, TravelItinerary.id,arguments: formDetails);
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(

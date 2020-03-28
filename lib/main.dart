@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tar_form/Basic_info.dart';
+import 'package:tar_form/hotelItinerary.dart';
 import 'package:tar_form/login_page.dart';
 import 'package:tar_form/registration.dart';
 import 'package:tar_form/travelItinerary.dart';
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
           LoginPage.id: (context) => LoginPage(),
           BasicInfo.id: (context) => BasicInfo(),
           TravelItinerary.id: (context) => TravelItinerary(),
+          HotelItinerary.id: (context) => HotelItinerary(),
         });
   }
 }
