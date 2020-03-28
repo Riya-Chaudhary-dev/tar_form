@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:tar_form/travelItinerary.dart';
 import 'textfieldcustom.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:date_range_picker/date_range_picker.dart' as DateRagePicker;
@@ -12,11 +13,12 @@ class BasicInfo extends StatefulWidget {
 }
 
 class _BasicInfoState extends State<BasicInfo> {
-  final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
+  GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
   Map formDetails = {};
   Color kTextColor = Color.fromRGBO(143, 148, 251, 1);
   DateTime fromDate = DateTime.now();
   DateTime toDate = DateTime.now();
+  DateTime RequestedOn =DateTime.now();
   String fromDay = 'Today';
   String toDay = 'Tomorrow';
   int noOfDays = 1;
@@ -27,6 +29,8 @@ class _BasicInfoState extends State<BasicInfo> {
   String dept;
   String div;
   String project;
+  bool allGood = true;
+  String TANo;
 
   selectDate() async {
     final List<DateTime> picked = await DateRagePicker.showDatePicker(
@@ -67,64 +71,101 @@ class _BasicInfoState extends State<BasicInfo> {
       return new DateFormat.E().format(date).toString();
     }
   }
-  Widget autoFilledinfo(String text, String input){
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          text,
-          style: TextStyle(
-              fontSize: 18, color: kTextColor, fontWeight: FontWeight.w600),
-        ),
-        SizedBox(
-          height: 3,
-        ),
-        Container(
-          padding: EdgeInsets.only(left: 5.0),
-          height: 65,
-          width: MediaQuery.of(context).size.width-5,
-          decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
-              boxShadow: [
-                BoxShadow(
-                    color: Color.fromRGBO(143, 148, 251, .2),
-                    blurRadius: 15.0,
-                    offset: Offset(0, 10))
-              ]),
-          child: Container(
-            padding: EdgeInsets.only(left: 5.0,),
-            child: Text(input, style: TextStyle(fontSize: 17),)
-          ),
-        ),
-        SizedBox(
-          height: 10,
-        ),
-      ],
-    );
-  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(icon: Icon(Icons.arrow_back_ios,color: Colors.white,),),
         backgroundColor: Color.fromRGBO(143, 148, 251, 1),
         title: Text(
-          'Tarvel Authorization Form',
+          'Traveler\'s Information',
           style: TextStyle(color: Colors.white),
         ),
       ),
-      body: SingleChildScrollView(
-        child: GestureDetector(
-          onTap: () {
-            FocusScope.of(context).requestFocus(new FocusNode());
-          },
+      body: GestureDetector(
+        onTap: () {
+          FocusScope.of(context).requestFocus(new FocusNode());
+        },
+        child: SingleChildScrollView(
           child: SafeArea(
             child: Column(
               children: <Widget>[
                 LinearProgressIndicator(
-                  value: 0.3,
+                  value: 0.25,
                   valueColor: new AlwaysStoppedAnimation<Color>(
                       Colors.orangeAccent.shade200),
+                ),
+                SizedBox(height: 15,),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Row(
+
+                        children: <Widget>[
+                          Text('TA No.:',style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600,color: kTextColor),),
+                          SizedBox(width: 2,),
+                          Container(
+//                                padding: EdgeInsets.only(left:5.0),
+                            padding: EdgeInsets.all(2),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(5),
+                              border: Border.all(
+                                color: kTextColor,
+                                //                   <--- border color
+                                width: 2.0,
+                              ),
+                            ),
+                            child: Text('HA-23458',style: TextStyle(
+                                letterSpacing: 2,
+                                fontSize: 14
+                            ),),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Text('Requested on:',style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600,color: kTextColor),),
+                          SizedBox(width: 2,),
+                          Container(
+//                                padding: EdgeInsets.only(left:5.0),
+                            padding: EdgeInsets.all(2),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(5),
+                              border: Border.all(
+                                color: kTextColor,
+                                //                   <--- border color
+                                width: 2.0,
+                              ),
+                            ),
+                            child: Text(DateFormat.d().format(RequestedOn).toString() +
+                                ' ' +
+                                DateFormat.MMM()
+                                    .format(RequestedOn)
+                                    .toString() +
+                                ' ' +
+                                DateFormat.y()
+                                    .format(RequestedOn)
+                                    .toString(),style: TextStyle(
+                                fontSize: 14
+                            ),),
+                          )
+                        ],
+                      ),
+
+                    ],
+                  ),
+                ),
+                SizedBox(height: 15,),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Text('NOTE: All field must be filled correctly to proceed. To make changes, refer to the \'Edit Profile\' page.',style: TextStyle(
+                    fontWeight: FontWeight.w600,color: Colors.red, fontSize: 13
+                  ),),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(20.0),
@@ -133,13 +174,78 @@ class _BasicInfoState extends State<BasicInfo> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        autoFilledinfo('Traveler\'s Name:', 'bboyaa'),
-                        autoFilledinfo('Traveler\'s Email:', 'kk'),
-                        autoFilledinfo('Department:', 'kk'),
-                        autoFilledinfo('Supervisor\'s Email:', 'gg'),
-                        autoFilledinfo('Division:', 'll'),
-                        autoFilledinfo('Designation:', 'kk'),
                         TextFieldCustom(
+                          height: allGood? 56 : 71,
+                          attribute: 'name',
+                          hint: 'Name',
+                          keyboardstyle: TextInputType.text,
+                          text: 'Traveler\'s Name: ',
+                          validator: [
+                            FormBuilderValidators.required(),
+                            FormBuilderValidators.minLength(3),
+                          ],
+                          onsaved: (value) {
+                            name = value;
+                          },
+                        ),
+                        TextFieldCustom(
+                          height: allGood? 56 : 71,
+
+                          attribute: 'email',
+                          hint: 'Email',
+                          keyboardstyle: TextInputType.emailAddress,
+                          text: 'Traveler\'s Email: ',
+                          validator: [FormBuilderValidators.required()],
+                          onsaved: (value) {
+                            email = value;
+                          },
+                        ),
+                        TextFieldCustom(
+                          height: allGood? 56 : 71,
+
+                          attribute: 'department',
+                          hint: 'Department',
+                          keyboardstyle: TextInputType.text,
+                          text: 'Department:',
+                          validator: [
+                            FormBuilderValidators.required(),
+                          ],
+                          onsaved: (value) {
+                            dept = value;
+                          },
+                        ),
+                        TextFieldCustom(
+                          height: allGood? 56 : 71,
+
+                          attribute: 'supervisor email',
+                          hint: 'Supervisor\'s Email',
+                          keyboardstyle: TextInputType.emailAddress,
+                          text: 'Supervisor\'s Email: ',
+                          validator: [
+                            FormBuilderValidators.required(),
+                            FormBuilderValidators.email(),
+                          ],
+                          onsaved: (value) {
+                            setState(() {
+                              supEmail = value;
+                            });
+                          },
+                        ),
+                        TextFieldCustom(
+                          height: allGood? 56 : 71,
+
+                          attribute: 'division',
+                          hint: 'Division',
+                          keyboardstyle: TextInputType.text,
+                          text: 'Division:',
+                          validator: [FormBuilderValidators.required()],
+                          onsaved: (value) {
+                            div = value;
+                          },
+                        ),
+                        TextFieldCustom(                          height: allGood? 56 : 71,
+
+
                           attribute: 'project',
                           hint: 'Project',
                           keyboardstyle: TextInputType.text,
@@ -278,24 +384,19 @@ class _BasicInfoState extends State<BasicInfo> {
                             onPressed: () {
                               if (_fbKey.currentState.saveAndValidate()) {
                                 formDetails = _fbKey.currentState.value;
-                                formDetails['fromDate'] = DateFormat.d()
-                                        .format(fromDate)
-                                        .toString() +
-                                    ' ' +
-                                    DateFormat.MMM()
-                                        .format(fromDate)
-                                        .toString() +
-                                    ' ' +
-                                    DateFormat.y().format(fromDate).toString();
-                                formDetails['toDate'] = DateFormat.d()
-                                        .format(toDate)
-                                        .toString() +
-                                    ' ' +
-                                    DateFormat.MMM().format(toDate).toString() +
-                                    ' ' +
-                                    DateFormat.y().format(toDate).toString();
-
-                                print(formDetails);
+                                formDetails['from date'] = fromDate;
+                                formDetails['to date'] = toDate;
+//
+//                                Navigator.popAndPushNamed(context, TravelItinerary.id,arguments: formDetails);
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                    builder: (context) => TravelItinerary(basicFormInfo: formDetails,),
+                              ),);
+                              }else{
+                                setState(() {
+                                  allGood =false;
+                                });
                               }
                             },
                             color: Color.fromRGBO(143, 148, 251, 1),

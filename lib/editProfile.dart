@@ -169,7 +169,7 @@ class _BasicInfoState extends State<BasicInfo> {
                             color: Color.fromRGBO(143, 148, 251, 1),
                             shape: StadiumBorder(),
                             child: Text(
-                              "Next",
+                              "Save",
                               style: TextStyle(
                                   fontSize: 18,
                                   color: Colors.white,

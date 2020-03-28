@@ -358,10 +358,7 @@ class DescriptionTag extends StatelessWidget {
           padding: EdgeInsets.all(8),
           decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(4),
-              gradient: LinearGradient(colors: [
-                Color.fromRGBO(143, 148, 251, 1),
-                Color.fromRGBO(143, 148, 251, .6),
-              ])),
+             color: Color.fromRGBO(143, 148, 251, 1)),
           child: Text(
             title,
             style: TextStyle(color: Colors.white, fontSize: 17),
