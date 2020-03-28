@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:tar_form/Basic_info.dart';
 import 'package:tar_form/SummaryPage.dart';
+import 'package:tar_form/editProfile.dart';
 import 'package:tar_form/hotelItinerary.dart';
 import 'package:tar_form/login_page.dart';
 import 'package:tar_form/registration.dart';
@@ -24,6 +25,8 @@ class MyApp extends StatelessWidget {
         ),
         home: SummaryPage(),
         routes: {
+          TravelLogPage.id: (context) => TravelLogPage(),
+          EditProfile.id: (context) => EditProfile(),
           RegistrationPage.id: (context) => RegistrationPage(),
           LoginPage.id: (context) => LoginPage(),
           BasicInfo.id: (context) => BasicInfo(),

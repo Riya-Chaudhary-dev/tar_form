@@ -3,6 +3,8 @@ import 'dart:math';
 
 
 class TravelLogPage extends StatefulWidget {
+  static String id = 'travel_logs';
+
   @override
   _TravelLogPageState createState() => _TravelLogPageState();
 }

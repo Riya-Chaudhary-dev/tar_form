@@ -3,8 +3,10 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:tar_form/Animation/FadeAnimation.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:tar_form/Basic_info.dart';
+import 'package:tar_form/editProfile.dart';
 
 import 'package:tar_form/login_page.dart';
+import 'package:tar_form/travel_log.dart';
 import 'registration.dart';
 
 class HomePage extends StatefulWidget {
@@ -48,11 +50,64 @@ class _HomePageState extends State<HomePage> {
                                 child: RaisedButton(
                                   padding: EdgeInsets.all(8),
                                   onPressed: () {
+                                    Navigator.pushNamed(context, EditProfile.id);
+                                  },
+                                  shape: StadiumBorder(),
+                                  color: Color.fromRGBO(143, 148, 251, 1),
+                                  child: Text(
+                                    "Edit Profile",
+                                    style: TextStyle(
+                                        fontSize: 26,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                              ),
+                            )),
+                        SizedBox(
+                          height: 60,
+                        ),
+                        FadeAnimation(
+                            2,
+                            Center(
+                              child: Container(
+                                height: 60,
+                                width: 350,
+                                child: RaisedButton(
+                                  padding: EdgeInsets.all(8),
+                                  onPressed: () {
                                     Navigator.pushNamed(context, BasicInfo.id);
                                   },
+                                  shape: StadiumBorder(),
                                   color: Color.fromRGBO(143, 148, 251, 1),
                                   child: Text(
                                     "Fill a TAR Form",
+                                    style: TextStyle(
+                                        fontSize: 26,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w600),
+                                  ),
+                                ),
+                              ),
+                            )),
+                        SizedBox(
+                          height: 60,
+                        ),
+                        FadeAnimation(
+                            2,
+                            Center(
+                              child: Container(
+                                height: 60,
+                                width: 350,
+                                child: RaisedButton(
+                                  padding: EdgeInsets.all(8),
+                                  onPressed: () {
+                                    Navigator.pushNamed(context, TravelLogPage.id);
+                                  },
+                                  shape: StadiumBorder(),
+                                  color: Color.fromRGBO(143, 148, 251, 1),
+                                  child: Text(
+                                    "Travel Logs",
                                     style: TextStyle(
                                         fontSize: 26,
                                         color: Colors.white,
@@ -85,6 +140,7 @@ class _HomePageState extends State<HomePage> {
                                       print(e);
                                     }
                                   },
+                                  shape: StadiumBorder(),
                                   color: Color.fromRGBO(143, 148, 251, 1),
                                   child: Text(
                                     "Sign Out",

@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'textfieldcustom.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'package:intl/intl.dart';
 
-class BasicInfo extends StatefulWidget {
-  static String id = 'basic_info';
+class EditProfile extends StatefulWidget {
+  static String id = 'edit_profile';
 
   @override
-  _BasicInfoState createState() => _BasicInfoState();
+  _EditProfileState createState() => _EditProfileState();
 }
 
-class _BasicInfoState extends State<BasicInfo> {
+class _EditProfileState extends State<EditProfile> {
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
   Map formDetails = {};
   Color kTextColor = Color.fromRGBO(143, 148, 251, 1);
