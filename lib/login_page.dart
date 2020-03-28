@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:tar_form/registration.dart';
 import 'Animation/FadeAnimation.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 
@@ -256,10 +257,15 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                             FadeAnimation(
                                 1.5,
-                                Text(
-                                  "Not a Member yet?",
-                                  style: TextStyle(
-                                      color: Color.fromRGBO(143, 148, 251, 1)),
+                                GestureDetector(
+                                  onTap: (){
+                                    Navigator.pushNamed(context, RegistrationPage.id);
+                                  },
+                                  child: Text(
+                                    "Not a Member yet?",
+                                    style: TextStyle(
+                                        color: Color.fromRGBO(143, 148, 251, 1)),
+                                  ),
                                 )),
                           ],
                         ),

@@ -6,11 +6,16 @@ import 'package:date_range_picker/date_range_picker.dart' as DateRagePicker;
 import 'package:intl/intl.dart';
 import 'package:tar_form/custom_expansion_tile.dart' as custom;
 
+List _departureKeys = [GlobalKey<FormBuilderState>()];
+List _modeOfTransportKeys = [GlobalKey<FormBuilderState>()];
+GlobalKey<FormBuilderState> nigr = GlobalKey<FormBuilderState>();
+
 class TravelItinerary extends StatefulWidget {
   @override
   _TravelItineraryState createState() => _TravelItineraryState();
 }
 
+bool allGood = true;
 List<Widget> Legs = [
   TravelCard(
     ToPlace: 'Pune',
@@ -20,7 +25,6 @@ List<Widget> Legs = [
 ];
 
 class _TravelItineraryState extends State<TravelItinerary> {
-  final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
   double advAmount;
   String advDescription;
   bool checkboxValue = false;
@@ -45,318 +49,308 @@ class _TravelItineraryState extends State<TravelItinerary> {
         },
         child: SafeArea(
           child: SingleChildScrollView(
-            child: FormBuilder(
-              key: _fbKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  LinearProgressIndicator(
-                    value: 0.7,
-                    valueColor:
-                        new AlwaysStoppedAnimation<Color>(Colors.orangeAccent),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                LinearProgressIndicator(
+                  value: 0.7,
+                  valueColor:
+                  new AlwaysStoppedAnimation<Color>(Colors.orangeAccent),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Card(
+                    elevation: 2,
+                    child: Container(
+                      width: MediaQuery.of(context).size.width - 15,
+                      padding: EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(4),
+                          color: Color.fromRGBO(143, 148, 251, 1)),
+                      child: Column(
+                        children: <Widget>[
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text(
+                                'Departing Date:',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 17),
+                              ),
+                              Text(
+                                'Return Date:',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 17),
+                              ),
+                            ],
+                          ),
+                          Icon(
+                            Icons.cached,
+                            color: Colors.white,
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text(
+                                '12 Dec 2019',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 17),
+                              ),
+                              Text(
+                                'Never',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 17),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Card(
-                      elevation: 2,
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                  child: Card(
+                    child: CheckboxListTile(
+                      value: advVal,
+                      onChanged: (val) {
+                        if (advVal == false) {
+                          setState(() {
+                            advVal = true;
+                          });
+                        } else if (advVal == true) {
+                          setState(() {
+                            advVal = false;
+                          });
+                        }
+                      },
+//                        subtitle: advVal
+//                            ?
+//                            : null,
+                      title: new Text(
+                        'Do you require Travel Advance?',
+                        style: TextStyle(
+                            fontSize: 14.0, fontWeight: FontWeight.w600),
+                      ),
+                      controlAffinity: ListTileControlAffinity.platform,
+                      activeColor: Colors.deepPurple.shade400,
+                    ),
+                  ),
+                ),
+                Visibility(
+                  visible: advVal,
+                  child: GestureDetector(
+                    onTap: () {
+                      FocusScope.of(context).requestFocus(new FocusNode());
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
                       child: Container(
-                        width: MediaQuery.of(context).size.width - 15,
                         padding: EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(4),
-                            color: Color.fromRGBO(143, 148, 251, 1)),
+                          borderRadius: BorderRadius.circular(5),
+                          border: Border.all(
+                            color: Color.fromRGBO(143, 148, 251, 8),
+                            width: 2.0,
+                          ),
+                        ),
                         child: Column(
                           children: <Widget>[
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Text(
-                                  'Departing Date:',
+                                  'Amount: ',
                                   style: TextStyle(
-                                      color: Colors.white, fontSize: 17),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600),
                                 ),
-                                Text(
-                                  'Return Date:',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 17),
-                                ),
+                                Expanded(
+                                  child: Container(
+                                    height: 65,
+                                    padding: EdgeInsets.all(2),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      border: Border.all(
+                                        color:
+                                        Color.fromRGBO(143, 148, 251, 8),
+                                        width: 2.0,
+                                      ),
+                                    ),
+                                    child: TextField
+//                                    FormBuilderTextField(
+//                                      autovalidate: allGood ? false : true,
+//                                      attribute: "advAmount",
+//                                      onSaved: (value) {
+//                                        value != null
+//                                            ? advAmount = double.parse(value)
+//                                            : advAmount = 0.0;
+//                                        print(advAmount);
+//                                      },
+//                                      validators: [
+//                                        FormBuilderValidators.required(),
+//                                      ],
+//                                      keyboardType: TextInputType.number,
+//                                      decoration: InputDecoration(
+//                                          border: InputBorder.none,
+//                                          hintText: 'Amount',
+//                                          hintStyle: TextStyle(
+//                                              color: Colors.grey[600],
+//                                              fontSize: 15)),
+//                                    ),
+                                  ),
+                                )
                               ],
                             ),
-                            Icon(
-                              Icons.cached,
-                              color: Colors.white,
-                            ),
+                            Divider(),
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: <Widget>[
                                 Text(
-                                  '12 Dec 2019',
+                                  '*Description: ',
                                   style: TextStyle(
-                                      color: Colors.white, fontSize: 17),
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w600),
                                 ),
-                                Text(
-                                  'Never',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 17),
-                                ),
+                                Expanded(
+                                  child: Container(
+                                    padding:
+                                    EdgeInsets.symmetric(horizontal: 2),
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(5),
+                                      border: Border.all(
+                                        color:
+                                        Color.fromRGBO(143, 148, 251, 8),
+                                        width: 2.0,
+                                      ),
+                                    ),
+                                    child: FormBuilderTextField(
+                                      autovalidate: allGood ? false : true,
+                                      attribute: "advDescription",
+                                      onSaved: (value) {
+                                        value != null
+                                            ? advDescription = value
+                                            : advDescription = '';
+                                      },
+                                      validators: [
+                                        FormBuilderValidators.required(),
+                                        FormBuilderValidators.minLength(3),
+                                      ],
+                                      keyboardType: TextInputType.text,
+                                      maxLines: 6,
+                                      decoration: InputDecoration(
+                                          border: InputBorder.none,
+                                          hintText: 'Description',
+                                          hintStyle: TextStyle(
+                                              color: Colors.grey[600],
+                                              fontSize: 15)),
+                                    ),
+                                  ),
+                                )
                               ],
+                            ),
+                            Divider(),
+                            Text(
+                              'Advance for business travel will be handed on case-by-case basis. Travel advances will be '
+                                  'NOT be issued to:\n'
+                                  'a. Employees with outstanding Expense Reimbursement Statements over 30 days.\n'
+                                  'b. Employees who have taken advance for previous tour and not returned the unused advance'
+                                  ' or not submitted the Expense Reimbursement Statement.\n'
+                                  'c. Employees who have a Company credit card.\n'
+                                  'd. Employees who choose to use their personal credit card for business travel.\n'
+                                  'Ref: *HA-Travel Policy *page-2(HA/16-17/001 Date:21/05/2016)',
+                              style: TextStyle(color: Colors.red),
                             ),
                           ],
                         ),
                       ),
                     ),
                   ),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                    child: Card(
-                      child: CheckboxListTile(
-                        value: advVal,
-                        onChanged: (val) {
-                          if (advVal == false) {
-                            setState(() {
-                              advVal = true;
-                            });
-                          } else if (advVal == true) {
-                            setState(() {
-                              advVal = false;
-                            });
-                          }
-                        },
-//                        subtitle: advVal
-//                            ?
-//                            : null,
-                        title: new Text(
-                          'Do you require Travel Advance?',
-                          style: TextStyle(
-                              fontSize: 14.0, fontWeight: FontWeight.w600),
-                        ),
-                        controlAffinity: ListTileControlAffinity.platform,
-                        activeColor: Colors.deepPurple.shade400,
+                ),
+                Column(
+                  children: Legs,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Center(
+                    child: RaisedButton(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(18.0),
                       ),
-                    ),
-                  ),
-                  Visibility(
-                    visible: advVal,
-                    child: GestureDetector(
-                      onTap: () {
-                        FocusScope.of(context).requestFocus(new FocusNode());
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Container(
-                          padding: EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(5),
-                            border: Border.all(
-                              color: Color.fromRGBO(143, 148, 251, 8),
-                              width: 2.0,
+                      splashColor: Colors.green,
+                      padding: EdgeInsets.symmetric(horizontal: 100),
+                      child: Text(
+                        'click to add legs',
+                        style: TextStyle(color: Colors.white, fontSize: 20),
+                      ),
+                      color: Colors.lightGreen,
+                      onPressed: () {
+                        setState(() {
+                          _departureKeys.add(GlobalKey<FormBuilderState>());
+                          _modeOfTransportKeys
+                              .add(GlobalKey<FormBuilderState>());
+                          print(_departureKeys);
+                          noOfLegs++;
+                          Legs.add(
+                            TravelCard(
+                              legNo: noOfLegs,
+                              ToPlace: 'Pune',
+                              FromPlace: 'Kol',
+                              ToDate: '21 Dec 2019',
                             ),
-                          ),
-                          child: Column(
-                            children: <Widget>[
-                              Row(
-                                children: <Widget>[
-                                  Text(
-                                    'Amount: ',
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                  Expanded(
-                                    child: Container(
-                                      height: 65,
-                                      padding: EdgeInsets.all(2),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(5),
-                                        border: Border.all(
-                                          color:
-                                              Color.fromRGBO(143, 148, 251, 8),
-                                          width: 2.0,
-                                        ),
-                                      ),
-                                      child: FormBuilderTextField(
-                                        attribute: "advAmount",
-                                        onSaved: (value) {
-                                          value != null
-                                              ? advAmount = double.parse(value)
-                                              : advAmount = 0.0;
-                                          print(advAmount);
-                                        },
-                                        validators: [
-                                          FormBuilderValidators.required(),
-                                        ],
-                                        keyboardType: TextInputType.number,
-                                        decoration: InputDecoration(
-                                            border: InputBorder.none,
-                                            hintText: 'Amount',
-                                            hintStyle: TextStyle(
-                                                color: Colors.grey[600],
-                                                fontSize: 15)),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              Divider(),
-                              Row(
-                                children: <Widget>[
-                                  Text(
-                                    '*Description: ',
-                                    style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                  Expanded(
-                                    child: Container(
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 2),
-//                                      height: 53,
-//                width: 170,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(5),
-                                        border: Border.all(
-                                          color:
-                                              Color.fromRGBO(143, 148, 251, 8),
-                                          width: 2.0,
-                                        ),
-                                      ),
-                                      child: FormBuilderTextField(
-                                        attribute: "advDescription",
-                                        onSaved: (value) {
-                                          value != null
-                                              ? advDescription = value
-                                              : advDescription = '';
-                                        },
-                                        validators: [
-                                          FormBuilderValidators.required(),
-                                          FormBuilderValidators.minLength(3),
-                                        ],
-                                        keyboardType: TextInputType.text,
-                                        maxLines: 6,
-                                        decoration: InputDecoration(
-                                            border: InputBorder.none,
-                                            hintText: 'Description',
-                                            hintStyle: TextStyle(
-                                                color: Colors.grey[600],
-                                                fontSize: 15)),
-                                      ),
-                                    ),
-                                  )
-                                ],
-                              ),
-                              Divider(),
-                              Text(
-                                'Advance for business travel will be handed on case-by-case basis. Travel advances will be '
-                                'NOT be issued to:\n'
-                                'a. Employees with outstanding Expense Reimbursement Statements over 30 days.\n'
-                                'b. Employees who have taken advance for previous tour and not returned the unused advance'
-                                ' or not submitted the Expense Reimbursement Statement.\n'
-                                'c. Employees who have a Company credit card.\n'
-                                'd. Employees who choose to use their personal credit card for business travel.\n'
-                                'Ref: *HA-Travel Policy *page-2(HA/16-17/001 Date:21/05/2016)',
-                                style: TextStyle(color: Colors.red),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
+                          );
+                        });
+                      },
                     ),
                   ),
-                  Column(
-                    children: Legs,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Center(
-                      child: RaisedButton(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
-                        ),
-                        splashColor: Colors.green,
-                        padding: EdgeInsets.symmetric(horizontal: 100),
-                        child: Text(
-                          'click to add legs',
-                          style: TextStyle(color: Colors.white, fontSize: 20),
-                        ),
-                        color: Colors.lightGreen,
-                        onPressed: () {
-                          setState(() {
-                            noOfLegs++;
-                            Legs.add(
-                              TravelCard(
-                                legNo: noOfLegs,
-                                ToPlace: 'Pune',
-                                FromPlace: 'Kol',
-                                ToDate: '21 Dec 2019',
-                              ),
-                            );
-                          });
-                        },
-                      ),
-                    ),
-                  ),
-                  HotelDetails(),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                    child: Card(
-                      child: CheckboxListTile(
-                        value: checkboxValue,
-                        onChanged: (val) {
-                          if (checkboxValue == false) {
-                            setState(() {
-                              checkboxValue = true;
-                            });
-                          } else if (checkboxValue == true) {
-                            setState(() {
-                              checkboxValue = false;
-                            });
-                          }
-                        },
-                        subtitle: !checkboxValue
-                            ? Text(
-                                'Required.',
-                                style: TextStyle(color: Colors.red),
-                              )
-                            : null,
-                        title: new Text(
-                          'I hereby confirm that the information filled in this TAR are as per Holtec\'s travel policy.',
-                          style: TextStyle(
-                              fontSize: 14.0, fontWeight: FontWeight.w600),
-                        ),
-                        controlAffinity: ListTileControlAffinity.leading,
-                        activeColor: Colors.deepPurple.shade400,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  FadeAnimation(
-                      2,
-                      Center(
-                        child: RaisedButton(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 60, vertical: 8),
-                          onPressed: () {
-                            if (_fbKey.currentState.saveAndValidate()) {
-                              print(_fbKey.currentState.value);
-                            } else {
-                              print('that aint shit boi');
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Center(
+                  child: RaisedButton(
+                    padding:
+                    EdgeInsets.symmetric(horizontal: 60, vertical: 8),
+                    onPressed: () {
+                      int outCount = 0;
+                      for (var q in _departureKeys) {
+                        if (q.currentState.saveAndValidate()) {
+                          outCount++;
+                          if (outCount == noOfLegs) {
+                            int inCount = 0;
+                            print('onto checking the modes');
+                            for (var q in _modeOfTransportKeys) {
+                              if (q.currentState.saveAndValidate()) {
+                                inCount++;
+                                if (inCount == noOfLegs) {
+                                  print('all good boi');
+                                }
+                              }
+                              else{
+                                setState(() {
+                                  allGood = false;
+                                });
+                              }
                             }
-                          },
-                          color: Color.fromRGBO(143, 148, 251, 1),
-                          shape: StadiumBorder(),
-                          child: Text(
-                            "Next",
-                            style: TextStyle(
-                                fontSize: 18,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600),
-                          ),
-                        ),
-                      )),
-                ],
-              ),
+                          }
+                        } else {
+                          setState(() {
+                            allGood = false;
+                          });
+                          print('not right');
+                        }
+                      }
+                    },
+                    color: Color.fromRGBO(143, 148, 251, 1),
+                    shape: StadiumBorder(),
+                    child: Text(
+                      "Next",
+                      style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.white,
+                          fontWeight: FontWeight.w600),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ),
@@ -400,259 +394,266 @@ class _TravelCardState extends State<TravelCard> {
 //    final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
 
     List Modes = ['Rental Car', 'Train', 'Flight', 'Personal Car', 'Bus'];
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Container(
-            child: Column
-              (children: <Widget>[
-              Container(
-                width: MediaQuery.of(context).size.width-10,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8),
-                  gradient: LinearGradient(colors: [
-                    Color.fromRGBO(143, 148, 251, 1),
-                    Color.fromRGBO(143, 148, 251, .6),
-                  ]),),
-       padding: EdgeInsets.all(10),
-       child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  'Leg ' + widget.legNo.toString(),
-                  style: TextStyle(color: Colors.white, fontSize: 17),
-                ),
-                Row(
-                  children: <Widget>[
-                    Text(
-                      'Travel Date:',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16),
+    return FormBuilder(
+      key: _departureKeys[widget.legNo - 1],
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Card(
+          color: Color.fromRGBO(143, 148, 251, 1),
+          child: Padding(
+            padding: const EdgeInsets.all(3.0),
+            child: Container(
+              child: Column(
+                children: <Widget>[
+                  Container(
+                    width: MediaQuery.of(context).size.width - 10,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(8),
+                      color: Color.fromRGBO(143, 148, 251, 1),
                     ),
-                    SizedBox(
-                      width: 7,
-                    ),
-                    Container(
-                      padding: EdgeInsets.all(4),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(5),
-                        border: Border.all(
-                          color: Color.fromRGBO(143, 148, 251, 150),
-                          //                   <--- border color
-                          width: 2.0,
+                    padding: EdgeInsets.all(10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          'Leg ' + widget.legNo.toString(),
+                          style: TextStyle(color: Colors.white, fontSize: 17),
                         ),
-                      ),
-                      child: GestureDetector(
-                        onTap: () => _selectDate(context),
-                        child: Text(
-                          DateFormat.d().format(selectedDate).toString() +
-                              ' ' +
-                              DateFormat.MMM().format(selectedDate).toString() +
-                              ', ' +
-                              DateFormat.y().format(selectedDate).toString(),
-                          style: TextStyle(
-                              color: Color.fromRGBO(143, 148, 251, 1)),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-              ),
-        Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 1.0),
-              child: Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(5.0),
-                  child: Column(
-                    children: <Widget>[
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Column(
-                            children: <Widget>[
-                              Text(
-                                'Depart From:',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600, fontSize: 16),
+                        Row(
+                          children: <Widget>[
+                            Text(
+                              'Travel Date:',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 16),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Container(
+                              padding: EdgeInsets.all(4),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(5),
+                                border: Border.all(
+                                  color: Color.fromRGBO(143, 148, 251, 150),
+                                  //                   <--- border color
+                                  width: 2.0,
+                                ),
                               ),
-                              Container(
-                                height: 53,
-                                width: 160,
+                              child: GestureDetector(
+                                onTap: () => _selectDate(context),
+                                child: Text(
+                                  DateFormat.d()
+                                      .format(selectedDate)
+                                      .toString() +
+                                      ' ' +
+                                      DateFormat.MMM()
+                                          .format(selectedDate)
+                                          .toString() +
+                                      ', ' +
+                                      DateFormat.y()
+                                          .format(selectedDate)
+                                          .toString(),
+                                  style: TextStyle(
+                                      fontSize: 20,
+                                      color: Color.fromRGBO(143, 148, 251, 1)),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 1.0),
+                    child: Card(
+                      child: Padding(
+                        padding: const EdgeInsets.all(5.0),
+                        child: Column(
+                          children: <Widget>[
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Column(
+                                  children: <Widget>[
+                                    Text(
+                                      'Depart From:',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 16),
+                                    ),
+                                    Container(
+                                      height: allGood ? 53 : 71,
+                                      width: 160,
 //                                padding: EdgeInsets.only(left:5.0),
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 2, vertical: 1),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  border: Border.all(
-                                    color: Color.fromRGBO(143, 148, 251, 8),
-                                    //                   <--- border color
-                                    width: 2.0,
-                                  ),
-                                ),
-                                child: FormBuilderTextField(
-                                  attribute: "departTo",
-                                  onSaved: (value) {
-                                    value != null
-                                        ? departFrom = value
-                                        : departFrom = '';
-                                  },
-                                  validators: [
-                                    FormBuilderValidators.required(),
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 2, vertical: 1),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(5),
+                                        border: Border.all(
+                                          color:
+                                          Color.fromRGBO(143, 148, 251, 8),
+                                          width: 2.0,
+                                        ),
+                                      ),
+                                      child: FormBuilderTextField(
+                                        autovalidate: allGood ? false : true,
+                                        attribute: "departTo",
+                                        onSaved: (value) {
+                                          value != null
+                                              ? departFrom = value
+                                              : departFrom = '';
+                                        },
+                                        validators: [
+                                          FormBuilderValidators.required(),
+                                        ],
+                                        keyboardType: TextInputType.text,
+                                        decoration: InputDecoration(
+                                            border: InputBorder.none,
+                                            hintText: 'Place',
+                                            hintStyle: TextStyle(
+                                                color: Colors.grey[300],
+                                                fontSize: 15)),
+                                      ),
+                                    ),
                                   ],
-                                  keyboardType: TextInputType.text,
-                                  decoration: InputDecoration(
-                                      border: InputBorder.none,
-                                      hintText: 'Place',
-                                      hintStyle: TextStyle(
-                                          color: Colors.grey[300],
-                                          fontSize: 15)),
+                                ),
+                                Column(
+                                  children: <Widget>[
+                                    Text(
+                                      'Depart To:',
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 16),
+                                    ),
+                                    Container(
+                                      height: allGood ? 53 : 71,
+                                      width: 160,
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 2, vertical: 1),
+                                      decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(5),
+                                        border: Border.all(
+                                          color:
+                                          Color.fromRGBO(143, 148, 251, 8),
+                                          width: 2.0,
+                                        ),
+                                      ),
+                                      child: FormBuilderTextField(
+                                        autovalidate: allGood ? false : true,
+                                        textAlign: TextAlign.center,
+                                        attribute: "departTo",
+                                        onSaved: (value) {
+                                          value != null
+                                              ? departTo = value
+                                              : departTo = '';
+                                        },
+                                        validators: [
+                                          FormBuilderValidators.required(),
+                                        ],
+                                        keyboardType: TextInputType.text,
+                                        decoration: InputDecoration(
+                                            border: InputBorder.none,
+                                            hintText: 'Place',
+                                            hintStyle: TextStyle(
+                                                color: Colors.grey[300],
+                                                fontSize: 15)),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              '*Mode of Transportation:',
+                              style: TextStyle(
+                                  fontWeight: FontWeight.w600, fontSize: 16),
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            Container(
+                              width: MediaQuery.of(context).size.width - 12,
+                              padding: EdgeInsets.symmetric(horizontal: 4),
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(5),
+                                border: Border.all(
+                                  color: Color.fromRGBO(143, 148, 251, 8),
+                                  width: 2.0,
                                 ),
                               ),
-                            ],
-                          ),
-                          Column(
-                            children: <Widget>[
-                              Text(
-                                'Depart To:',
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w600, fontSize: 16),
-                              ),
-                              Container(
-                                height: 53,
-                                width: 160,
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 2, vertical: 1),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  border: Border.all(
-                                    color: Color.fromRGBO(143, 148, 251, 8),
-                                    //                   <--- border color
-                                    width: 2.0,
-                                  ),
-                                ),
-                                child: FormBuilderTextField(
-                                  textAlign: TextAlign.center,
-                                  attribute: "departTo",
-                                  onSaved: (value) {
-                                    value != null
-                                        ? departTo = value
-                                        : departTo = '';
+                              child: Center(
+                                child: FormBuilderDropdown(
+                                  attribute: "mode",
+                                  onChanged: (val) {
+                                    setState(() {
+                                      mode = val;
+                                    });
                                   },
-                                  validators: [
-                                    FormBuilderValidators.required(),
-                                  ],
-                                  keyboardType: TextInputType.text,
+                                  onSaved: (val) {
+                                    setState(() {
+                                      mode = val;
+                                    });
+                                  },
                                   decoration: InputDecoration(
                                     border: InputBorder.none,
-                                      hintText: 'Place',
-                                      hintStyle: TextStyle(
-                                          color: Colors.grey[300],
-                                          fontSize: 15)),
+                                  ),
+                                  hint: Row(
+                                    children: <Widget>[
+                                      Text('Select mode of transportation'),
+                                    ],
+                                  ),
+                                  validators: [
+                                    FormBuilderValidators.required()
+                                  ],
+                                  items: Modes.map((mode) => DropdownMenuItem(
+                                      value: mode,
+                                      child: Text("$mode"))).toList(),
                                 ),
                               ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text(
-                        '*Mode of Transportation:',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, fontSize: 16),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Container(
-                        width: MediaQuery.of(context).size.width - 12,
-                        padding: EdgeInsets.symmetric(horizontal: 4),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5),
-                          border: Border.all(
-                            color: Color.fromRGBO(143, 148, 251, 8),
-                            //                   <--- border color
-                            width: 2.0,
-                          ),
-                        ),
-                        child: Center(
-                          child: FormBuilderDropdown(
-                            attribute: "mode",
-                            onChanged: (val) {
-                              setState(() {
-                                mode = val;
-                              });
-                            },
-                            onSaved: (val) {
-                              setState(() {
-                                mode = val;
-                              });
-                            },
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
                             ),
-                            // initialValue: 'Male',
-                            hint: Text('Select mode of transportation'),
-                            validators: [FormBuilderValidators.required()],
-                            items: Modes.map((mode) => DropdownMenuItem(
-                                value: mode, child: Text("$mode"))).toList(),
-                          ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                            descrBox(
+                              mode: mode,
+                              legNo: widget.legNo,
+                            ),
+                            SizedBox(
+                              height: 10,
+                            ),
+                          ],
                         ),
                       ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      descrBox(mode),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          print(Legs);
-                          setState(() {
-                            Legs.removeLast();
-                          });
-                        },
-                        child: Container(
-                            width: double.infinity,
-                            height: 30,
-                            color: Colors.red,
-                            child: Icon(Icons.delete)),
-                      )
-                    ],
+                    ),
                   ),
-                ),
+                ],
               ),
             ),
-            ],),
           ),
         ),
       ),
     );
-
   }
 }
 
 class descrBox extends StatefulWidget {
-  descrBox(this.mode);
+  descrBox({this.mode, this.legNo});
 
   String mode;
+  int legNo;
 
   @override
   _descrBoxState createState() => _descrBoxState();
 }
 
 class _descrBoxState extends State<descrBox> {
-  final GlobalKey<FormBuilderState> _fbKey1 = GlobalKey<FormBuilderState>();
-
   List service = [
     'Return',
     'Drop only',
@@ -672,9 +673,9 @@ class _descrBoxState extends State<descrBox> {
   String DropAdd;
   String traindeets;
   String flightdeets;
-  double personalCaramt;
-  double personalCardist;
-  double personalCarrate;
+  double personalCardist=0;
+  double personalCarrate=0;
+
 
   selectDate() async {
     final List<DateTime> picked = await DateRagePicker.showDatePicker(
@@ -713,9 +714,12 @@ class _descrBoxState extends State<descrBox> {
 
   @override
   Widget build(BuildContext context) {
+    double personalCaramt=0;
+    personalCaramt=personalCardist*personalCarrate;
+
     if (widget.mode == 'Rental Car') {
       return FormBuilder(
-        key: _fbKey1,
+        key: _modeOfTransportKeys[widget.legNo - 1],
         child: Column(
           children: <Widget>[
             Divider(),
@@ -735,8 +739,7 @@ class _descrBoxState extends State<descrBox> {
                 Expanded(
                   child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 4),
-
-                    height: 55,
+                    height: allGood ? 53 : 71,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
                       border: Border.all(
@@ -745,17 +748,19 @@ class _descrBoxState extends State<descrBox> {
                       ),
                     ),
                     child: FormBuilderTextField(
+                      autovalidate: allGood ? false : true,
                       attribute: "RetalName",
                       onSaved: (val) {
                         setState(() {
                           rentalName = val;
                         });
                       },
+                      validators: [FormBuilderValidators.required()],
                       decoration: InputDecoration(
                           border: InputBorder.none,
                           hintText: 'Rental Company Name',
                           hintStyle:
-                              TextStyle(color: Colors.grey[300], fontSize: 15)),
+                          TextStyle(color: Colors.grey[300], fontSize: 15)),
                     ),
                   ),
                 )
@@ -770,9 +775,8 @@ class _descrBoxState extends State<descrBox> {
                 ),
                 Expanded(
                   child: Container(
-                    height: 55,
+                    height: allGood ? 53 : 71,
                     padding: EdgeInsets.symmetric(horizontal: 4),
-
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
                       border: Border.all(
@@ -781,17 +785,19 @@ class _descrBoxState extends State<descrBox> {
                       ),
                     ),
                     child: FormBuilderTextField(
+                      autovalidate: allGood ? false : true,
                       attribute: "carPickupAddress",
                       onSaved: (val) {
                         setState(() {
                           PickUpAdd = val;
                         });
                       },
+                      validators: [FormBuilderValidators.required()],
                       decoration: InputDecoration(
                           border: InputBorder.none,
                           hintText: 'PickUp address',
                           hintStyle:
-                              TextStyle(color: Colors.grey[300], fontSize: 15)),
+                          TextStyle(color: Colors.grey[300], fontSize: 15)),
                     ),
                   ),
                 )
@@ -806,9 +812,8 @@ class _descrBoxState extends State<descrBox> {
                 ),
                 Expanded(
                   child: Container(
-                    height: 55,
+                    height: allGood ? 53 : 71,
                     padding: EdgeInsets.symmetric(horizontal: 4),
-
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(5),
                       border: Border.all(
@@ -817,18 +822,20 @@ class _descrBoxState extends State<descrBox> {
                       ),
                     ),
                     child: FormBuilderTextField(
+                      autovalidate: allGood ? false : true,
                       attribute: "carDropOffAddress",
                       onSaved: (val) {
                         setState(() {
                           DropAdd = val;
                         });
                       },
+                      validators: [FormBuilderValidators.required()],
                       maxLines: 4,
                       decoration: InputDecoration(
                           border: InputBorder.none,
                           hintText: 'Dropoff address',
                           hintStyle:
-                              TextStyle(color: Colors.grey[300], fontSize: 15)),
+                          TextStyle(color: Colors.grey[300], fontSize: 15)),
                     ),
                   ),
                 )
@@ -846,11 +853,10 @@ class _descrBoxState extends State<descrBox> {
                     Text(
                       'Vehicle Type: ',
                       style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                     ),
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: 4),
-
                       width: MediaQuery.of(context).size.width / 2.5,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(5),
@@ -861,6 +867,9 @@ class _descrBoxState extends State<descrBox> {
                         ),
                       ),
                       child: FormBuilderDropdown(
+                        validators: [
+                          FormBuilderValidators.required(),
+                        ],
                         attribute: "vehicleType",
                         onSaved: (val) {
                           vehicleType = val;
@@ -868,12 +877,10 @@ class _descrBoxState extends State<descrBox> {
                         decoration: InputDecoration(
                           border: InputBorder.none,
                         ),
-                        // initialValue: 'Male',
                         hint: Text('Select vehicle type'),
-                        validators: [FormBuilderValidators.required()],
                         items: vehicle
                             .map((vehicle) => DropdownMenuItem(
-                                value: vehicle, child: Text("$vehicle")))
+                            value: vehicle, child: Text("$vehicle")))
                             .toList(),
                       ),
                     ),
@@ -884,11 +891,10 @@ class _descrBoxState extends State<descrBox> {
                     Text(
                       'Service Type: ',
                       style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                     ),
                     Container(
                       padding: EdgeInsets.symmetric(horizontal: 4),
-
                       width: MediaQuery.of(context).size.width / 2.5,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(5),
@@ -913,7 +919,7 @@ class _descrBoxState extends State<descrBox> {
                         validators: [FormBuilderValidators.required()],
                         items: service
                             .map((service) => DropdownMenuItem(
-                                value: service, child: Text("$service")))
+                            value: service, child: Text("$service")))
                             .toList(),
                       ),
                     ),
@@ -921,7 +927,9 @@ class _descrBoxState extends State<descrBox> {
                 ),
               ],
             ),
-            Divider(),
+            Divider(
+              height: 30,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
@@ -930,7 +938,7 @@ class _descrBoxState extends State<descrBox> {
                     Text(
                       'Pickup Date ',
                       style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                     ),
                     Text(
                       DateFormat.d().format(fromDate).toString() +
@@ -943,17 +951,27 @@ class _descrBoxState extends State<descrBox> {
                   ],
                 ),
                 GestureDetector(
-                    onTap: selectDate,
-                    child: Icon(
-                      Icons.calendar_today,
-                      color: Colors.deepPurple.shade200,
-                    )),
+                  onTap: selectDate,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+//
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(100),
+                        color: Color.fromRGBO(143, 148, 251, 8)),
+                    child: Center(
+                      child: Text(
+                        'Select Dates',
+                        style: TextStyle(color: Colors.white, fontSize: 17),
+                      ),
+                    ),
+                  ),
+                ),
                 Column(
                   children: <Widget>[
                     Text(
                       'Dropoff Date: ',
                       style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                      TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                     ),
                     Text(
                       DateFormat.d().format(toDate).toString() +
@@ -972,7 +990,7 @@ class _descrBoxState extends State<descrBox> {
       );
     } else if (widget.mode == 'Flight') {
       return FormBuilder(
-        key: _fbKey1,
+        key: _modeOfTransportKeys[widget.legNo - 1],
         child: Row(
           children: <Widget>[
             Text(
@@ -981,9 +999,8 @@ class _descrBoxState extends State<descrBox> {
             ),
             Expanded(
               child: Container(
-                height: 55,
+                height: allGood ? 53 : 71,
                 padding: EdgeInsets.symmetric(horizontal: 4),
-
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(5),
                   border: Border.all(
@@ -1001,11 +1018,12 @@ class _descrBoxState extends State<descrBox> {
                   validators: [
                     FormBuilderValidators.required(),
                   ],
+                  autovalidate: allGood ? false : true,
                   decoration: InputDecoration(
                       border: InputBorder.none,
                       hintText: 'Flight No.',
                       hintStyle:
-                          TextStyle(color: Colors.grey[300], fontSize: 15)),
+                      TextStyle(color: Colors.grey[300], fontSize: 15)),
                 ),
               ),
             )
@@ -1013,209 +1031,247 @@ class _descrBoxState extends State<descrBox> {
         ),
       );
     } else if (widget.mode == 'Train') {
-      return Row(
-        children: <Widget>[
-          Text(
-            'Train No. & Class: ',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-          ),
-          Expanded(
-            child: Container(
-              height: 55,
-              padding: EdgeInsets.symmetric(horizontal: 4),
-
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                border: Border.all(
-                  color: Color.fromRGBO(143, 148, 251, 8),
-                  width: 2.0,
+      return FormBuilder(
+        key: _modeOfTransportKeys[widget.legNo - 1],
+        child: Row(
+          children: <Widget>[
+            Text(
+              'Train No. & Class: ',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+            ),
+            Expanded(
+              child: Container(
+                height: allGood ? 53 : 71,
+                padding: EdgeInsets.symmetric(horizontal: 4),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  border: Border.all(
+                    color: Color.fromRGBO(143, 148, 251, 8),
+                    width: 2.0,
+                  ),
+                ),
+                child: FormBuilderTextField(
+                  autovalidate: allGood ? false : true,
+                  validators: [
+                    FormBuilderValidators.required(),
+                  ],
+                  attribute: "trainDetails",
+                  onSaved: (val) {
+                    setState(() {
+                      traindeets = val;
+                    });
+                  },
+                  decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: 'Train no. & Class',
+                      hintStyle:
+                      TextStyle(color: Colors.grey[300], fontSize: 15)),
                 ),
               ),
-              child: FormBuilderTextField(
-                attribute: "trainDetails",
-                onSaved: (val) {
-                  setState(() {
-                    traindeets = val;
-                  });
-                },
-                decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: 'Train no. & Class',
-                    hintStyle:
-                        TextStyle(color: Colors.grey[300], fontSize: 15)),
-              ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       );
     } else if (widget.mode == 'Bus') {
-      return Row(
-        children: <Widget>[
-          Text(
-            'Bus Type: ',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-          ),
-          Expanded(
-            child: Container(
-              height: 55,
-              padding: EdgeInsets.symmetric(horizontal: 4),
-
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(5),
-                border: Border.all(
-                  color: Color.fromRGBO(143, 148, 251, 8),
-                  width: 2.0,
+      return FormBuilder(
+        key: _modeOfTransportKeys[widget.legNo - 1],
+        child: Row(
+          children: <Widget>[
+            Text(
+              'Bus Type: ',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+            ),
+            Expanded(
+              child: Container(
+                height: allGood ? 53 : 71,
+                padding: EdgeInsets.symmetric(horizontal: 4),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(5),
+                  border: Border.all(
+                    color: Color.fromRGBO(143, 148, 251, 8),
+                    width: 2.0,
+                  ),
+                ),
+                child: FormBuilderTextField(
+                  validators: [
+                    FormBuilderValidators.required(),
+                  ],
+                  autovalidate: allGood ? false : true,
+                  attribute: "BusType",
+                  onSaved: (val) {
+                    setState(() {
+                      busType = val;
+                    });
+                  },
+                  decoration: InputDecoration(
+                      border: InputBorder.none,
+                      hintText: 'Luxury/Sleeper',
+                      hintStyle:
+                      TextStyle(color: Colors.grey[300], fontSize: 15)),
                 ),
               ),
-              child: FormBuilderTextField(
-                attribute: "BusType",
-                onSaved: (val) {
-                  setState(() {
-                    busType = val;
-                  });
-                },
-                decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: 'Luxury/Sleeper',
-                    hintStyle:
-                        TextStyle(color: Colors.grey[300], fontSize: 15)),
-              ),
-            ),
-          )
-        ],
+            )
+          ],
+        ),
       );
     } else if (widget.mode == 'Personal Car') {
-      return Column(
-        children: <Widget>[
-          Text(
-            'In case you are using your personal car for official purpose, please fill in the details below',
-            style: TextStyle(color: Colors.redAccent, fontSize: 13),
-          ),
-          SizedBox(
-            height: 8,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    'Distance Traveled(km): ',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Container(
-                    height: 55,
-                    width: 90,
-                    padding: EdgeInsets.symmetric(horizontal: 4),
-
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      border: Border.all(
-                        color: Color.fromRGBO(143, 148, 251, 8),
-                        width: 2.0,
+      return FormBuilder(
+        key: _modeOfTransportKeys[widget.legNo - 1],
+        child: Column(
+          children: <Widget>[
+            Text(
+              'In case you are using your personal car for official purpose, please fill in the details below',
+              style: TextStyle(color: Colors.redAccent, fontSize: 13),
+            ),
+            SizedBox(
+              height: 8,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      'Distance Traveled(km): ',
+                      style:
+                      TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    ),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Container(
+                      height: allGood ? 53 : 71,
+                      width: 90,
+                      padding: EdgeInsets.symmetric(horizontal: 4),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        border: Border.all(
+                          color: Color.fromRGBO(143, 148, 251, 8),
+                          width: 2.0,
+                        ),
+                      ),
+                      child: FormBuilderTextField(
+                        validators: [
+                          FormBuilderValidators.required(),
+                        ],
+                        autovalidate: allGood ? false : true,
+                        attribute: "personalCarDistance",
+                        onChanged: (val){
+                          setState(() {
+                            personalCardist = double.parse(val);
+                          });
+                        },
+                        onSaved: (val) {
+                          setState(() {
+                            personalCardist = double.parse(val);
+                          });
+                        },
+                        keyboardType: TextInputType.number,
+                        decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: 'Distance',
+                            hintStyle: TextStyle(
+                                color: Colors.grey[600], fontSize: 15)),
                       ),
                     ),
-                    child: FormBuilderTextField(
-                      attribute: "personalCarDistance",
-                      onSaved: (val) {
-                        setState(() {
-                          personalCardist = double.parse(val);
-                        });
-                      },
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: 'Distance in km',
-                          hintStyle:
-                              TextStyle(color: Colors.grey[600], fontSize: 15)),
-                    ),
-                  ),
-                ],
-              ),
-              Column(
-                children: <Widget>[
-                  Text(
-                    'Rate per km: ',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                  ),
-                  SizedBox(
-                    height: 8,
-                  ),
-                  Container(
-                    height: 55,
-                    width: 90,
-                    padding: EdgeInsets.symmetric(horizontal: 4),
-
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(5),
-                      border: Border.all(
-                        color: Color.fromRGBO(143, 148, 251, 8),
-                        width: 2.0,
-                      ),
-                    ),
-                    child: FormBuilderTextField(
-                      attribute: "personalCarRate",
-                      onSaved: (val) {
-                        setState(() {
-                          personalCarrate = double.parse(val);
-                        });
-                      },
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: 'Rate',
-                          hintStyle:
-                              TextStyle(color: Colors.grey[600], fontSize: 15)),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 10,
-          ),
-          Row(
-            children: <Widget>[
-              Text(
-                'Amount: ',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-              ),
-              Expanded(
-                child: Container(
-                  height: 55,
-                  padding: EdgeInsets.symmetric(horizontal: 4),
-
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    border: Border.all(
-                      color: Color.fromRGBO(143, 148, 251, 8),
-                      width: 2.0,
-                    ),
-                  ),
-                  child: FormBuilderTextField(
-                    attribute: "personalCaramt",
-                    onSaved: (val) {
-                      setState(() {
-                        personalCaramt = double.parse(val);
-                      });
-                    },
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'Rate times cost per km',
-                        hintStyle:
-                            TextStyle(color: Colors.grey[300], fontSize: 15)),
-                  ),
+                  ],
                 ),
-              )
-            ],
-          )
-        ],
+                Column(
+                  children: <Widget>[
+                    Text(
+                      'Rate per km: ',
+                      style:
+                      TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    ),
+                    SizedBox(
+                      height: 8,
+                    ),
+                    Container(
+                      height: allGood ? 53 : 71,
+                      width: 90,
+                      padding: EdgeInsets.symmetric(horizontal: 4),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(5),
+                        border: Border.all(
+                          color: Color.fromRGBO(143, 148, 251, 8),
+                          width: 2.0,
+                        ),
+                      ),
+                      child:
+//                      FormBuilderTextField(
+//                        validators: [
+//                          FormBuilderValidators.required(),
+//                        ],
+//                        autovalidate: allGood ? false : true,
+//                        attribute: "personalCarRate",
+//                        onChanged: (val){
+//                          setState(() {
+//                            personalCarrate = double.parse(val);
+//                          });
+//                        },
+//                        onSaved: (val) {
+//                          setState(() {
+//                            personalCarrate = double.parse(val);
+//                          });
+//                        },
+//                        keyboardType: TextInputType.number,
+//                        decoration: InputDecoration(
+//                            border: InputBorder.none,
+//                            hintText: 'Rate',
+//                            hintStyle: TextStyle(
+//                                color: Colors.grey[600], fontSize: 15)),
+//                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            SizedBox(
+              height: 10,
+            ),
+            Row(
+              children: <Widget>[
+                Text(
+                  'Amount: ',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                ),
+                Expanded(
+                  child: Container(
+                    height: allGood ? 53 : 71,
+                    padding: EdgeInsets.symmetric(horizontal: 4),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(5),
+                      border: Border.all(
+                        color: Color.fromRGBO(143, 148, 251, 8),
+                        width: 2.0,
+                      ),
+                    ),
+                    child: Center(child: Text((personalCaramt).toString(),style: TextStyle(fontSize: 17,fontWeight: FontWeight.w600),))
+//                    FormBuilderTextField(
+//                      validators: [
+//                        FormBuilderValidators.required(),
+//                      ],
+//                      autovalidate: allGood ? false : true,
+//                      attribute: "personalCaramt",
+//                      onSaved: (val) {
+//                        setState(() {
+//                          personalCaramt = double.parse(val);
+//                        });
+//                      },
+//                      keyboardType: TextInputType.number,
+//                      decoration: InputDecoration(
+//                          border: InputBorder.none,
+//                          hintText: 'Rate times cost per km',
+//                          hintStyle:
+//                          TextStyle(color: Colors.grey[300], fontSize: 15)),
+//                    ),
+                  ),
+                )
+              ],
+            )
+          ],
+        ),
       );
     } else
       return Divider();
