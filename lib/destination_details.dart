@@ -26,7 +26,7 @@ class _DestinationPageState extends State<DestinationPage> {
   String designation = 'GM and Above';
 
   @override
-  List validatorLodge(designation) {
+  List validatorLodge(String designation) {
     if (designation == 'GM and Above') {
       return [
         FormBuilderValidators.required(),
@@ -231,6 +231,21 @@ class _DestinationPageState extends State<DestinationPage> {
                               SizedBox(
                                 height: 4,
                               ),
+                              SizedBox(height: 4,),
+                              Card(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      Text('Refer to this icon to get information about the\nrespective terms and conditions.'
+                                        , style: TextStyle(fontWeight: FontWeight.w600),),
+                                      Icon(Icons.assignment,color: Colors.redAccent,)
+                                    ],
+                                  ),
+                                ),
+                              ),
+
                               Card(
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
@@ -295,9 +310,12 @@ class _DestinationPageState extends State<DestinationPage> {
                                           ),
                                           Row(
                                             children: <Widget>[
-                                              Text('Terms and Conditions',
-                                                  style:
-                                                      TextStyle(fontSize: 13)),
+                                              Text(
+                                                'T&C',
+                                                style: TextStyle(fontSize: 13,
+                                                    color: Colors.red,
+                                                    fontWeight: FontWeight.w600),
+                                              ),
                                               IconButton(
                                                 icon: Icon(
                                                   Icons.assignment,
@@ -455,17 +473,10 @@ class _DestinationPageState extends State<DestinationPage> {
                                                 attribute: "lodgeamt",
                                                 onSaved: (val) {
                                                   setState(() {
-                                                   val!=null ? lodgeamt = double.parse(val) : lodgeamt = 0.0;
+                                                   val!=null ? lodgeamt = 0.0: lodgeamt = double.parse(val) ;
                                                   });
                                                 },
-                                                validators: [
-                                                  FormBuilderValidators
-                                                      .numeric(),
-                                                  FormBuilderValidators
-                                                      .required(),
-                                                  FormBuilderValidators.max(
-                                                      7500),
-                                                ],
+                                                validators: validatorLodge('GM and Above'),
                                                 keyboardType:
                                                     TextInputType.number,
                                                 decoration: InputDecoration(
@@ -485,110 +496,110 @@ class _DestinationPageState extends State<DestinationPage> {
                                                 color: Colors.red,
                                                 fontWeight: FontWeight.w600),
                                               ),
-//                                              IconButton(
-//                                                icon: Icon(
-//                                                  Icons.assignment,
-//                                                  color: Colors.redAccent,
-//                                                ),
-//                                                onPressed: () {
-//                                                  showDialog(
-//                                                      context: context,
-//                                                      child: AlertDialog(
-//                                                          title: Text(
-//                                                            'HA-Travel policy(HA/16-17/001 Date:21/05/2016)\nThe limits of reimbursement are as follows:',
-//                                                          ),
-//                                                          content:
-//                                                              SingleChildScrollView(
-//                                                            scrollDirection:
-//                                                                Axis.horizontal,
-//                                                            child: DataTable(
-//                                                              dataRowHeight: 85,
-//                                                              columns: [
-//                                                                DataColumn(
-//                                                                    label: Text(
-//                                                                  'Grade',
-//                                                                  style: TextStyle(
-//                                                                      color: Colors
-//                                                                          .deepPurple,
-//                                                                      fontWeight:
-//                                                                          FontWeight
-//                                                                              .w600,
-//                                                                      fontSize:
-//                                                                          16),
-//                                                                )),
-//                                                                DataColumn(
-//                                                                    label: Text(
-//                                                                  'Location Category',
-//                                                                  style: TextStyle(
-//                                                                      color: Colors
-//                                                                          .deepPurple,
-//                                                                      fontWeight:
-//                                                                          FontWeight
-//                                                                              .w600,
-//                                                                      fontSize:
-//                                                                          16),
-//                                                                )),
-//                                                                DataColumn(
-//                                                                    label: Text(
-//                                                                  'Travel Mode Up Limit',
-//                                                                  style: TextStyle(
-//                                                                      color: Colors
-//                                                                          .deepPurple,
-//                                                                      fontWeight:
-//                                                                          FontWeight
-//                                                                              .w600,
-//                                                                      fontSize:
-//                                                                          16),
-//                                                                )),
-//                                                              ],
-//                                                              rows: [
-//                                                                DataRow(cells: [
-//                                                                  DataCell(Text(
-//                                                                      'GM and above')),
-//                                                                  DataCell(Text(
-//                                                                      'Super-A\nA\nB\nC')),
-//                                                                  DataCell(Text(
-//                                                                      '₹7500\n₹5000\n₹4000\n₹3000')),
-//                                                                ]),
-//                                                                DataRow(cells: [
-//                                                                  DataCell(Text(
-//                                                                      'DGM/Sr. Manager\n/Manager')),
-//                                                                  DataCell(Text(
-//                                                                      'Super-A\nA\nB\nC')),
-//                                                                  DataCell(Text(
-//                                                                      '₹6000\n₹4000\n₹3000\n₹2500')),
-//                                                                ]),
-//                                                                DataRow(cells: [
-//                                                                  DataCell(Text(
-//                                                                      'Asst Manager/\nSr Engineer')),
-//                                                                  DataCell(Text(
-//                                                                      'Super-A\nA\nB\nC')),
-//                                                                  DataCell(Text(
-//                                                                      '₹5000\n₹3500\n₹2500\n₹2000')),
-//                                                                ]),
-//                                                                DataRow(cells: [
-//                                                                  DataCell(Text(
-//                                                                      'Engineer/Asst \nEngineer/Trainee')),
-//                                                                  DataCell(Text(
-//                                                                      'Super-A\nA\nB\nC')),
-//                                                                  DataCell(Text(
-//                                                                      '₹4000\n₹3000\n₹2500\n₹2000')),
-//                                                                ]),
-//                                                                DataRow(cells: [
-//                                                                  DataCell(Text(
-//                                                                      'All Grades')),
-//                                                                  DataCell(Text(
-//                                                                      'D&E')),
-//                                                                  DataCell(Text(
-//                                                                      '₹9000')),
-//                                                                ]),
-//                                                              ],
-//                                                            ),
-//                                                          )
-////
-//                                                          ));
-//                                                },
-//                                              ),
+                                              IconButton(
+                                                icon: Icon(
+                                                  Icons.assignment,
+                                                  color: Colors.redAccent,
+                                                ),
+                                                onPressed: () {
+                                                  showDialog(
+                                                      context: context,
+                                                      child: AlertDialog(
+                                                          title: Text(
+                                                            'HA-Travel policy(HA/16-17/001 Date:21/05/2016)\nThe limits of reimbursement are as follows:',
+                                                          ),
+                                                          content:
+                                                              SingleChildScrollView(
+                                                            scrollDirection:
+                                                                Axis.horizontal,
+                                                            child: DataTable(
+                                                              dataRowHeight: 85,
+                                                              columns: [
+                                                                DataColumn(
+                                                                    label: Text(
+                                                                  'Grade',
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .deepPurple,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w600,
+                                                                      fontSize:
+                                                                          16),
+                                                                )),
+                                                                DataColumn(
+                                                                    label: Text(
+                                                                  'Location Category',
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .deepPurple,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w600,
+                                                                      fontSize:
+                                                                          16),
+                                                                )),
+                                                                DataColumn(
+                                                                    label: Text(
+                                                                  'Travel Mode Up Limit',
+                                                                  style: TextStyle(
+                                                                      color: Colors
+                                                                          .deepPurple,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w600,
+                                                                      fontSize:
+                                                                          16),
+                                                                )),
+                                                              ],
+                                                              rows: [
+                                                                DataRow(cells: [
+                                                                  DataCell(Text(
+                                                                      'GM and above')),
+                                                                  DataCell(Text(
+                                                                      'Super-A\nA\nB\nC')),
+                                                                  DataCell(Text(
+                                                                      '₹7500\n₹5000\n₹4000\n₹3000')),
+                                                                ]),
+                                                                DataRow(cells: [
+                                                                  DataCell(Text(
+                                                                      'DGM/Sr. Manager\n/Manager')),
+                                                                  DataCell(Text(
+                                                                      'Super-A\nA\nB\nC')),
+                                                                  DataCell(Text(
+                                                                      '₹6000\n₹4000\n₹3000\n₹2500')),
+                                                                ]),
+                                                                DataRow(cells: [
+                                                                  DataCell(Text(
+                                                                      'Asst Manager/\nSr Engineer')),
+                                                                  DataCell(Text(
+                                                                      'Super-A\nA\nB\nC')),
+                                                                  DataCell(Text(
+                                                                      '₹5000\n₹3500\n₹2500\n₹2000')),
+                                                                ]),
+                                                                DataRow(cells: [
+                                                                  DataCell(Text(
+                                                                      'Engineer/Asst \nEngineer/Trainee')),
+                                                                  DataCell(Text(
+                                                                      'Super-A\nA\nB\nC')),
+                                                                  DataCell(Text(
+                                                                      '₹4000\n₹3000\n₹2500\n₹2000')),
+                                                                ]),
+                                                                DataRow(cells: [
+                                                                  DataCell(Text(
+                                                                      'All Grades')),
+                                                                  DataCell(Text(
+                                                                      'D&E')),
+                                                                  DataCell(Text(
+                                                                      '₹9000')),
+                                                                ]),
+                                                              ],
+                                                            ),
+                                                          )
+//
+                                                          ));
+                                                },
+                                              ),
                                             ],
                                           ),
                                         ],
@@ -647,8 +658,7 @@ class _DestinationPageState extends State<DestinationPage> {
                                                 validators: [
                                                   FormBuilderValidators
                                                       .numeric(),
-                                                  FormBuilderValidators
-                                                      .required(),
+
                                                 ],
                                                 keyboardType:
                                                     TextInputType.number,
@@ -663,9 +673,12 @@ class _DestinationPageState extends State<DestinationPage> {
                                           ),
                                           Row(
                                             children: <Widget>[
-                                              Text('Terms and Conditions',
-                                                  style:
-                                                      TextStyle(fontSize: 13)),
+                                              Text(
+                                                'T&C',
+                                                style: TextStyle(fontSize: 13,
+                                                    color: Colors.red,
+                                                    fontWeight: FontWeight.w600),
+                                              ),
                                               IconButton(
                                                 icon: Icon(
                                                   Icons.assignment,
@@ -747,8 +760,10 @@ class _DestinationPageState extends State<DestinationPage> {
                                           Row(
                                             children: <Widget>[
                                               Text(
-                                                'Terms and Conditions',
-                                                style: TextStyle(fontSize: 13),
+                                                'T&C',
+                                                style: TextStyle(fontSize: 13,
+                                                    color: Colors.red,
+                                                    fontWeight: FontWeight.w600),
                                               ),
                                               IconButton(
                                                 icon: Icon(
@@ -900,8 +915,6 @@ class _DestinationPageState extends State<DestinationPage> {
                                                 validators: [
                                                   FormBuilderValidators
                                                       .numeric(),
-                                                  FormBuilderValidators
-                                                      .required(),
                                                 ],
                                                 keyboardType:
                                                     TextInputType.number,
@@ -995,8 +1008,6 @@ class _DestinationPageState extends State<DestinationPage> {
                                                 validators: [
                                                   FormBuilderValidators
                                                       .numeric(),
-                                                  FormBuilderValidators
-                                                      .required(),
                                                 ],
                                                 keyboardType:
                                                     TextInputType.number,

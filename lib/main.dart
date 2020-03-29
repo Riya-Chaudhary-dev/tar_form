@@ -5,9 +5,9 @@ import 'package:tar_form/editProfile.dart';
 import 'package:tar_form/hotelItinerary.dart';
 import 'package:tar_form/login_page.dart';
 import 'package:tar_form/registration.dart';
+import 'package:tar_form/supervisor_approval_page.dart';
 import 'package:tar_form/travelItinerary.dart';
-import 'package:tar_form/travel_log.dart';
-
+import 'destination_details.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
@@ -23,9 +23,9 @@ class MyApp extends StatelessWidget {
           accentColor: Color.fromRGBO(143, 148, 251, 1),
           splashColor: Color.fromRGBO(143, 148, 251, 1),
         ),
-        home: SummaryPage(),
+        home: ApprovalPage(),
         routes: {
-          TravelLogPage.id: (context) => TravelLogPage(),
+//          TravelLogPage.id: (context) => TravelLogPage(),
           EditProfile.id: (context) => EditProfile(),
           RegistrationPage.id: (context) => RegistrationPage(),
           LoginPage.id: (context) => LoginPage(),
