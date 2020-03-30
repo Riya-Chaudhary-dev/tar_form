@@ -116,11 +116,7 @@ class SummaryPage extends StatelessWidget {
                         padding:
                         EdgeInsets.symmetric(horizontal: 40, vertical: 10),
                         onPressed: () {
-//                      if (_fbKey.currentState.saveAndValidate()) {
-//                        print(_fbKey.currentState.value);
-//                        Scaffold.of(context).showSnackBar(
-//                            SnackBar(content: Text('Processing Data')));
-//                      }
+
                         },
                         color: Colors.red,
                         shape: StadiumBorder(),

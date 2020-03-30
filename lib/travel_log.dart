@@ -175,3 +175,19 @@ class TravelLogCards extends StatelessWidget {
       );
   }
 }
+class EmptyPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: Center(
+        child: Row(
+          children: <Widget>[
+            Icon(Icons.error, color: Colors.grey[200],),
+            Text('No travel authorization requested yet.',style: TextStyle(color: Colors.grey[200]),),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
