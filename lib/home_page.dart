@@ -75,8 +75,29 @@ class _HomePageState extends State<HomePage> {
                                 width: 350,
                                 child: RaisedButton(
                                   padding: EdgeInsets.all(8),
-                                  onPressed: () {
-                                    Navigator.pushNamed(context, BasicInfo.id);
+                                  onPressed: () async {
+                                  var q = await  Navigator.pushNamed(context, BasicInfo.id);
+                                  if(q == false){
+                                    showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        // return object of type Dialog
+                                        return AlertDialog(
+                                          title: Text('Basic info not filled'),
+                                          content: Text('Please fill the basic info before filling the form'),
+                                          actions: <Widget>[
+                                            // usually buttons at the bottom of the dialog
+                                            FlatButton(
+                                              child: Text("Close"),
+                                              onPressed: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  }
                                   },
                                   shape: StadiumBorder(),
                                   color: Color.fromRGBO(143, 148, 251, 1),

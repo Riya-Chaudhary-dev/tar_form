@@ -26,7 +26,7 @@ class _DestinationPageState extends State<DestinationPage> {
   String designation = 'GM and Above';
 
   @override
-  List validatorLodge(designation) {
+  dynamic validatorLodge({String designation}) {
     if (designation == 'GM and Above') {
       return [
         FormBuilderValidators.required(),
@@ -156,7 +156,7 @@ class _DestinationPageState extends State<DestinationPage> {
                                         decoration: InputDecoration(
                                             border: InputBorder.none,
                                             hintText:
-                                                'If project related, indicate Project number and name of client OR '
+                                            'If project related, indicate Project number and name of client OR '
                                                 'Holtec Supervisor that is requesting the travel.)\n'
                                                 'The traveler is required to elaborate the purpose and provide'
                                                 ' brief description of the project here.',
@@ -231,12 +231,27 @@ class _DestinationPageState extends State<DestinationPage> {
                               SizedBox(
                                 height: 4,
                               ),
+                              SizedBox(height: 4,),
+                              Card(
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      Text('Refer to this icon to get information about the\nrespective terms and conditions.'
+                                        , style: TextStyle(fontWeight: FontWeight.w600),),
+                                      Icon(Icons.assignment,color: Colors.redAccent,)
+                                    ],
+                                  ),
+                                ),
+                              ),
+
                               Card(
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Column(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    CrossAxisAlignment.start,
                                     children: <Widget>[
                                       Text(
                                         '*Travel (to & fro destination/in-between multiple destination):',
@@ -249,7 +264,7 @@ class _DestinationPageState extends State<DestinationPage> {
                                       ),
                                       Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                         children: <Widget>[
                                           Container(
                                             width: 120,
@@ -258,7 +273,7 @@ class _DestinationPageState extends State<DestinationPage> {
                                             decoration: BoxDecoration(
                                                 color: Colors.white,
                                                 borderRadius:
-                                                    BorderRadius.circular(10),
+                                                BorderRadius.circular(10),
                                                 boxShadow: [
                                                   BoxShadow(
                                                       color: Color.fromRGBO(
@@ -283,7 +298,7 @@ class _DestinationPageState extends State<DestinationPage> {
                                                       .numeric()
                                                 ],
                                                 keyboardType:
-                                                    TextInputType.number,
+                                                TextInputType.number,
                                                 decoration: InputDecoration(
                                                     border: InputBorder.none,
                                                     hintText: "Enter amount",
@@ -295,9 +310,12 @@ class _DestinationPageState extends State<DestinationPage> {
                                           ),
                                           Row(
                                             children: <Widget>[
-                                              Text('Terms and Conditions',
-                                                  style:
-                                                      TextStyle(fontSize: 13)),
+                                              Text(
+                                                'T&C',
+                                                style: TextStyle(fontSize: 13,
+                                                    color: Colors.red,
+                                                    fontWeight: FontWeight.w600),
+                                              ),
                                               IconButton(
                                                 icon: Icon(
                                                   Icons.assignment,
@@ -311,47 +329,47 @@ class _DestinationPageState extends State<DestinationPage> {
                                                             'HA-Travel policy(HA/16-17/001 Date:21/05/2016)\nThe limits of reimbursement are as follows:',
                                                           ),
                                                           content:
-                                                              SingleChildScrollView(
+                                                          SingleChildScrollView(
                                                             scrollDirection:
-                                                                Axis.horizontal,
+                                                            Axis.horizontal,
                                                             child: DataTable(
                                                               columns: [
                                                                 DataColumn(
                                                                     label: Text(
-                                                                  'Grade',
-                                                                  style: TextStyle(
-                                                                      color: Colors
-                                                                          .deepPurple,
-                                                                      fontWeight:
+                                                                      'Grade',
+                                                                      style: TextStyle(
+                                                                          color: Colors
+                                                                              .deepPurple,
+                                                                          fontWeight:
                                                                           FontWeight
                                                                               .w600,
-                                                                      fontSize:
+                                                                          fontSize:
                                                                           16),
-                                                                )),
+                                                                    )),
                                                                 DataColumn(
                                                                     label: Text(
-                                                                  'Location Category',
-                                                                  style: TextStyle(
-                                                                      color: Colors
-                                                                          .deepPurple,
-                                                                      fontWeight:
+                                                                      'Location Category',
+                                                                      style: TextStyle(
+                                                                          color: Colors
+                                                                              .deepPurple,
+                                                                          fontWeight:
                                                                           FontWeight
                                                                               .w600,
-                                                                      fontSize:
+                                                                          fontSize:
                                                                           16),
-                                                                )),
+                                                                    )),
                                                                 DataColumn(
                                                                     label: Text(
-                                                                  'Travel Mode Up Limit',
-                                                                  style: TextStyle(
-                                                                      color: Colors
-                                                                          .deepPurple,
-                                                                      fontWeight:
+                                                                      'Travel Mode Up Limit',
+                                                                      style: TextStyle(
+                                                                          color: Colors
+                                                                              .deepPurple,
+                                                                          fontWeight:
                                                                           FontWeight
                                                                               .w600,
-                                                                      fontSize:
+                                                                          fontSize:
                                                                           16),
-                                                                )),
+                                                                    )),
                                                               ],
                                                               rows: [
                                                                 DataRow(cells: [
@@ -400,7 +418,7 @@ class _DestinationPageState extends State<DestinationPage> {
 //                                                  Text('The limits of reimbursement of expenses for travel exceeding 200 km are as follows:\n'
 //                                                      'Grade              Location Category              Travel Mode Up Limit'
 //                                                      'GM and above        Super-A/A/B/C                  Air/Rail   '),),
-                                                          ));
+                                                      ));
                                                 },
                                               ),
                                             ],
@@ -410,7 +428,7 @@ class _DestinationPageState extends State<DestinationPage> {
                                       Divider(),
                                       Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                         children: <Widget>[
                                           Text(
                                             'Lodging/Hotel/Accommodation:',
@@ -431,7 +449,7 @@ class _DestinationPageState extends State<DestinationPage> {
                                       ),
                                       Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                         children: <Widget>[
                                           Container(
                                             width: 120,
@@ -440,7 +458,7 @@ class _DestinationPageState extends State<DestinationPage> {
                                             decoration: BoxDecoration(
                                                 color: Colors.white,
                                                 borderRadius:
-                                                    BorderRadius.circular(10),
+                                                BorderRadius.circular(10),
                                                 boxShadow: [
                                                   BoxShadow(
                                                       color: Color.fromRGBO(
@@ -455,19 +473,12 @@ class _DestinationPageState extends State<DestinationPage> {
                                                 attribute: "lodgeamt",
                                                 onSaved: (val) {
                                                   setState(() {
-                                                   val!=null ? lodgeamt = double.parse(val) : lodgeamt = 0.0;
+                                                    val!=null ? lodgeamt = 0.0: lodgeamt = double.parse(val) ;
                                                   });
                                                 },
-                                                validators: [
-                                                  FormBuilderValidators
-                                                      .numeric(),
-                                                  FormBuilderValidators
-                                                      .required(),
-                                                  FormBuilderValidators.max(
-                                                      7500),
-                                                ],
+                                                validators: validatorLodge( designation: 'GM and Above'),
                                                 keyboardType:
-                                                    TextInputType.number,
+                                                TextInputType.number,
                                                 decoration: InputDecoration(
                                                     border: InputBorder.none,
                                                     hintText: "Enter amount",
@@ -482,113 +493,113 @@ class _DestinationPageState extends State<DestinationPage> {
                                               Text(
                                                 'T&C',
                                                 style: TextStyle(fontSize: 13,
-                                                color: Colors.red,
-                                                fontWeight: FontWeight.w600),
+                                                    color: Colors.red,
+                                                    fontWeight: FontWeight.w600),
                                               ),
-//                                              IconButton(
-//                                                icon: Icon(
-//                                                  Icons.assignment,
-//                                                  color: Colors.redAccent,
-//                                                ),
-//                                                onPressed: () {
-//                                                  showDialog(
-//                                                      context: context,
-//                                                      child: AlertDialog(
-//                                                          title: Text(
-//                                                            'HA-Travel policy(HA/16-17/001 Date:21/05/2016)\nThe limits of reimbursement are as follows:',
-//                                                          ),
-//                                                          content:
-//                                                              SingleChildScrollView(
-//                                                            scrollDirection:
-//                                                                Axis.horizontal,
-//                                                            child: DataTable(
-//                                                              dataRowHeight: 85,
-//                                                              columns: [
-//                                                                DataColumn(
-//                                                                    label: Text(
-//                                                                  'Grade',
-//                                                                  style: TextStyle(
-//                                                                      color: Colors
-//                                                                          .deepPurple,
-//                                                                      fontWeight:
-//                                                                          FontWeight
-//                                                                              .w600,
-//                                                                      fontSize:
-//                                                                          16),
-//                                                                )),
-//                                                                DataColumn(
-//                                                                    label: Text(
-//                                                                  'Location Category',
-//                                                                  style: TextStyle(
-//                                                                      color: Colors
-//                                                                          .deepPurple,
-//                                                                      fontWeight:
-//                                                                          FontWeight
-//                                                                              .w600,
-//                                                                      fontSize:
-//                                                                          16),
-//                                                                )),
-//                                                                DataColumn(
-//                                                                    label: Text(
-//                                                                  'Travel Mode Up Limit',
-//                                                                  style: TextStyle(
-//                                                                      color: Colors
-//                                                                          .deepPurple,
-//                                                                      fontWeight:
-//                                                                          FontWeight
-//                                                                              .w600,
-//                                                                      fontSize:
-//                                                                          16),
-//                                                                )),
-//                                                              ],
-//                                                              rows: [
-//                                                                DataRow(cells: [
-//                                                                  DataCell(Text(
-//                                                                      'GM and above')),
-//                                                                  DataCell(Text(
-//                                                                      'Super-A\nA\nB\nC')),
-//                                                                  DataCell(Text(
-//                                                                      '₹7500\n₹5000\n₹4000\n₹3000')),
-//                                                                ]),
-//                                                                DataRow(cells: [
-//                                                                  DataCell(Text(
-//                                                                      'DGM/Sr. Manager\n/Manager')),
-//                                                                  DataCell(Text(
-//                                                                      'Super-A\nA\nB\nC')),
-//                                                                  DataCell(Text(
-//                                                                      '₹6000\n₹4000\n₹3000\n₹2500')),
-//                                                                ]),
-//                                                                DataRow(cells: [
-//                                                                  DataCell(Text(
-//                                                                      'Asst Manager/\nSr Engineer')),
-//                                                                  DataCell(Text(
-//                                                                      'Super-A\nA\nB\nC')),
-//                                                                  DataCell(Text(
-//                                                                      '₹5000\n₹3500\n₹2500\n₹2000')),
-//                                                                ]),
-//                                                                DataRow(cells: [
-//                                                                  DataCell(Text(
-//                                                                      'Engineer/Asst \nEngineer/Trainee')),
-//                                                                  DataCell(Text(
-//                                                                      'Super-A\nA\nB\nC')),
-//                                                                  DataCell(Text(
-//                                                                      '₹4000\n₹3000\n₹2500\n₹2000')),
-//                                                                ]),
-//                                                                DataRow(cells: [
-//                                                                  DataCell(Text(
-//                                                                      'All Grades')),
-//                                                                  DataCell(Text(
-//                                                                      'D&E')),
-//                                                                  DataCell(Text(
-//                                                                      '₹9000')),
-//                                                                ]),
-//                                                              ],
-//                                                            ),
-//                                                          )
-////
-//                                                          ));
-//                                                },
-//                                              ),
+                                              IconButton(
+                                                icon: Icon(
+                                                  Icons.assignment,
+                                                  color: Colors.redAccent,
+                                                ),
+                                                onPressed: () {
+                                                  showDialog(
+                                                      context: context,
+                                                      child: AlertDialog(
+                                                          title: Text(
+                                                            'HA-Travel policy(HA/16-17/001 Date:21/05/2016)\nThe limits of reimbursement are as follows:',
+                                                          ),
+                                                          content:
+                                                          SingleChildScrollView(
+                                                            scrollDirection:
+                                                            Axis.horizontal,
+                                                            child: DataTable(
+                                                              dataRowHeight: 85,
+                                                              columns: [
+                                                                DataColumn(
+                                                                    label: Text(
+                                                                      'Grade',
+                                                                      style: TextStyle(
+                                                                          color: Colors
+                                                                              .deepPurple,
+                                                                          fontWeight:
+                                                                          FontWeight
+                                                                              .w600,
+                                                                          fontSize:
+                                                                          16),
+                                                                    )),
+                                                                DataColumn(
+                                                                    label: Text(
+                                                                      'Location Category',
+                                                                      style: TextStyle(
+                                                                          color: Colors
+                                                                              .deepPurple,
+                                                                          fontWeight:
+                                                                          FontWeight
+                                                                              .w600,
+                                                                          fontSize:
+                                                                          16),
+                                                                    )),
+                                                                DataColumn(
+                                                                    label: Text(
+                                                                      'Travel Mode Up Limit',
+                                                                      style: TextStyle(
+                                                                          color: Colors
+                                                                              .deepPurple,
+                                                                          fontWeight:
+                                                                          FontWeight
+                                                                              .w600,
+                                                                          fontSize:
+                                                                          16),
+                                                                    )),
+                                                              ],
+                                                              rows: [
+                                                                DataRow(cells: [
+                                                                  DataCell(Text(
+                                                                      'GM and above')),
+                                                                  DataCell(Text(
+                                                                      'Super-A\nA\nB\nC')),
+                                                                  DataCell(Text(
+                                                                      '₹7500\n₹5000\n₹4000\n₹3000')),
+                                                                ]),
+                                                                DataRow(cells: [
+                                                                  DataCell(Text(
+                                                                      'DGM/Sr. Manager\n/Manager')),
+                                                                  DataCell(Text(
+                                                                      'Super-A\nA\nB\nC')),
+                                                                  DataCell(Text(
+                                                                      '₹6000\n₹4000\n₹3000\n₹2500')),
+                                                                ]),
+                                                                DataRow(cells: [
+                                                                  DataCell(Text(
+                                                                      'Asst Manager/\nSr Engineer')),
+                                                                  DataCell(Text(
+                                                                      'Super-A\nA\nB\nC')),
+                                                                  DataCell(Text(
+                                                                      '₹5000\n₹3500\n₹2500\n₹2000')),
+                                                                ]),
+                                                                DataRow(cells: [
+                                                                  DataCell(Text(
+                                                                      'Engineer/Asst \nEngineer/Trainee')),
+                                                                  DataCell(Text(
+                                                                      'Super-A\nA\nB\nC')),
+                                                                  DataCell(Text(
+                                                                      '₹4000\n₹3000\n₹2500\n₹2000')),
+                                                                ]),
+                                                                DataRow(cells: [
+                                                                  DataCell(Text(
+                                                                      'All Grades')),
+                                                                  DataCell(Text(
+                                                                      'D&E')),
+                                                                  DataCell(Text(
+                                                                      '₹9000')),
+                                                                ]),
+                                                              ],
+                                                            ),
+                                                          )
+//
+                                                      ));
+                                                },
+                                              ),
                                             ],
                                           ),
                                         ],
@@ -596,7 +607,7 @@ class _DestinationPageState extends State<DestinationPage> {
                                       Divider(),
                                       Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                         children: <Widget>[
                                           Text(
                                             'Local Travel:',
@@ -617,7 +628,7 @@ class _DestinationPageState extends State<DestinationPage> {
                                       ),
                                       Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                         children: <Widget>[
                                           Container(
                                             width: 120,
@@ -626,7 +637,7 @@ class _DestinationPageState extends State<DestinationPage> {
                                             decoration: BoxDecoration(
                                                 color: Colors.white,
                                                 borderRadius:
-                                                    BorderRadius.circular(10),
+                                                BorderRadius.circular(10),
                                                 boxShadow: [
                                                   BoxShadow(
                                                       color: Color.fromRGBO(
@@ -647,11 +658,10 @@ class _DestinationPageState extends State<DestinationPage> {
                                                 validators: [
                                                   FormBuilderValidators
                                                       .numeric(),
-                                                  FormBuilderValidators
-                                                      .required(),
+
                                                 ],
                                                 keyboardType:
-                                                    TextInputType.number,
+                                                TextInputType.number,
                                                 decoration: InputDecoration(
                                                     border: InputBorder.none,
                                                     hintText: "Enter amount",
@@ -663,9 +673,12 @@ class _DestinationPageState extends State<DestinationPage> {
                                           ),
                                           Row(
                                             children: <Widget>[
-                                              Text('Terms and Conditions',
-                                                  style:
-                                                      TextStyle(fontSize: 13)),
+                                              Text(
+                                                'T&C',
+                                                style: TextStyle(fontSize: 13,
+                                                    color: Colors.red,
+                                                    fontWeight: FontWeight.w600),
+                                              ),
                                               IconButton(
                                                 icon: Icon(
                                                   Icons.assignment,
@@ -698,7 +711,7 @@ class _DestinationPageState extends State<DestinationPage> {
                                       ),
                                       Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                         children: <Widget>[
                                           Container(
                                             width: 120,
@@ -707,7 +720,7 @@ class _DestinationPageState extends State<DestinationPage> {
                                             decoration: BoxDecoration(
                                                 color: Colors.white,
                                                 borderRadius:
-                                                    BorderRadius.circular(10),
+                                                BorderRadius.circular(10),
                                                 boxShadow: [
                                                   BoxShadow(
                                                       color: Color.fromRGBO(
@@ -734,7 +747,7 @@ class _DestinationPageState extends State<DestinationPage> {
                                                       1500)
                                                 ],
                                                 keyboardType:
-                                                    TextInputType.number,
+                                                TextInputType.number,
                                                 decoration: InputDecoration(
                                                     border: InputBorder.none,
                                                     hintText: "Enter amount",
@@ -747,8 +760,10 @@ class _DestinationPageState extends State<DestinationPage> {
                                           Row(
                                             children: <Widget>[
                                               Text(
-                                                'Terms and Conditions',
-                                                style: TextStyle(fontSize: 13),
+                                                'T&C',
+                                                style: TextStyle(fontSize: 13,
+                                                    color: Colors.red,
+                                                    fontWeight: FontWeight.w600),
                                               ),
                                               IconButton(
                                                 icon: Icon(
@@ -763,48 +778,48 @@ class _DestinationPageState extends State<DestinationPage> {
                                                             'HA-Travel policy(HA/16-17/001 Date:21/05/2016)\nThe limits of reimbursement are as follows:',
                                                           ),
                                                           content:
-                                                              SingleChildScrollView(
+                                                          SingleChildScrollView(
                                                             scrollDirection:
-                                                                Axis.horizontal,
+                                                            Axis.horizontal,
                                                             child: DataTable(
                                                               dataRowHeight: 85,
                                                               columns: [
                                                                 DataColumn(
                                                                     label: Text(
-                                                                  'Grade',
-                                                                  style: TextStyle(
-                                                                      color: Colors
-                                                                          .deepPurple,
-                                                                      fontWeight:
+                                                                      'Grade',
+                                                                      style: TextStyle(
+                                                                          color: Colors
+                                                                              .deepPurple,
+                                                                          fontWeight:
                                                                           FontWeight
                                                                               .w600,
-                                                                      fontSize:
+                                                                          fontSize:
                                                                           16),
-                                                                )),
+                                                                    )),
                                                                 DataColumn(
                                                                     label: Text(
-                                                                  'Location Category',
-                                                                  style: TextStyle(
-                                                                      color: Colors
-                                                                          .deepPurple,
-                                                                      fontWeight:
+                                                                      'Location Category',
+                                                                      style: TextStyle(
+                                                                          color: Colors
+                                                                              .deepPurple,
+                                                                          fontWeight:
                                                                           FontWeight
                                                                               .w600,
-                                                                      fontSize:
+                                                                          fontSize:
                                                                           16),
-                                                                )),
+                                                                    )),
                                                                 DataColumn(
                                                                     label: Text(
-                                                                  'Travel Mode Up Limit',
-                                                                  style: TextStyle(
-                                                                      color: Colors
-                                                                          .deepPurple,
-                                                                      fontWeight:
+                                                                      'Travel Mode Up Limit',
+                                                                      style: TextStyle(
+                                                                          color: Colors
+                                                                              .deepPurple,
+                                                                          fontWeight:
                                                                           FontWeight
                                                                               .w600,
-                                                                      fontSize:
+                                                                          fontSize:
                                                                           16),
-                                                                )),
+                                                                    )),
                                                               ],
                                                               rows: [
                                                                 DataRow(cells: [
@@ -851,7 +866,7 @@ class _DestinationPageState extends State<DestinationPage> {
                                                             ),
                                                           )
 //
-                                                          ));
+                                                      ));
                                                 },
                                               ),
                                             ],
@@ -870,7 +885,7 @@ class _DestinationPageState extends State<DestinationPage> {
                                       ),
                                       Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                         children: <Widget>[
                                           Container(
                                             width: 120,
@@ -879,7 +894,7 @@ class _DestinationPageState extends State<DestinationPage> {
                                             decoration: BoxDecoration(
                                                 color: Colors.white,
                                                 borderRadius:
-                                                    BorderRadius.circular(10),
+                                                BorderRadius.circular(10),
                                                 boxShadow: [
                                                   BoxShadow(
                                                       color: Color.fromRGBO(
@@ -900,11 +915,9 @@ class _DestinationPageState extends State<DestinationPage> {
                                                 validators: [
                                                   FormBuilderValidators
                                                       .numeric(),
-                                                  FormBuilderValidators
-                                                      .required(),
                                                 ],
                                                 keyboardType:
-                                                    TextInputType.number,
+                                                TextInputType.number,
                                                 decoration: InputDecoration(
                                                     border: InputBorder.none,
                                                     hintText: "Enter amount",
@@ -921,7 +934,7 @@ class _DestinationPageState extends State<DestinationPage> {
                                             decoration: BoxDecoration(
                                                 color: Colors.white,
                                                 borderRadius:
-                                                    BorderRadius.circular(10),
+                                                BorderRadius.circular(10),
                                                 boxShadow: [
                                                   BoxShadow(
                                                       color: Color.fromRGBO(
@@ -940,11 +953,11 @@ class _DestinationPageState extends State<DestinationPage> {
                                                   });
                                                 },
                                                 keyboardType:
-                                                    TextInputType.text,
+                                                TextInputType.text,
                                                 decoration: InputDecoration(
                                                     border: InputBorder.none,
                                                     hintText:
-                                                        "Add Description if any",
+                                                    "Add Description if any",
                                                     hintStyle: TextStyle(
                                                         color: Colors.grey[300],
                                                         fontSize: 15)),
@@ -965,7 +978,7 @@ class _DestinationPageState extends State<DestinationPage> {
                                       ),
                                       Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                         children: <Widget>[
                                           Container(
                                             width: 120,
@@ -974,7 +987,7 @@ class _DestinationPageState extends State<DestinationPage> {
                                             decoration: BoxDecoration(
                                                 color: Colors.white,
                                                 borderRadius:
-                                                    BorderRadius.circular(10),
+                                                BorderRadius.circular(10),
                                                 boxShadow: [
                                                   BoxShadow(
                                                       color: Color.fromRGBO(
@@ -995,11 +1008,9 @@ class _DestinationPageState extends State<DestinationPage> {
                                                 validators: [
                                                   FormBuilderValidators
                                                       .numeric(),
-                                                  FormBuilderValidators
-                                                      .required(),
                                                 ],
                                                 keyboardType:
-                                                    TextInputType.number,
+                                                TextInputType.number,
                                                 decoration: InputDecoration(
                                                     border: InputBorder.none,
                                                     hintText: "Enter amount",
@@ -1016,7 +1027,7 @@ class _DestinationPageState extends State<DestinationPage> {
                                             decoration: BoxDecoration(
                                                 color: Colors.white,
                                                 borderRadius:
-                                                    BorderRadius.circular(10),
+                                                BorderRadius.circular(10),
                                                 boxShadow: [
                                                   BoxShadow(
                                                       color: Color.fromRGBO(
@@ -1035,11 +1046,11 @@ class _DestinationPageState extends State<DestinationPage> {
                                                   });
                                                 },
                                                 keyboardType:
-                                                    TextInputType.text,
+                                                TextInputType.text,
                                                 decoration: InputDecoration(
                                                     border: InputBorder.none,
                                                     hintText:
-                                                        "Add Description if any",
+                                                    "Add Description if any",
                                                     hintStyle: TextStyle(
                                                         color: Colors.grey[300],
                                                         fontSize: 15)),

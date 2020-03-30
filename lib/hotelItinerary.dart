@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:date_range_picker/date_range_picker.dart' as DateRagePicker;
 import 'package:intl/intl.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 Map dateInfo = {};
 Map formDetails = {};
@@ -23,10 +25,11 @@ double advAmount;
 String advDescription;
 bool checkboxValue = false;
 bool advVal = false;
-int noOfLegs = 1;
+int noOfHotels = 1;
 
 class _HotelItineraryState extends State<HotelItinerary> {
   GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
+  bool showSpinner = false;
 
   @override
   void initState() {
@@ -41,6 +44,7 @@ class _HotelItineraryState extends State<HotelItinerary> {
 
   void addToForm(int legNo) {
     formDetails.clear();
+    formDetails.addAll(widget.travelFormInfo);
     while (legNo != 0) {
       formDetails.addAll({
         'accomodation $legNo': {
@@ -65,6 +69,29 @@ class _HotelItineraryState extends State<HotelItinerary> {
     return true; // return true if the route to be popped
   }
 
+// user defined function
+  void _showDialog({String title, String message}) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            FlatButton(
+              child: Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -86,258 +113,292 @@ class _HotelItineraryState extends State<HotelItinerary> {
             style: TextStyle(color: Colors.white),
           ),
         ),
-        body: GestureDetector(
-          onTap: () {
-            FocusScope.of(context).requestFocus(new FocusNode());
-          },
-          child: SafeArea(
-            child: SingleChildScrollView(
-              child: FormBuilder(
-                key: _fbKey,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    LinearProgressIndicator(
-                      value: 0.7,
-                      valueColor: new AlwaysStoppedAnimation<Color>(
-                          Colors.orangeAccent),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Card(
-                        elevation: 2,
-                        child: Container(
-                          width: MediaQuery.of(context).size.width - 15,
-                          padding: EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(4),
-                              color: Color.fromRGBO(143, 148, 251, 1)),
-                          child: Column(
-                            children: <Widget>[
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Text(
-                                    'Departing Date:',
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 17),
-                                  ),
-                                  Text(
-                                    'Return Date:',
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 17),
-                                  ),
-                                ],
-                              ),
-                              Icon(
-                                Icons.cached,
-                                color: Colors.white,
-                              ),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: <Widget>[
-                                  Text(
-                                    DateFormat.d()
-                                            .format(widget
-                                                .travelFormInfo['from date'])
-                                            .toString() +
-                                        ' ' +
-                                        DateFormat.MMM()
-                                            .format(widget
-                                                .travelFormInfo['from date'])
-                                            .toString() +
-                                        ' ' +
-                                        DateFormat.y()
-                                            .format(widget
-                                                .travelFormInfo['from date'])
-                                            .toString(),
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 17),
-                                  ),
-                                  Text(
-                                    DateFormat.d()
-                                            .format(widget
-                                                .travelFormInfo['to date'])
-                                            .toString() +
-                                        ' ' +
-                                        DateFormat.MMM()
-                                            .format(widget
-                                                .travelFormInfo['to date'])
-                                            .toString() +
-                                        ' ' +
-                                        DateFormat.y()
-                                            .format(widget
-                                                .travelFormInfo['to date'])
-                                            .toString(),
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 17),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
+        body: Stack(
+          children: <Widget>[
+            GestureDetector(
+              onTap: () {
+                FocusScope.of(context).requestFocus(new FocusNode());
+              },
+              child: SafeArea(
+                child: SingleChildScrollView(
+                  child: FormBuilder(
+                    key: _fbKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        LinearProgressIndicator(
+                          value: 0.7,
+                          valueColor: new AlwaysStoppedAnimation<Color>(
+                              Colors.orangeAccent),
                         ),
-                      ),
-                    ),
-                    Column(
-                      children: hotels,
-                    ),
-                    hotels.length > 1
-                        ? Padding(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 30),
-                            child: Center(
-                              child: RaisedButton(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(25.0),
-                                  ),
-                                  splashColor: Colors.redAccent,
-                                  padding: const EdgeInsets.symmetric(
-                                      vertical: 10, horizontal: 30),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: Card(
+                            elevation: 2,
+                            child: Container(
+                              width: MediaQuery.of(context).size.width - 15,
+                              padding: EdgeInsets.all(8),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(4),
+                                  color: Color.fromRGBO(143, 148, 251, 1)),
+                              child: Column(
+                                children: <Widget>[
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: <Widget>[
-                                      Icon(
-                                        Icons.delete,
-                                        color: Colors.white,
-                                      ),
-                                      SizedBox(
-                                        width: 10,
+                                      Text(
+                                        'Departing Date:',
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 17),
                                       ),
                                       Text(
-                                        'Delete Accomodation',
+                                        'Return Date:',
                                         style: TextStyle(
-                                            color: Colors.white, fontSize: 20),
+                                            color: Colors.white, fontSize: 17),
                                       ),
                                     ],
                                   ),
-                                  color: Colors.red,
-                                  onPressed: () {
-                                    setState(() {
-                                      formDetails.clear();
-                                      hotels.removeLast();
-                                    });
-                                  }),
+                                  Icon(
+                                    Icons.cached,
+                                    color: Colors.white,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      Text(
+                                        DateFormat.d()
+                                                .format(widget.travelFormInfo[
+                                                    'from date'])
+                                                .toString() +
+                                            ' ' +
+                                            DateFormat.MMM()
+                                                .format(widget.travelFormInfo[
+                                                    'from date'])
+                                                .toString() +
+                                            ' ' +
+                                            DateFormat.y()
+                                                .format(widget.travelFormInfo[
+                                                    'from date'])
+                                                .toString(),
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 17),
+                                      ),
+                                      Text(
+                                        DateFormat.d()
+                                                .format(widget
+                                                    .travelFormInfo['to date'])
+                                                .toString() +
+                                            ' ' +
+                                            DateFormat.MMM()
+                                                .format(widget
+                                                    .travelFormInfo['to date'])
+                                                .toString() +
+                                            ' ' +
+                                            DateFormat.y()
+                                                .format(widget
+                                                    .travelFormInfo['to date'])
+                                                .toString(),
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 17),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
-                          )
-                        : SizedBox(),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 10, horizontal: 30),
-                      child: Center(
-                        child: RaisedButton(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(25.0),
                           ),
-                          splashColor: Colors.green,
+                        ),
+                        Column(
+                          children: hotels,
+                        ),
+                        hotels.length > 1
+                            ? Padding(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 30),
+                                child: Center(
+                                  child: RaisedButton(
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius:
+                                            BorderRadius.circular(25.0),
+                                      ),
+                                      splashColor: Colors.redAccent,
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 10, horizontal: 30),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: <Widget>[
+                                          Icon(
+                                            Icons.delete,
+                                            color: Colors.white,
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Text(
+                                            'Delete Accomodation',
+                                            style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 20),
+                                          ),
+                                        ],
+                                      ),
+                                      color: Colors.red,
+                                      onPressed: () {
+                                        setState(() {
+                                          noOfHotels--;
+                                          formDetails.clear();
+                                          hotels.removeLast();
+                                        });
+                                      }),
+                                ),
+                              )
+                            : SizedBox(),
+                        Padding(
                           padding: const EdgeInsets.symmetric(
                               vertical: 10, horizontal: 30),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Icon(
-                                Icons.add,
-                                color: Colors.white,
+                          child: Center(
+                            child: RaisedButton(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(25.0),
                               ),
-                              SizedBox(
-                                width: 10,
+                              splashColor: Colors.green,
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 30),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Icon(
+                                    Icons.add,
+                                    color: Colors.white,
+                                  ),
+                                  SizedBox(
+                                    width: 10,
+                                  ),
+                                  Text(
+                                    'Add Accomodation',
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 20),
+                                  ),
+                                ],
                               ),
-                              Text(
-                                'Add Accomodation',
+                              color: Colors.lightGreen,
+                              onPressed: () {
+                                setState(() {
+                                  noOfHotels++;
+                                  hotels.add(HotelDetails(
+                                    legNo: noOfHotels,
+                                    initialDate:
+                                        widget.travelFormInfo['from date'],
+                                    finalDate: widget.travelFormInfo['to date'],
+                                  ));
+                                });
+                              },
+                            ),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+                          child: Card(
+                            child: CheckboxListTile(
+                              value: checkboxValue,
+                              onChanged: (val) {
+                                if (checkboxValue == false) {
+                                  setState(() {
+                                    checkboxValue = true;
+                                  });
+                                } else if (checkboxValue == true) {
+                                  setState(() {
+                                    checkboxValue = false;
+                                  });
+                                }
+                              },
+                              subtitle: !checkboxValue
+                                  ? Text(
+                                      'Required.',
+                                      style: TextStyle(color: Colors.red),
+                                    )
+                                  : null,
+                              title: new Text(
+                                'I hereby confirm that the information filled in this TAR are as per Holtec\'s travel policy.',
                                 style: TextStyle(
-                                    color: Colors.white, fontSize: 20),
+                                    fontSize: 14.0,
+                                    fontWeight: FontWeight.w600),
                               ),
-                            ],
+                              controlAffinity: ListTileControlAffinity.leading,
+                              activeColor: Colors.deepPurple.shade400,
+                            ),
                           ),
-                          color: Colors.lightGreen,
-                          onPressed: () {
-                            setState(() {
-                              noOfLegs++;
-                              hotels.add(HotelDetails(
-                                legNo: noOfLegs,
-                                initialDate: widget.travelFormInfo['from date'],
-                                finalDate: widget.travelFormInfo['to date'],
-                              ));
-                            });
-                          },
                         ),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                      child: Card(
-                        child: CheckboxListTile(
-                          value: checkboxValue,
-                          onChanged: (val) {
-                            if (checkboxValue == false) {
-                              setState(() {
-                                checkboxValue = true;
-                              });
-                            } else if (checkboxValue == true) {
-                              setState(() {
-                                checkboxValue = false;
-                              });
-                            }
-                          },
-                          subtitle: !checkboxValue
-                              ? Text(
-                                  'Required.',
-                                  style: TextStyle(color: Colors.red),
-                                )
-                              : null,
-                          title: new Text(
-                            'I hereby confirm that the information filled in this TAR are as per Holtec\'s travel policy.',
-                            style: TextStyle(
-                                fontSize: 14.0, fontWeight: FontWeight.w600),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Center(
+                          child: RaisedButton(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 60, vertical: 8),
+                            onPressed: () async {
+                              if (_fbKey.currentState.saveAndValidate()) {
+                                if (checkboxValue == true) {
+                                  addToForm(hotels.length);
+                                  print(formDetails);
+                                  setState(() {
+                                    showSpinner = true;
+                                  });
+                                  try{
+                                    FirebaseUser user = await FirebaseAuth
+                                        .instance
+                                        .currentUser();
+                                    print(user.email);
+                                  }catch(e){
+                                    print(e);
+                                  }
+                                } else {
+                                  _showDialog(
+                                      title: 'Agree to Terms and Conditions',
+                                      message:
+                                          'Please agree to the terms and conditions to submit the form');
+                                }
+                              } else {
+                                _showDialog(
+                                    title: 'Incorrect Details',
+                                    message:
+                                        'Please check the form for incorrect or incomplete details');
+                                setState(() {
+                                  allGood = false;
+                                });
+                              }
+                            },
+                            color: Color.fromRGBO(143, 148, 251, 1),
+                            shape: StadiumBorder(),
+                            child: Text(
+                              "Submit",
+                              style: TextStyle(
+                                  fontSize: 18,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w600),
+                            ),
                           ),
-                          controlAffinity: ListTileControlAffinity.leading,
-                          activeColor: Colors.deepPurple.shade400,
                         ),
-                      ),
+                      ],
                     ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Center(
-                      child: RaisedButton(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 60, vertical: 8),
-                        onPressed: () {
-                          if (_fbKey.currentState.saveAndValidate()) {
-                            if (checkboxValue == true) {
-                              addToForm(hotels.length);
-                              print(formDetails);
-                            } else {
-                              //TODO: add alert to agree
-                            }
-//                            print(_fbKey.currentState.value);
-//                            print(dateInfo);
-                          } else {
-                            //TODO: add alert to check form
-
-                            setState(() {
-                              allGood = false;
-                            });
-                          }
-                        },
-                        color: Color.fromRGBO(143, 148, 251, 1),
-                        shape: StadiumBorder(),
-                        child: Text(
-                          "Next",
-                          style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600),
-                        ),
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
               ),
             ),
-          ),
+            showSpinner
+                ? Container(
+                    color: Colors.black54,
+                    child: Center(
+                      child: SpinKitWave(
+                        color: Colors.white,
+                      ),
+                    ),
+                  )
+                : SizedBox(),
+          ],
         ),
       ),
     );

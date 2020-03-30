@@ -136,6 +136,29 @@ class _TravelItineraryState extends State<TravelItinerary> {
     return true; // return true if the route to be popped
   }
 
+// user defined function
+  void _showDialog({String title, String message}) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            FlatButton(
+              child: Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -143,7 +166,10 @@ class _TravelItineraryState extends State<TravelItinerary> {
       child: Scaffold(
         appBar: AppBar(
           leading: IconButton(
-            icon: Icon(Icons.arrow_back_ios,color: Colors.white,),
+            icon: Icon(
+              Icons.arrow_back_ios,
+              color: Colors.white,
+            ),
             onPressed: () {
               Navigator.pop(context);
               widget.basicFormInfo.clear();
@@ -323,7 +349,6 @@ class _TravelItineraryState extends State<TravelItinerary> {
                                         ),
                                         child: FormBuilderTextField(
                                           textAlign: TextAlign.center,
-
                                           autovalidate: allGood ? false : true,
                                           attribute: "advAmount",
                                           onSaved: (value) {
@@ -375,7 +400,6 @@ class _TravelItineraryState extends State<TravelItinerary> {
                                         ),
                                         child: FormBuilderTextField(
                                           textAlign: TextAlign.center,
-
                                           autovalidate: allGood ? false : true,
                                           attribute: "advDescription",
                                           onSaved: (value) {
@@ -430,8 +454,8 @@ class _TravelItineraryState extends State<TravelItinerary> {
                                     borderRadius: BorderRadius.circular(30.0),
                                   ),
                                   splashColor: Colors.redAccent,
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 50,vertical: 10),
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 50, vertical: 10),
                                   child: Text(
                                     'Delete last leg',
                                     style: TextStyle(
@@ -440,6 +464,8 @@ class _TravelItineraryState extends State<TravelItinerary> {
                                   color: Colors.red,
                                   onPressed: () {
                                     setState(() {
+                                      noOfLegs--;
+
                                       formDetails.clear();
                                       Legs.removeLast();
                                     });
@@ -455,7 +481,8 @@ class _TravelItineraryState extends State<TravelItinerary> {
                             borderRadius: BorderRadius.circular(30.0),
                           ),
                           splashColor: Colors.green,
-                          padding: EdgeInsets.symmetric(horizontal: 77,vertical: 10),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 77, vertical: 10),
                           child: Text(
                             'Add Leg',
                             style: TextStyle(color: Colors.white, fontSize: 20),
@@ -510,10 +537,17 @@ class _TravelItineraryState extends State<TravelItinerary> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                  builder: (context) => HotelItinerary(travelFormInfo: formDetails,),
+                                  builder: (context) => HotelItinerary(
+                                    travelFormInfo: formDetails,
+                                  ),
                                 ),
                               );
                             }
+                          } else {
+                            _showDialog(
+                                title: 'Incorrect Details',
+                                message:
+                                    'Please check the form for incorrect or incomplete details');
                             setState(() {
                               allGood = false;
                             });
@@ -962,7 +996,6 @@ class _DescrBoxState extends State<DescrBox> {
                     ),
                   ),
                   child: FormBuilderTextField(
-
                     autovalidate: allGood ? false : true,
                     attribute: "Leg $legNo RetalName",
                     textAlign: TextAlign.center,
@@ -1004,7 +1037,6 @@ class _DescrBoxState extends State<DescrBox> {
                     autovalidate: allGood ? false : true,
                     attribute: "Leg $legNo carPickupAddress",
                     textAlign: TextAlign.center,
-
                     onSaved: (val) {
                       setState(() {
                         pickUpAdd = val;
@@ -1043,7 +1075,6 @@ class _DescrBoxState extends State<DescrBox> {
                     autovalidate: allGood ? false : true,
                     attribute: "Leg $legNo carDropOffAddress",
                     textAlign: TextAlign.center,
-
                     onSaved: (val) {
                       setState(() {
                         DropAdd = val;
@@ -1228,7 +1259,6 @@ class _DescrBoxState extends State<DescrBox> {
               child: FormBuilderTextField(
                 attribute: "Leg $legNo flightNo",
                 textAlign: TextAlign.center,
-
                 onSaved: (val) {
                   setState(() {
                     flightdeets = val;
@@ -1269,7 +1299,6 @@ class _DescrBoxState extends State<DescrBox> {
               child: FormBuilderTextField(
                 autovalidate: allGood ? false : true,
                 textAlign: TextAlign.center,
-
                 validators: [
                   FormBuilderValidators.required(),
                 ],
@@ -1309,7 +1338,6 @@ class _DescrBoxState extends State<DescrBox> {
               ),
               child: FormBuilderTextField(
                 textAlign: TextAlign.center,
-
                 validators: [
                   FormBuilderValidators.required(),
                 ],
@@ -1366,7 +1394,6 @@ class _DescrBoxState extends State<DescrBox> {
                     ),
                     child: FormBuilderTextField(
                       textAlign: TextAlign.center,
-
                       validators: [
                         FormBuilderValidators.required(),
                         FormBuilderValidators.numeric(),
@@ -1412,7 +1439,6 @@ class _DescrBoxState extends State<DescrBox> {
                     ),
                     child: FormBuilderTextField(
                       textAlign: TextAlign.center,
-
                       validators: [
                         FormBuilderValidators.required(),
                         FormBuilderValidators.numeric(),
@@ -1460,7 +1486,6 @@ class _DescrBoxState extends State<DescrBox> {
                   ),
                   child: FormBuilderTextField(
                     textAlign: TextAlign.center,
-
                     validators: [
                       FormBuilderValidators.required(),
                       FormBuilderValidators.numeric(),

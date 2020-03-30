@@ -9,7 +9,9 @@ class TextFieldCustom extends StatefulWidget {
       this.text,
       this.onsaved,
       this.height,
-      this.attribute});
+      this.attribute,
+      this.autovalidate,
+      this.initialValue});
 
   final String hint;
   final String attribute;
@@ -17,6 +19,9 @@ class TextFieldCustom extends StatefulWidget {
   List<String Function(dynamic)> validator;
   final String text;
   final double height;
+  final bool autovalidate;
+  final String initialValue;
+
   Function onsaved;
 
   @override
@@ -47,7 +52,6 @@ class _TextFieldCustomState extends State<TextFieldCustom> {
                 color: Color.fromRGBO(143, 148, 251, 1)),
             child: Container(
               height: 65,
-              padding: EdgeInsets.all(2),
               decoration: BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(5),
@@ -57,8 +61,9 @@ class _TextFieldCustomState extends State<TextFieldCustom> {
                 ),
               ),
               child: FormBuilderTextField(
+                initialValue: widget.initialValue,
                 textAlign: TextAlign.center,
-                autovalidate: allGood ? false : true,
+                autovalidate: widget.autovalidate,
                 attribute: widget.attribute,
                 onSaved: widget.onsaved,
                 validators: widget.validator,

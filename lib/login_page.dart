@@ -16,9 +16,31 @@ class _LoginPageState extends State<LoginPage> {
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
   bool showSpinner = false;
 
+  void _showDialog({String title, String message}) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            FlatButton(
+              child: Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-        return Scaffold(
+    return Scaffold(
         backgroundColor: Colors.white,
         body: Stack(
           children: <Widget>[
@@ -34,7 +56,8 @@ class _LoginPageState extends State<LoginPage> {
                         height: 350,
                         decoration: BoxDecoration(
                             image: DecorationImage(
-                                image: AssetImage('assets/images/background.png'),
+                                image:
+                                    AssetImage('assets/images/background.png'),
                                 fit: BoxFit.fill)),
                         child: Stack(
                           children: <Widget>[
@@ -110,8 +133,8 @@ class _LoginPageState extends State<LoginPage> {
                                       borderRadius: BorderRadius.circular(10),
                                       boxShadow: [
                                         BoxShadow(
-                                            color:
-                                                Color.fromRGBO(143, 148, 251, .2),
+                                            color: Color.fromRGBO(
+                                                143, 148, 251, .2),
                                             blurRadius: 20.0,
                                             offset: Offset(0, 10))
                                       ]),
@@ -124,7 +147,8 @@ class _LoginPageState extends State<LoginPage> {
                                           decoration: BoxDecoration(
                                               border: Border(
                                                   bottom: BorderSide(
-                                                      color: Colors.grey[100]))),
+                                                      color:
+                                                          Colors.grey[100]))),
                                           child: FormBuilderTextField(
                                             attribute: "email",
                                             keyboardType:
@@ -134,6 +158,8 @@ class _LoginPageState extends State<LoginPage> {
                                               FormBuilderValidators.email()
                                             ],
                                             decoration: InputDecoration(
+                                                prefixIcon: Icon(Icons.email,
+                                                    color: Colors.grey[400]),
                                                 border: InputBorder.none,
                                                 hintText: "Email",
                                                 hintStyle: TextStyle(
@@ -144,13 +170,15 @@ class _LoginPageState extends State<LoginPage> {
                                           padding: EdgeInsets.all(8.0),
                                           child: FormBuilderTextField(
                                             validators: [
-                                              FormBuilderValidators.minLength(8),
+                                              FormBuilderValidators.minLength(
+                                                  8),
                                               FormBuilderValidators.required()
                                             ],
                                             attribute: "password",
                                             obscureText: true,
                                             maxLines: 1,
-                                            decoration: InputDecoration(
+                                            decoration: InputDecoration( prefixIcon: Icon(Icons.lock_outline,
+                                                color: Colors.grey[400]),
                                                 border: InputBorder.none,
                                                 hintText: "Password",
                                                 hintStyle: TextStyle(
@@ -174,48 +202,57 @@ class _LoginPageState extends State<LoginPage> {
                                       });
 //                                  if(_fbKey.currentState.value['email'].toString().endsWith('holtec.com')){
 //                                  }
-                                      try{
-                                      await FirebaseAuth.instance
-                                          .signInWithEmailAndPassword(
-                                              email: _fbKey
-                                                  .currentState.value['email'],
-                                              password: _fbKey
-                                                  .currentState.value['password']);
-                                      FirebaseUser user =
-                                          await FirebaseAuth.instance.currentUser();
-                                      setState(() {
-                                        showSpinner = false;
-                                      });
-                                      if (user.isEmailVerified) {
-                                        Navigator.pop(context, true);
-                                      } else {
+                                      try {
+                                        await FirebaseAuth.instance
+                                            .signInWithEmailAndPassword(
+                                                email: _fbKey.currentState
+                                                    .value['email'],
+                                                password: _fbKey.currentState
+                                                    .value['password']);
+                                        FirebaseUser user = await FirebaseAuth
+                                            .instance
+                                            .currentUser();
+                                        setState(() {
+                                          showSpinner = false;
+                                        });
+                                        if (user.isEmailVerified) {
+                                          Navigator.pop(context, true);
+                                        } else {
+                                          showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return AlertDialog(
+                                                    title: Text(
+                                                        "Please verify with email"),
+                                                    content: Text(
+                                                        "An email has been sent to your account for verfication, Please verify email to continue.\n if you have not recieved an email click on resend email"),
+                                                    actions: <Widget>[
+                                                      FlatButton(
+                                                          child: Text(
+                                                              "Resend email"),
+                                                          onPressed: () async {
+                                                            await user
+                                                                .sendEmailVerification();
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                          }),
+                                                      FlatButton(
+                                                          child: Text("Close"),
+                                                          onPressed: () {
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                          }),
+                                                    ]);
+                                              });
+                                        }
+                                      } catch (e) {
+                                        _showDialog(
+                                            title: 'Wrong Password',
+                                            message:
+                                                'Please Check your password and Try again');
 
-                                        showDialog(
-                                            context: context,
-                                            builder: (BuildContext context) {
-                                              return AlertDialog(
-                                                  title: Text(
-                                                      "Please verify with email"),
-                                                  content: Text(
-                                                      "An email has been sent to your account for verfication, Please verify email to continue.\n if you have not recieved an email click on resend email"),
-                                                  actions: <Widget>[
-                                                    FlatButton(
-                                                        child: Text("Resend email"),
-                                                        onPressed: () async {
-                                                          await user
-                                                              .sendEmailVerification();
-                                                          Navigator.of(context)
-                                                              .pop();
-                                                        }),
-                                                    FlatButton(
-                                                        child: Text("Close"),
-                                                        onPressed: () {
-                                                          Navigator.of(context)
-                                                              .pop();
-                                                        }),
-                                                  ]);
-                                            });
-                                      }}catch(e){
                                         setState(() {
                                           showSpinner = false;
                                         });
@@ -226,7 +263,8 @@ class _LoginPageState extends State<LoginPage> {
                                   child: Container(
                                     height: 50,
                                     decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(100),
+                                        borderRadius:
+                                            BorderRadius.circular(100),
                                         gradient: LinearGradient(colors: [
                                           Color.fromRGBO(143, 148, 251, 1),
                                           Color.fromRGBO(143, 148, 251, .6),
@@ -245,26 +283,28 @@ class _LoginPageState extends State<LoginPage> {
                             SizedBox(
                               height: 40,
                             ),
-                            FadeAnimation(
-                                1.5,
-                                Text(
-                                  "Forgot Password?",
-                                  style: TextStyle(
-                                      color: Color.fromRGBO(143, 148, 251, 1)),
-                                )),
+//                            FadeAnimation(
+//                                1.5,
+//                                Text(
+//                                  "Forgot Password?",
+//                                  style: TextStyle(
+//                                      color: Color.fromRGBO(143, 148, 251, 1)),
+//                                )),
                             SizedBox(
                               height: 10,
                             ),
                             FadeAnimation(
                                 1.5,
                                 GestureDetector(
-                                  onTap: (){
-                                    Navigator.pushNamed(context, RegistrationPage.id);
+                                  onTap: () {
+                                    Navigator.pushNamed(
+                                        context, RegistrationPage.id);
                                   },
                                   child: Text(
                                     "Not a Member yet?",
                                     style: TextStyle(
-                                        color: Color.fromRGBO(143, 148, 251, 1)),
+                                        color:
+                                            Color.fromRGBO(143, 148, 251, 1)),
                                   ),
                                 )),
                           ],
@@ -275,10 +315,16 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               ),
             ),
-            showSpinner? Container(
-              color: Colors.black54,
-              child: Center(child: SpinKitWave(color: Colors.white,),),
-            ):SizedBox(),
+            showSpinner
+                ? Container(
+                    color: Colors.black54,
+                    child: Center(
+                      child: SpinKitWave(
+                        color: Colors.white,
+                      ),
+                    ),
+                  )
+                : SizedBox(),
           ],
         ));
   }
