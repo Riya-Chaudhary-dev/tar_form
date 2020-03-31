@@ -1,1098 +1,1 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
-import 'Animation/FadeAnimation.dart';
-import 'textfieldcustom.dart';
-
-class DestinationPage extends StatefulWidget {
-  @override
-  _DestinationPageState createState() => _DestinationPageState();
-}
-
-class _DestinationPageState extends State<DestinationPage> {
-  final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
-  String destination;
-  String purpose;
-  bool inttravel = false;
-  double travelamt;
-  double lodgeamt;
-  double localamt;
-  double meals;
-  double businessmeals;
-  String mealdescpt;
-  double other;
-  String otherdescription;
-  String currency;
-  String designation = 'GM and Above';
-
-  @override
-  dynamic validatorLodge({String designation}) {
-    if (designation == 'GM and Above') {
-      return [
-        FormBuilderValidators.required(),
-        FormBuilderValidators.max(7500)
-      ];
-    } else if (designation == 'DGM/Sr. Manager/Manager') {
-      return [
-        FormBuilderValidators.required(),
-        FormBuilderValidators.max(6000)
-      ];
-    } else if (designation == 'Asst Manager/Sr Engineer') {
-      return [
-        FormBuilderValidators.required(),
-        FormBuilderValidators.max(5000)
-      ];
-    } else if (designation == 'Engineer/Asst Engineer/Trainee') {
-      return [
-        FormBuilderValidators.required(),
-        FormBuilderValidators.max(4000)
-      ];
-    } else if (designation == 'All Grade') {
-      return [
-        FormBuilderValidators.required(),
-        FormBuilderValidators.max(9000)
-      ];
-    }
-  }
-
-  List validatorMeal(designation) {
-    if (designation == 'GM and Above' || designation == 'All Grade') {
-      return [
-        FormBuilderValidators.required(),
-      ];
-    } else {
-      return [
-        FormBuilderValidators.required(),
-        FormBuilderValidators.max(1500)
-      ];
-    }
-  }
-
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Color.fromRGBO(143, 148, 251, 1),
-        title: Text(
-          'Tarvel Authorization Form',
-          style: TextStyle(color: Colors.white),
-        ),
-      ),
-      body: GestureDetector(
-        onTap: () {
-          FocusScope.of(context).requestFocus(new FocusNode());
-        },
-        child: SingleChildScrollView(
-          child: GestureDetector(
-            onTap: () {
-              FocusScope.of(context).requestFocus(new FocusNode());
-            },
-            child: Column(
-              children: <Widget>[
-                LinearProgressIndicator(
-                  value: 0.4,
-                  valueColor: new AlwaysStoppedAnimation<Color>(
-                      Colors.orangeAccent.shade200),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: FadeAnimation(
-                      1.8,
-                      FormBuilder(
-                        key: _fbKey,
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              TextFieldCustom(
-                                hint: 'Destination',
-                                keyboardstyle: TextInputType.text,
-                                text: 'Destination:',
-                                validator: [
-                                  FormBuilderValidators.required(),
-                                  FormBuilderValidators.minLength(3),
-                                ],
-                                onsaved: (value) {
-                                  destination = value;
-                                  print(destination);
-                                },
-                              ),
-                              Text(
-                                'Purpose of Travel:',
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    color: Color.fromRGBO(143, 148, 251, 1),
-                                    fontWeight: FontWeight.w600),
-                              ),
-                              SizedBox(
-                                height: 3,
-                              ),
-                              FadeAnimation(
-                                  1.8,
-                                  Container(
-                                    padding: EdgeInsets.only(left: 5.0),
-                                    decoration: BoxDecoration(
-                                        color: Colors.white,
-                                        borderRadius: BorderRadius.circular(10),
-                                        boxShadow: [
-                                          BoxShadow(
-                                              color: Color.fromRGBO(
-                                                  143, 148, 251, .2),
-                                              blurRadius: 20.0,
-                                              offset: Offset(0, 10))
-                                        ]),
-                                    child: Container(
-                                      padding: EdgeInsets.all(8),
-                                      child: FormBuilderTextField(
-                                        attribute: "purpose",
-//                                        onSaved: (value) {
-//                                          purpose = value;
-//                                          print(purpose);
-//                                        },
-                                        validators: [
-                                          FormBuilderValidators.required(),
-                                          FormBuilderValidators.minLength(3),
-                                        ],
-                                        keyboardType: TextInputType.text,
-                                        maxLines: 6,
-                                        decoration: InputDecoration(
-                                            border: InputBorder.none,
-                                            hintText:
-                                            'If project related, indicate Project number and name of client OR '
-                                                'Holtec Supervisor that is requesting the travel.)\n'
-                                                'The traveler is required to elaborate the purpose and provide'
-                                                ' brief description of the project here.',
-                                            hintStyle: TextStyle(
-                                                color: Colors.grey[300],
-                                                fontSize: 15)),
-                                      ),
-                                    ),
-                                  )),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Card(
-                                child: CheckboxListTile(
-                                  title: const Text('International Trip'),
-                                  value: inttravel,
-                                  onChanged: (bool value) {
-                                    setState(() {
-                                      inttravel = value;
-                                    });
-                                  },
-                                  secondary: const Icon(
-                                    Icons.card_travel,
-                                    color: Colors.redAccent,
-                                  ),
-                                ),
-                              ),
-                              Visibility(
-                                visible: inttravel,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: <Widget>[
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Text(
-                                      'Select currency:',
-                                      style: TextStyle(
-                                          fontSize: 17,
-                                          fontWeight: FontWeight.w600),
-                                    ),
-                                    FormBuilderChoiceChip(
-                                      onChanged: (val) {
-                                        setState(() {
-                                          currency = val;
-                                          print(currency);
-                                        });
-                                      },
-                                      spacing: 8,
-                                      elevation: 2,
-                                      attribute: "currency",
-                                      options: [
-                                        FormBuilderFieldOption(
-                                            child: Text("INR"), value: "inr"),
-                                        FormBuilderFieldOption(
-                                            child: Text("USD"), value: "usd"),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Text(
-                                'Details of Estimated Expense:',
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    color: Color.fromRGBO(143, 148, 251, 1),
-                                    fontWeight: FontWeight.w600),
-                              ),
-                              SizedBox(
-                                height: 4,
-                              ),
-                              SizedBox(height: 4,),
-                              Card(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                    children: <Widget>[
-                                      Text('Refer to this icon to get information about the\nrespective terms and conditions.'
-                                        , style: TextStyle(fontWeight: FontWeight.w600),),
-                                      Icon(Icons.assignment,color: Colors.redAccent,)
-                                    ],
-                                  ),
-                                ),
-                              ),
-
-                              Card(
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                    CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Text(
-                                        '*Travel (to & fro destination/in-between multiple destination):',
-                                        style: TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w600),
-                                      ),
-                                      SizedBox(
-                                        height: 4,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                        children: <Widget>[
-                                          Container(
-                                            width: 120,
-                                            padding: EdgeInsets.only(left: 5.0),
-                                            height: 50,
-                                            decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius:
-                                                BorderRadius.circular(10),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                      color: Color.fromRGBO(
-                                                          143, 148, 251, .2),
-                                                      blurRadius: 20.0,
-                                                      offset: Offset(0, 10))
-                                                ]),
-                                            child: Container(
-                                              padding: EdgeInsets.only(
-                                                  left: 5.0, bottom: 1),
-                                              child: FormBuilderTextField(
-                                                attribute: "travelamt",
-//                                                onSaved: (val) {
-//                                                  setState(() {
-//                                                    travelamt = val;
-//                                                  });
-//                                                },
-                                                validators: [
-                                                  FormBuilderValidators
-                                                      .required(),
-                                                  FormBuilderValidators
-                                                      .numeric()
-                                                ],
-                                                keyboardType:
-                                                TextInputType.number,
-                                                decoration: InputDecoration(
-                                                    border: InputBorder.none,
-                                                    hintText: "Enter amount",
-                                                    hintStyle: TextStyle(
-                                                        color: Colors.grey[300],
-                                                        fontSize: 15)),
-                                              ),
-                                            ),
-                                          ),
-                                          Row(
-                                            children: <Widget>[
-                                              Text(
-                                                'T&C',
-                                                style: TextStyle(fontSize: 13,
-                                                    color: Colors.red,
-                                                    fontWeight: FontWeight.w600),
-                                              ),
-                                              IconButton(
-                                                icon: Icon(
-                                                  Icons.assignment,
-                                                  color: Colors.redAccent,
-                                                ),
-                                                onPressed: () {
-                                                  showDialog(
-                                                      context: context,
-                                                      child: AlertDialog(
-                                                          title: Text(
-                                                            'HA-Travel policy(HA/16-17/001 Date:21/05/2016)\nThe limits of reimbursement are as follows:',
-                                                          ),
-                                                          content:
-                                                          SingleChildScrollView(
-                                                            scrollDirection:
-                                                            Axis.horizontal,
-                                                            child: DataTable(
-                                                              columns: [
-                                                                DataColumn(
-                                                                    label: Text(
-                                                                      'Grade',
-                                                                      style: TextStyle(
-                                                                          color: Colors
-                                                                              .deepPurple,
-                                                                          fontWeight:
-                                                                          FontWeight
-                                                                              .w600,
-                                                                          fontSize:
-                                                                          16),
-                                                                    )),
-                                                                DataColumn(
-                                                                    label: Text(
-                                                                      'Location Category',
-                                                                      style: TextStyle(
-                                                                          color: Colors
-                                                                              .deepPurple,
-                                                                          fontWeight:
-                                                                          FontWeight
-                                                                              .w600,
-                                                                          fontSize:
-                                                                          16),
-                                                                    )),
-                                                                DataColumn(
-                                                                    label: Text(
-                                                                      'Travel Mode Up Limit',
-                                                                      style: TextStyle(
-                                                                          color: Colors
-                                                                              .deepPurple,
-                                                                          fontWeight:
-                                                                          FontWeight
-                                                                              .w600,
-                                                                          fontSize:
-                                                                          16),
-                                                                    )),
-                                                              ],
-                                                              rows: [
-                                                                DataRow(cells: [
-                                                                  DataCell(Text(
-                                                                      'GM and above')),
-                                                                  DataCell(Text(
-                                                                      'Super-A/A/B/C')),
-                                                                  DataCell(Text(
-                                                                      'Air/Rail-AC1T/First Class ')),
-                                                                ]),
-                                                                DataRow(cells: [
-                                                                  DataCell(Text(
-                                                                      'DGM/Sr. Manager\n/Manager')),
-                                                                  DataCell(Text(
-                                                                      'Super-A/A/B/C')),
-                                                                  DataCell(Text(
-                                                                      'Air/Rail-AC2T')),
-                                                                ]),
-                                                                DataRow(cells: [
-                                                                  DataCell(Text(
-                                                                      'Asst Manager/\nSr Engineer')),
-                                                                  DataCell(Text(
-                                                                      'Super-A/A/B/C')),
-                                                                  DataCell(Text(
-                                                                      'Air/Rail-AC3T/Chair Car')),
-                                                                ]),
-                                                                DataRow(cells: [
-                                                                  DataCell(Text(
-                                                                      'Engineer/Asst \nEngineer/Trainee')),
-                                                                  DataCell(Text(
-                                                                      'Super-A/A/B/C')),
-                                                                  DataCell(Text(
-                                                                      'Air/Rail-AC3T/Sleeper Car')),
-                                                                ]),
-                                                                DataRow(cells: [
-                                                                  DataCell(Text(
-                                                                      'All Grades')),
-                                                                  DataCell(Text(
-                                                                      'D&E')),
-                                                                  DataCell(Text(
-                                                                      'Air')),
-                                                                ]),
-                                                              ],
-                                                            ),
-                                                          )
-//                                                  Text('The limits of reimbursement of expenses for travel exceeding 200 km are as follows:\n'
-//                                                      'Grade              Location Category              Travel Mode Up Limit'
-//                                                      'GM and above        Super-A/A/B/C                  Air/Rail   '),),
-                                                      ));
-                                                },
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                      Divider(),
-                                      Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                        children: <Widget>[
-                                          Text(
-                                            'Lodging/Hotel/Accommodation:',
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.w600),
-                                          ),
-                                          Text(
-                                            'per day',
-                                            style: TextStyle(
-                                                color: Colors.redAccent,
-                                                fontSize: 13),
-                                          )
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 4,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                        children: <Widget>[
-                                          Container(
-                                            width: 120,
-                                            padding: EdgeInsets.only(left: 5.0),
-                                            height: 50,
-                                            decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius:
-                                                BorderRadius.circular(10),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                      color: Color.fromRGBO(
-                                                          143, 148, 251, .2),
-                                                      blurRadius: 20.0,
-                                                      offset: Offset(0, 10))
-                                                ]),
-                                            child: Container(
-                                              padding: EdgeInsets.only(
-                                                  left: 5.0, bottom: 1),
-                                              child: FormBuilderTextField(
-                                                attribute: "lodgeamt",
-                                                onSaved: (val) {
-                                                  setState(() {
-                                                    val!=null ? lodgeamt = 0.0: lodgeamt = double.parse(val) ;
-                                                  });
-                                                },
-                                                validators: validatorLodge( designation: 'GM and Above'),
-                                                keyboardType:
-                                                TextInputType.number,
-                                                decoration: InputDecoration(
-                                                    border: InputBorder.none,
-                                                    hintText: "Enter amount",
-                                                    hintStyle: TextStyle(
-                                                        color: Colors.grey[300],
-                                                        fontSize: 15)),
-                                              ),
-                                            ),
-                                          ),
-                                          Row(
-                                            children: <Widget>[
-                                              Text(
-                                                'T&C',
-                                                style: TextStyle(fontSize: 13,
-                                                    color: Colors.red,
-                                                    fontWeight: FontWeight.w600),
-                                              ),
-                                              IconButton(
-                                                icon: Icon(
-                                                  Icons.assignment,
-                                                  color: Colors.redAccent,
-                                                ),
-                                                onPressed: () {
-                                                  showDialog(
-                                                      context: context,
-                                                      child: AlertDialog(
-                                                          title: Text(
-                                                            'HA-Travel policy(HA/16-17/001 Date:21/05/2016)\nThe limits of reimbursement are as follows:',
-                                                          ),
-                                                          content:
-                                                          SingleChildScrollView(
-                                                            scrollDirection:
-                                                            Axis.horizontal,
-                                                            child: DataTable(
-                                                              dataRowHeight: 85,
-                                                              columns: [
-                                                                DataColumn(
-                                                                    label: Text(
-                                                                      'Grade',
-                                                                      style: TextStyle(
-                                                                          color: Colors
-                                                                              .deepPurple,
-                                                                          fontWeight:
-                                                                          FontWeight
-                                                                              .w600,
-                                                                          fontSize:
-                                                                          16),
-                                                                    )),
-                                                                DataColumn(
-                                                                    label: Text(
-                                                                      'Location Category',
-                                                                      style: TextStyle(
-                                                                          color: Colors
-                                                                              .deepPurple,
-                                                                          fontWeight:
-                                                                          FontWeight
-                                                                              .w600,
-                                                                          fontSize:
-                                                                          16),
-                                                                    )),
-                                                                DataColumn(
-                                                                    label: Text(
-                                                                      'Travel Mode Up Limit',
-                                                                      style: TextStyle(
-                                                                          color: Colors
-                                                                              .deepPurple,
-                                                                          fontWeight:
-                                                                          FontWeight
-                                                                              .w600,
-                                                                          fontSize:
-                                                                          16),
-                                                                    )),
-                                                              ],
-                                                              rows: [
-                                                                DataRow(cells: [
-                                                                  DataCell(Text(
-                                                                      'GM and above')),
-                                                                  DataCell(Text(
-                                                                      'Super-A\nA\nB\nC')),
-                                                                  DataCell(Text(
-                                                                      '₹7500\n₹5000\n₹4000\n₹3000')),
-                                                                ]),
-                                                                DataRow(cells: [
-                                                                  DataCell(Text(
-                                                                      'DGM/Sr. Manager\n/Manager')),
-                                                                  DataCell(Text(
-                                                                      'Super-A\nA\nB\nC')),
-                                                                  DataCell(Text(
-                                                                      '₹6000\n₹4000\n₹3000\n₹2500')),
-                                                                ]),
-                                                                DataRow(cells: [
-                                                                  DataCell(Text(
-                                                                      'Asst Manager/\nSr Engineer')),
-                                                                  DataCell(Text(
-                                                                      'Super-A\nA\nB\nC')),
-                                                                  DataCell(Text(
-                                                                      '₹5000\n₹3500\n₹2500\n₹2000')),
-                                                                ]),
-                                                                DataRow(cells: [
-                                                                  DataCell(Text(
-                                                                      'Engineer/Asst \nEngineer/Trainee')),
-                                                                  DataCell(Text(
-                                                                      'Super-A\nA\nB\nC')),
-                                                                  DataCell(Text(
-                                                                      '₹4000\n₹3000\n₹2500\n₹2000')),
-                                                                ]),
-                                                                DataRow(cells: [
-                                                                  DataCell(Text(
-                                                                      'All Grades')),
-                                                                  DataCell(Text(
-                                                                      'D&E')),
-                                                                  DataCell(Text(
-                                                                      '₹9000')),
-                                                                ]),
-                                                              ],
-                                                            ),
-                                                          )
-//
-                                                      ));
-                                                },
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                      Divider(),
-                                      Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                        children: <Widget>[
-                                          Text(
-                                            'Local Travel:',
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                fontWeight: FontWeight.w600),
-                                          ),
-                                          Text(
-                                            'For Airport/Railway Station /Hotel \n/Project Site /Client Office',
-                                            style: TextStyle(
-                                                color: Colors.redAccent,
-                                                fontSize: 13),
-                                          )
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 4,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                        children: <Widget>[
-                                          Container(
-                                            width: 120,
-                                            padding: EdgeInsets.only(left: 5.0),
-                                            height: 50,
-                                            decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius:
-                                                BorderRadius.circular(10),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                      color: Color.fromRGBO(
-                                                          143, 148, 251, .2),
-                                                      blurRadius: 20.0,
-                                                      offset: Offset(0, 10))
-                                                ]),
-                                            child: Container(
-                                              padding: EdgeInsets.only(
-                                                  left: 5.0, bottom: 1),
-                                              child: FormBuilderTextField(
-                                                attribute: "localamt",
-//                                                onSaved: (val) {
-//                                                  setState(() {
-//                                                    localamt= val;
-//                                                  });
-//                                                },
-                                                validators: [
-                                                  FormBuilderValidators
-                                                      .numeric(),
-
-                                                ],
-                                                keyboardType:
-                                                TextInputType.number,
-                                                decoration: InputDecoration(
-                                                    border: InputBorder.none,
-                                                    hintText: "Enter amount",
-                                                    hintStyle: TextStyle(
-                                                        color: Colors.grey[300],
-                                                        fontSize: 15)),
-                                              ),
-                                            ),
-                                          ),
-                                          Row(
-                                            children: <Widget>[
-                                              Text(
-                                                'T&C',
-                                                style: TextStyle(fontSize: 13,
-                                                    color: Colors.red,
-                                                    fontWeight: FontWeight.w600),
-                                              ),
-                                              IconButton(
-                                                icon: Icon(
-                                                  Icons.assignment,
-                                                  color: Colors.redAccent,
-                                                ),
-                                                onPressed: () {
-                                                  showDialog(
-                                                      context: context,
-                                                      child: AlertDialog(
-                                                          title: Text(
-                                                            'HA-Travel policy(HA/16-17/001 Date:21/05/2016)\nRoad Transportation to and from the airport',
-                                                          ),
-                                                          content: Text(
-                                                              'Employees traveling to the same location should share road transportation to and from the airport whenever possible. The most economical mode of transportation should be used to and from the airport(ie bus and rail-terminals). Employees should consider public transportation, hotel and, airport shuttle services.')));
-                                                },
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                      Divider(),
-                                      Text(
-                                        '*Meals:',
-                                        style: TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w600),
-                                      ),
-                                      SizedBox(
-                                        height: 4,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                        children: <Widget>[
-                                          Container(
-                                            width: 120,
-                                            padding: EdgeInsets.only(left: 5.0),
-                                            height: 50,
-                                            decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius:
-                                                BorderRadius.circular(10),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                      color: Color.fromRGBO(
-                                                          143, 148, 251, .2),
-                                                      blurRadius: 20.0,
-                                                      offset: Offset(0, 10))
-                                                ]),
-                                            child: Container(
-                                              padding: EdgeInsets.only(
-                                                  left: 5.0, bottom: 1),
-                                              child: FormBuilderTextField(
-                                                attribute: "meals",
-//                                                onSaved: (val) {
-//                                                  setState(() {
-//                                                    meals = val;
-//                                                  });
-//                                                },
-                                                validators: [
-                                                  FormBuilderValidators
-                                                      .numeric(),
-                                                  FormBuilderValidators
-                                                      .required(),
-                                                  FormBuilderValidators.max(
-                                                      1500)
-                                                ],
-                                                keyboardType:
-                                                TextInputType.number,
-                                                decoration: InputDecoration(
-                                                    border: InputBorder.none,
-                                                    hintText: "Enter amount",
-                                                    hintStyle: TextStyle(
-                                                        color: Colors.grey[300],
-                                                        fontSize: 15)),
-                                              ),
-                                            ),
-                                          ),
-                                          Row(
-                                            children: <Widget>[
-                                              Text(
-                                                'T&C',
-                                                style: TextStyle(fontSize: 13,
-                                                    color: Colors.red,
-                                                    fontWeight: FontWeight.w600),
-                                              ),
-                                              IconButton(
-                                                icon: Icon(
-                                                  Icons.assignment,
-                                                  color: Colors.redAccent,
-                                                ),
-                                                onPressed: () {
-                                                  showDialog(
-                                                      context: context,
-                                                      child: AlertDialog(
-                                                          title: Text(
-                                                            'HA-Travel policy(HA/16-17/001 Date:21/05/2016)\nThe limits of reimbursement are as follows:',
-                                                          ),
-                                                          content:
-                                                          SingleChildScrollView(
-                                                            scrollDirection:
-                                                            Axis.horizontal,
-                                                            child: DataTable(
-                                                              dataRowHeight: 85,
-                                                              columns: [
-                                                                DataColumn(
-                                                                    label: Text(
-                                                                      'Grade',
-                                                                      style: TextStyle(
-                                                                          color: Colors
-                                                                              .deepPurple,
-                                                                          fontWeight:
-                                                                          FontWeight
-                                                                              .w600,
-                                                                          fontSize:
-                                                                          16),
-                                                                    )),
-                                                                DataColumn(
-                                                                    label: Text(
-                                                                      'Location Category',
-                                                                      style: TextStyle(
-                                                                          color: Colors
-                                                                              .deepPurple,
-                                                                          fontWeight:
-                                                                          FontWeight
-                                                                              .w600,
-                                                                          fontSize:
-                                                                          16),
-                                                                    )),
-                                                                DataColumn(
-                                                                    label: Text(
-                                                                      'Travel Mode Up Limit',
-                                                                      style: TextStyle(
-                                                                          color: Colors
-                                                                              .deepPurple,
-                                                                          fontWeight:
-                                                                          FontWeight
-                                                                              .w600,
-                                                                          fontSize:
-                                                                          16),
-                                                                    )),
-                                                              ],
-                                                              rows: [
-                                                                DataRow(cells: [
-                                                                  DataCell(Text(
-                                                                      'GM and above')),
-                                                                  DataCell(Text(
-                                                                      'Super-A\nA\nB\nC')),
-                                                                  DataCell(Text(
-                                                                      'At Actual\nAt Actual\nAt Actual\nAt Actual')),
-                                                                ]),
-                                                                DataRow(cells: [
-                                                                  DataCell(Text(
-                                                                      'DGM/Sr. Manager\n/Manager')),
-                                                                  DataCell(Text(
-                                                                      'Super-A\nA\nB\nC')),
-                                                                  DataCell(Text(
-                                                                      '₹1500\n₹1000\n₹750\n₹750')),
-                                                                ]),
-                                                                DataRow(cells: [
-                                                                  DataCell(Text(
-                                                                      'Asst Manager/\nSr Engineer')),
-                                                                  DataCell(Text(
-                                                                      'Super-A\nA\nB\nC')),
-                                                                  DataCell(Text(
-                                                                      '₹1500\n₹1000\n₹750\n₹750')),
-                                                                ]),
-                                                                DataRow(cells: [
-                                                                  DataCell(Text(
-                                                                      'Engineer/Asst \nEngineer/Trainee')),
-                                                                  DataCell(Text(
-                                                                      'Super-A\nA\nB\nC')),
-                                                                  DataCell(Text(
-                                                                      '₹1500\n₹1000\n₹750\n₹750')),
-                                                                ]),
-                                                                DataRow(cells: [
-                                                                  DataCell(Text(
-                                                                      'All Grades')),
-                                                                  DataCell(Text(
-                                                                      'D&E')),
-                                                                  DataCell(Text(
-                                                                      'At Actual')),
-                                                                ]),
-                                                              ],
-                                                            ),
-                                                          )
-//
-                                                      ));
-                                                },
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                      Divider(),
-                                      Text(
-                                        'Business Meals:',
-                                        style: TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w600),
-                                      ),
-                                      SizedBox(
-                                        height: 4,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                        children: <Widget>[
-                                          Container(
-                                            width: 120,
-                                            padding: EdgeInsets.only(left: 5.0),
-                                            height: 50,
-                                            decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius:
-                                                BorderRadius.circular(10),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                      color: Color.fromRGBO(
-                                                          143, 148, 251, .2),
-                                                      blurRadius: 20.0,
-                                                      offset: Offset(0, 10))
-                                                ]),
-                                            child: Container(
-                                              padding: EdgeInsets.only(
-                                                  left: 5.0, bottom: 1),
-                                              child: FormBuilderTextField(
-                                                attribute: "businessmeals",
-//                                                onSaved: (val) {
-//                                                  setState(() {
-//                                                    businessmeals = val;
-//                                                  });
-//                                                },
-                                                validators: [
-                                                  FormBuilderValidators
-                                                      .numeric(),
-                                                ],
-                                                keyboardType:
-                                                TextInputType.number,
-                                                decoration: InputDecoration(
-                                                    border: InputBorder.none,
-                                                    hintText: "Enter amount",
-                                                    hintStyle: TextStyle(
-                                                        color: Colors.grey[300],
-                                                        fontSize: 15)),
-                                              ),
-                                            ),
-                                          ),
-                                          Container(
-                                            width: 190,
-                                            padding: EdgeInsets.only(left: 5.0),
-                                            height: 50,
-                                            decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius:
-                                                BorderRadius.circular(10),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                      color: Color.fromRGBO(
-                                                          143, 148, 251, .2),
-                                                      blurRadius: 20.0,
-                                                      offset: Offset(0, 10))
-                                                ]),
-                                            child: Container(
-                                              padding: EdgeInsets.only(
-                                                  left: 5.0, bottom: 1),
-                                              child: FormBuilderTextField(
-                                                attribute: "mealdescpt",
-                                                onSaved: (val) {
-                                                  setState(() {
-                                                    mealdescpt = val;
-                                                  });
-                                                },
-                                                keyboardType:
-                                                TextInputType.text,
-                                                decoration: InputDecoration(
-                                                    border: InputBorder.none,
-                                                    hintText:
-                                                    "Add Description if any",
-                                                    hintStyle: TextStyle(
-                                                        color: Colors.grey[300],
-                                                        fontSize: 15)),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Divider(),
-                                      Text(
-                                        'Others:',
-                                        style: TextStyle(
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.w600),
-                                      ),
-                                      SizedBox(
-                                        height: 4,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                        children: <Widget>[
-                                          Container(
-                                            width: 120,
-                                            padding: EdgeInsets.only(left: 5.0),
-                                            height: 50,
-                                            decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius:
-                                                BorderRadius.circular(10),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                      color: Color.fromRGBO(
-                                                          143, 148, 251, .2),
-                                                      blurRadius: 20.0,
-                                                      offset: Offset(0, 10))
-                                                ]),
-                                            child: Container(
-                                              padding: EdgeInsets.only(
-                                                  left: 5.0, bottom: 1),
-                                              child: FormBuilderTextField(
-                                                attribute: "other",
-//                                                onSaved: (val) {
-//                                                  setState(() {
-//                                                    other = val;
-//                                                  });
-//                                                },
-                                                validators: [
-                                                  FormBuilderValidators
-                                                      .numeric(),
-                                                ],
-                                                keyboardType:
-                                                TextInputType.number,
-                                                decoration: InputDecoration(
-                                                    border: InputBorder.none,
-                                                    hintText: "Enter amount",
-                                                    hintStyle: TextStyle(
-                                                        color: Colors.grey[300],
-                                                        fontSize: 15)),
-                                              ),
-                                            ),
-                                          ),
-                                          Container(
-                                            width: 190,
-                                            padding: EdgeInsets.only(left: 5.0),
-                                            height: 50,
-                                            decoration: BoxDecoration(
-                                                color: Colors.white,
-                                                borderRadius:
-                                                BorderRadius.circular(10),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                      color: Color.fromRGBO(
-                                                          143, 148, 251, .2),
-                                                      blurRadius: 20.0,
-                                                      offset: Offset(0, 10))
-                                                ]),
-                                            child: Container(
-                                              padding: EdgeInsets.only(
-                                                  left: 5.0, bottom: 1),
-                                              child: FormBuilderTextField(
-                                                attribute: 'Description',
-                                                onSaved: (val) {
-                                                  setState(() {
-                                                    otherdescription = val;
-                                                  });
-                                                },
-                                                keyboardType:
-                                                TextInputType.text,
-                                                decoration: InputDecoration(
-                                                    border: InputBorder.none,
-                                                    hintText:
-                                                    "Add Description if any",
-                                                    hintStyle: TextStyle(
-                                                        color: Colors.grey[300],
-                                                        fontSize: 15)),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                height: 4,
-                              ),
-                            ]),
-                      )),
-                ),
-                Center(
-                  child: RaisedButton(
-                    padding: EdgeInsets.all(8),
-                    onPressed: () {
-                      if (_fbKey.currentState.saveAndValidate()) {
-                        print(_fbKey.currentState.value);
-                      }
-                    },
-                    color: Color.fromRGBO(143, 148, 251, 1),
-                    shape: StadiumBorder(),
-                    child: Text(
-                      "Next",
-                      style: TextStyle(
-                          fontSize: 18,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
+import 'package:flutter/cupertino.dart';import 'package:flutter/material.dart';import 'package:flutter_form_builder/flutter_form_builder.dart';import 'package:tar_form/travelItinerary.dart';import 'Animation/FadeAnimation.dart';import 'textfieldcustom.dart';class DestinationPage extends StatefulWidget {  DestinationPage({this.basicFormInfo});  final Map basicFormInfo;  @override  _DestinationPageState createState() => _DestinationPageState();}class _DestinationPageState extends State<DestinationPage> {  final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();  Map formDetails = {};  String destination;  String purpose;  bool inttravel = false;  double travelamt;  double lodgeamt;  double localamt;  double meals;  double businessmeals;  String mealdescpt;  double other;  String otherdescription;  String currency;  String designation;  bool allGood = true;  @override  void initState() {    // TODO: implement initState    super.initState();    print(formDetails['international trip']);    formDetails.addAll(widget.basicFormInfo);  }  @override  dynamic validatorLodge({String designation}) {    if (designation == 'GM and Above') {      return [FormBuilderValidators.required(), FormBuilderValidators.max(7500)];    } else if (designation == 'DGM/Sr. Manager/Manager') {      return [FormBuilderValidators.required(), FormBuilderValidators.max(6000)];    } else if (designation == 'Asst Manager/Sr Engineer') {      return [FormBuilderValidators.required(), FormBuilderValidators.max(5000)];    } else if (designation == 'Engineer/Asst Engineer/Trainee') {      return [FormBuilderValidators.required(), FormBuilderValidators.max(4000)];    } else if (designation == 'All Grade') {      return [FormBuilderValidators.required(), FormBuilderValidators.max(9000)];    }  }  dynamic validatorMeal(designation) {    if (designation == 'GM and Above' || designation == 'All Grade') {      return [        FormBuilderValidators.required(),      ];    } else {      return [FormBuilderValidators.required(), FormBuilderValidators.max(1500)];    }  }  void _showDialog({String title, String message}) {    showDialog(      context: context,      builder: (BuildContext context) {        // return object of type Dialog        return AlertDialog(          title: Text(title),          content: Text(message),          actions: <Widget>[            // usually buttons at the bottom of the dialog            FlatButton(              child: Text("Close"),              onPressed: () {                Navigator.of(context).pop();              },            ),          ],        );      },    );  }  Widget build(BuildContext context) {    designation = formDetails['designation'];    return Scaffold(      appBar: AppBar(        backgroundColor: Color.fromRGBO(143, 148, 251, 1),        title: Text(          'Tarvel Authorization Form',          style: TextStyle(color: Colors.white),        ),      ),      body: GestureDetector(        onTap: () {          FocusScope.of(context).requestFocus(new FocusNode());        },        child: SingleChildScrollView(          child: GestureDetector(            onTap: () {              FocusScope.of(context).requestFocus(new FocusNode());            },            child: Column(              children: <Widget>[                LinearProgressIndicator(                  value: 0.4,                  valueColor: new AlwaysStoppedAnimation<Color>(Colors.orangeAccent.shade200),                ),                Padding(                  padding: const EdgeInsets.all(8.0),                  child: Card(                    color: Colors.red[400],                    child: Padding(                      padding: const EdgeInsets.all(5.0),                      child: Column(                        children: <Widget>[                          Row(                            children: <Widget>[                              Icon(                                Icons.info,                                size: 40,                                color: Colors.white,                              ),                              SizedBox(                                width: 10,                              ),                              Text(                                'Travel for one day (Max 16 hours)',                                style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 20),                              ),                            ],                          ),                          Padding(                            padding: const EdgeInsets.all(8.0),                            child: Container(                                color: Colors.white,                                child: Padding(                                  padding: const EdgeInsets.all(8.0),                                  child: Column(                                    children: <Widget>[                                      Text('When travel takes place during the same calendar day, or overnight lodging is not required, reimbursement is limited to only actual and necessary expenses incurred. \n\nActual and reasonable expenses include:'),                                      Padding(                                        padding: const EdgeInsets.only(left: 20.0, top: 20),                                        child: Column(                                          children: <Widget>[                                            Row(                                              children: <Widget>[                                                Icon(                                                  Icons.work,                                                  size: 20,                                                ),                                                SizedBox(                                                  width: 10,                                                ),                                                Flexible(                                                  child: Text('Business expenses'),                                                ),                                              ],                                            ),                                            SizedBox(                                              height: 10,                                            ),                                            Row(                                              children: <Widget>[                                                Icon(                                                  Icons.fastfood,                                                  size: 20,                                                ),                                                SizedBox(                                                  width: 10,                                                ),                                                Flexible(                                                  child: Text('Meals(subject to maximum listed under Boarding/Meal Allowance in this section)'),                                                ),                                              ],                                            ),                                            SizedBox(                                              height: 10,                                            ),                                            Row(                                              children: <Widget>[                                                Icon(                                                  Icons.call,                                                  size: 20,                                                ),                                                SizedBox(                                                  width: 10,                                                ),                                                Flexible(                                                  child: Text('Official telephone calls, including charges if any for internet access for email communications'),                                                ),                                              ],                                            ),                                            SizedBox(                                              height: 10,                                            ),                                            Row(                                              children: <Widget>[                                                Icon(                                                  Icons.local_parking,                                                  size: 20,                                                ),                                                SizedBox(                                                  width: 10,                                                ),                                                Flexible(                                                  child: Text('Travel expensesToll road and parking charges'),                                                ),                                              ],                                            ),                                          ],                                        ),                                      ),                                      SizedBox(                                        height: 20,                                      ),                                      Padding(                                        padding: const EdgeInsets.only(left: 18.0),                                        child: Text(                                          '*HA-Travel Policy *page-4 (HA/16-17/001 Date:21/05/2016)',                                        ),                                      )                                    ],                                  ),                                )),                          ),                        ],                      ),                    ),                  ),                ),                Padding(                  padding: const EdgeInsets.all(20.0),                  child: FadeAnimation(                      1.8,                      FormBuilder(                        autovalidate: allGood ? false : true,                        key: _fbKey,                        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: <Widget>[                          TextFieldCustom(                            height: allGood ? 53 : 71,                            hint: 'Destination',                            attribute: 'destination',                            keyboardstyle: TextInputType.text,                            text: 'Destination:',                            validator: [                              FormBuilderValidators.required(),                              FormBuilderValidators.minLength(3),                            ],                            onsaved: (value) {                              destination = value;                            },                          ),                          Text(                            'Purpose of Travel:',                            style: TextStyle(fontSize: 18, color: Color.fromRGBO(143, 148, 251, 1), fontWeight: FontWeight.w600),                          ),                          SizedBox(                            height: 3,                          ),                          FadeAnimation(                              1.8,                              Container(                                padding: EdgeInsets.only(left: 5.0),                                decoration: BoxDecoration(                                  color: Colors.white30,                                  borderRadius: BorderRadius.circular(5),                                  border: Border.all(                                    color: Color.fromRGBO(143, 148, 251, 1),                                    width: 3.0,                                  ),                                ),                                child: Container(                                  padding: EdgeInsets.all(8),                                  child: FormBuilderTextField(                                    attribute: "purpose",//                                        onSaved: (value) {//                                          purpose = value;//                                          print(purpose);//                                        },                                    validators: [                                      FormBuilderValidators.required(),                                      FormBuilderValidators.minLength(3),                                    ],                                    keyboardType: TextInputType.text,                                    maxLines: 6,                                    decoration: InputDecoration(                                        border: InputBorder.none,                                        hintText: 'If project related, indicate Project number and name of client OR '                                            'Holtec Supervisor that is requesting the travel.)\n'                                            'The traveler is required to elaborate the purpose and provide'                                            ' brief description of the project here.',                                        hintStyle: TextStyle(color: Colors.grey[300], fontSize: 15)),                                  ),                                ),                              )),                          SizedBox(                            height: 10,                          ),                          Card(                            child: CheckboxListTile(                              title: const Text('International Trip'),                              value: inttravel,                              onChanged: (bool value) {                                setState(() {                                  inttravel = value;                                });                              },                              secondary: const Icon(                                Icons.card_travel,                                color: Colors.redAccent,                              ),                            ),                          ),                          Visibility(                            visible: inttravel,                            child: Column(                              crossAxisAlignment: CrossAxisAlignment.start,                              children: <Widget>[                                SizedBox(                                  height: 10,                                ),                                Text(                                  'Select currency:',                                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),                                ),                                FormBuilderChoiceChip(                                  onChanged: (val) {                                    setState(() {                                      currency = val;                                      print(currency);                                    });                                  },                                  spacing: 8,                                  elevation: 2,                                  attribute: "currency",                                  options: [                                    FormBuilderFieldOption(child: Text("INR"), value: "inr"),                                    FormBuilderFieldOption(child: Text("USD"), value: "usd"),                                  ],                                ),                              ],                            ),                          ),                          SizedBox(                            height: 10,                          ),                          Text(                            'Details of Estimated Expense:',                            style: TextStyle(fontSize: 18, color: Color.fromRGBO(143, 148, 251, 1), fontWeight: FontWeight.w600),                          ),                          SizedBox(                            height: 4,                          ),                          SizedBox(                            height: 4,                          ),                          Card(                            child: Padding(                              padding: const EdgeInsets.all(8.0),                              child: Row(                                mainAxisAlignment: MainAxisAlignment.spaceBetween,                                children: <Widget>[                                  Text(                                    'Refer to this icon to get information about the\nrespective terms and conditions.',                                    style: TextStyle(fontWeight: FontWeight.w600),                                  ),                                  Icon(                                    Icons.assignment,                                    color: Colors.redAccent,                                  )                                ],                              ),                            ),                          ),                          Card(                            child: Padding(                              padding: const EdgeInsets.all(8.0),                              child: Column(                                crossAxisAlignment: CrossAxisAlignment.start,                                children: <Widget>[                                  Text(                                    '*Travel (to & fro destination/in-between multiple destination):',                                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),                                  ),                                  SizedBox(                                    height: 4,                                  ),                                  Row(                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,                                    children: <Widget>[                                      Container(                                        width: 250,                                        padding: EdgeInsets.only(left: 5.0),                                        height: allGood ? 53 : 71,                                        decoration: BoxDecoration(                                          color: Colors.white30,                                          borderRadius: BorderRadius.circular(5),                                          border: Border.all(                                            color: Color.fromRGBO(143, 148, 251, 1),                                            width: 3.0,                                          ),                                        ),                                        child: FormBuilderTextField(                                          attribute: "travelamt",//                                                onSaved: (val) {//                                                  setState(() {//                                                    travelamt = val;//                                                  });//                                                },                                          validators: [FormBuilderValidators.required(), FormBuilderValidators.numeric()],                                          keyboardType: TextInputType.number,                                          decoration: InputDecoration(border: InputBorder.none, hintText: "Enter amount", hintStyle: TextStyle(color: Colors.grey[300], fontSize: 15)),                                        ),                                      ),                                      GestureDetector(                                        onTap: () {                                          showDialog(                                              context: context,                                              child: AlertDialog(                                                  title: Text(                                                    'HA-Travel policy(HA/16-17/001 Date:21/05/2016)\nThe limits of reimbursement are as follows:',                                                  ),                                                  content: SingleChildScrollView(                                                    scrollDirection: Axis.horizontal,                                                    child: DataTable(                                                      columns: [                                                        DataColumn(                                                            label: Text(                                                          'Grade',                                                          style: TextStyle(color: Colors.deepPurple, fontWeight: FontWeight.w600, fontSize: 16),                                                        )),                                                        DataColumn(                                                            label: Text(                                                          'Location Category',                                                          style: TextStyle(color: Colors.deepPurple, fontWeight: FontWeight.w600, fontSize: 16),                                                        )),                                                        DataColumn(                                                            label: Text(                                                          'Travel Mode Up Limit',                                                          style: TextStyle(color: Colors.deepPurple, fontWeight: FontWeight.w600, fontSize: 16),                                                        )),                                                      ],                                                      rows: [                                                        DataRow(cells: [                                                          DataCell(Text('GM and above')),                                                          DataCell(Text('Super-A/A/B/C')),                                                          DataCell(Text('Air/Rail-AC1T/First Class ')),                                                        ]),                                                        DataRow(cells: [                                                          DataCell(Text('DGM/Sr. Manager\n/Manager')),                                                          DataCell(Text('Super-A/A/B/C')),                                                          DataCell(Text('Air/Rail-AC2T')),                                                        ]),                                                        DataRow(cells: [                                                          DataCell(Text('Asst Manager/\nSr Engineer')),                                                          DataCell(Text('Super-A/A/B/C')),                                                          DataCell(Text('Air/Rail-AC3T/Chair Car')),                                                        ]),                                                        DataRow(cells: [                                                          DataCell(Text('Engineer/Asst \nEngineer/Trainee')),                                                          DataCell(Text('Super-A/A/B/C')),                                                          DataCell(Text('Air/Rail-AC3T/Sleeper Car')),                                                        ]),                                                        DataRow(cells: [                                                          DataCell(Text('All Grades')),                                                          DataCell(Text('D&E')),                                                          DataCell(Text('Air')),                                                        ]),                                                      ],                                                    ),                                                  )//                                                  Text('The limits of reimbursement of expenses for travel exceeding 200 km are as follows:\n'//                                                      'Grade              Location Category              Travel Mode Up Limit'//                                                      'GM and above        Super-A/A/B/C                  Air/Rail   '),),                                                  ));                                        },                                        child: Container(                                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(4), color: Colors.red),                                          child: Padding(                                            padding: const EdgeInsets.all(10.0),                                            child: Row(                                              children: <Widget>[                                                Icon(                                                  Icons.assignment,                                                  color: Colors.white,                                                  size: 25,                                                ),                                                SizedBox(                                                  width: 10,                                                ),                                                Text(                                                  'T&C',                                                  style: TextStyle(fontSize: 15, color: Colors.white, fontWeight: FontWeight.w600),                                                ),                                              ],                                            ),                                          ),                                        ),                                      ),                                    ],                                  ),                                  Divider(),                                  Row(                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,                                    children: <Widget>[                                      Text(                                        'Lodging/Hotel/Accommodation:',                                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),                                      ),                                      Text(                                        'per day',                                        style: TextStyle(color: Colors.redAccent, fontSize: 13),                                      )                                    ],                                  ),                                  SizedBox(                                    height: 4,                                  ),                                  Row(                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,                                    children: <Widget>[                                      Container(                                        width: 250,                                        padding: EdgeInsets.only(left: 5.0),                                        height: allGood ? 53 : 71,                                        decoration: BoxDecoration(                                          color: Colors.white30,                                          borderRadius: BorderRadius.circular(5),                                          border: Border.all(                                            color: Color.fromRGBO(143, 148, 251, 1),                                            width: 3.0,                                          ),                                        ),                                        child: Container(                                          padding: EdgeInsets.only(left: 5.0, bottom: 1),                                          child: FormBuilderTextField(                                            attribute: "lodgeamt",                                            onSaved: (val) {                                              setState(() {                                                val != null ? lodgeamt = 0.0 : lodgeamt = double.parse(val);                                              });                                            },                                            validators: validatorLodge(designation: designation),                                            keyboardType: TextInputType.number,                                            decoration: InputDecoration(border: InputBorder.none, hintText: "Enter amount", hintStyle: TextStyle(color: Colors.grey[300], fontSize: 15)),                                          ),                                        ),                                      ),                                      GestureDetector(                                        onTap: () {                                          showDialog(                                              context: context,                                              child: AlertDialog(                                                  title: Text(                                                    'HA-Travel policy(HA/16-17/001 Date:21/05/2016)\nThe limits of reimbursement are as follows:',                                                  ),                                                  content: SingleChildScrollView(                                                    scrollDirection: Axis.horizontal,                                                    child: DataTable(                                                      dataRowHeight: 85,                                                      columns: [                                                        DataColumn(                                                            label: Text(                                                          'Grade',                                                          style: TextStyle(color: Colors.deepPurple, fontWeight: FontWeight.w600, fontSize: 16),                                                        )),                                                        DataColumn(                                                            label: Text(                                                          'Location Category',                                                          style: TextStyle(color: Colors.deepPurple, fontWeight: FontWeight.w600, fontSize: 16),                                                        )),                                                        DataColumn(                                                            label: Text(                                                          'Travel Mode Up Limit',                                                          style: TextStyle(color: Colors.deepPurple, fontWeight: FontWeight.w600, fontSize: 16),                                                        )),                                                      ],                                                      rows: [                                                        DataRow(cells: [                                                          DataCell(Text('GM and above')),                                                          DataCell(Text('Super-A\nA\nB\nC')),                                                          DataCell(Text('₹7500\n₹5000\n₹4000\n₹3000')),                                                        ]),                                                        DataRow(cells: [                                                          DataCell(Text('DGM/Sr. Manager\n/Manager')),                                                          DataCell(Text('Super-A\nA\nB\nC')),                                                          DataCell(Text('₹6000\n₹4000\n₹3000\n₹2500')),                                                        ]),                                                        DataRow(cells: [                                                          DataCell(Text('Asst Manager/\nSr Engineer')),                                                          DataCell(Text('Super-A\nA\nB\nC')),                                                          DataCell(Text('₹5000\n₹3500\n₹2500\n₹2000')),                                                        ]),                                                        DataRow(cells: [                                                          DataCell(Text('Engineer/Asst \nEngineer/Trainee')),                                                          DataCell(Text('Super-A\nA\nB\nC')),                                                          DataCell(Text('₹4000\n₹3000\n₹2500\n₹2000')),                                                        ]),                                                        DataRow(cells: [                                                          DataCell(Text('All Grades')),                                                          DataCell(Text('D&E')),                                                          DataCell(Text('₹9000')),                                                        ]),                                                      ],                                                    ),                                                  )//                                                  ));                                        },                                        child: Container(                                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(4), color: Colors.red),                                          child: Padding(                                            padding: const EdgeInsets.all(10.0),                                            child: Row(                                              children: <Widget>[                                                Icon(                                                  Icons.assignment,                                                  color: Colors.white,                                                  size: 25,                                                ),                                                SizedBox(                                                  width: 10,                                                ),                                                Text(                                                  'T&C',                                                  style: TextStyle(fontSize: 15, color: Colors.white, fontWeight: FontWeight.w600),                                                ),                                              ],                                            ),                                          ),                                        ),                                      ),                                    ],                                  ),                                  Divider(),                                  Row(                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,                                    children: <Widget>[                                      Text(                                        'Local Travel:',                                        style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),                                      ),                                      Text(                                        'For Airport/Railway Station /Hotel \n/Project Site /Client Office',                                        style: TextStyle(color: Colors.redAccent, fontSize: 13),                                      )                                    ],                                  ),                                  SizedBox(                                    height: 4,                                  ),                                  Row(                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,                                    children: <Widget>[                                      Container(                                        width: 250,                                        padding: EdgeInsets.only(left: 5.0),                                        height: allGood ? 53 : 71,                                        decoration: BoxDecoration(                                          color: Colors.white30,                                          borderRadius: BorderRadius.circular(5),                                          border: Border.all(                                            color: Color.fromRGBO(143, 148, 251, 1),                                            width: 3.0,                                          ),                                        ),                                        child: Container(                                          padding: EdgeInsets.only(left: 5.0, bottom: 1),                                          child: FormBuilderTextField(                                            attribute: "localamt",//                                                onSaved: (val) {//                                                  setState(() {//                                                    localamt= val;//                                                  });//                                                },                                            validators: [                                              FormBuilderValidators.numeric(),                                              FormBuilderValidators.required(),                                            ],                                            keyboardType: TextInputType.number,                                            decoration: InputDecoration(border: InputBorder.none, hintText: "Enter amount", hintStyle: TextStyle(color: Colors.grey[300], fontSize: 15)),                                          ),                                        ),                                      ),                                      GestureDetector(                                        onTap: () {                                          showDialog(                                              context: context,                                              child: AlertDialog(                                                  title: Text(                                                    'HA-Travel policy(HA/16-17/001 Date:21/05/2016)\nRoad Transportation to and from the airport',                                                  ),                                                  content: Text(                                                      'Employees traveling to the same location should share road transportation to and from the airport whenever possible. The most economical mode of transportation should be used to and from the airport(ie bus and rail-terminals). Employees should consider public transportation, hotel and, airport shuttle services.')));                                        },                                        child: Container(                                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(4), color: Colors.red),                                          child: Padding(                                            padding: const EdgeInsets.all(10.0),                                            child: Row(                                              children: <Widget>[                                                Icon(                                                  Icons.assignment,                                                  color: Colors.white,                                                  size: 25,                                                ),                                                SizedBox(                                                  width: 10,                                                ),                                                Text(                                                  'T&C',                                                  style: TextStyle(fontSize: 15, color: Colors.white, fontWeight: FontWeight.w600),                                                ),                                              ],                                            ),                                          ),                                        ),                                      ),                                    ],                                  ),                                  Divider(),                                  Text(                                    '*Meals:',                                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),                                  ),                                  SizedBox(                                    height: 4,                                  ),                                  Row(                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,                                    children: <Widget>[                                      Container(                                        width: 250,                                        padding: EdgeInsets.only(left: 5.0),                                        height: allGood ? 53 : 71,                                        decoration: BoxDecoration(                                          color: Colors.white30,                                          borderRadius: BorderRadius.circular(5),                                          border: Border.all(                                            color: Color.fromRGBO(143, 148, 251, 1),                                            width: 3.0,                                          ),                                        ),                                        child: Container(                                          padding: EdgeInsets.only(left: 5.0, bottom: 1),                                          child: FormBuilderTextField(                                            attribute: "meals",//                                                onSaved: (val) {//                                                  setState(() {//                                                    meals = val;//                                                  });//                                                },                                            validators: validatorMeal(designation),                                            keyboardType: TextInputType.number,                                            decoration: InputDecoration(border: InputBorder.none, hintText: "Enter amount", hintStyle: TextStyle(color: Colors.grey[300], fontSize: 15)),                                          ),                                        ),                                      ),                                      GestureDetector(                                        onTap: () {                                          showDialog(                                              context: context,                                              child: AlertDialog(                                                  title: Text(                                                    'HA-Travel policy(HA/16-17/001 Date:21/05/2016)\nThe limits of reimbursement are as follows:',                                                  ),                                                  content: SingleChildScrollView(                                                    scrollDirection: Axis.horizontal,                                                    child: DataTable(                                                      dataRowHeight: 85,                                                      columns: [                                                        DataColumn(                                                            label: Text(                                                          'Grade',                                                          style: TextStyle(color: Colors.deepPurple, fontWeight: FontWeight.w600, fontSize: 16),                                                        )),                                                        DataColumn(                                                            label: Text(                                                          'Location Category',                                                          style: TextStyle(color: Colors.deepPurple, fontWeight: FontWeight.w600, fontSize: 16),                                                        )),                                                        DataColumn(                                                            label: Text(                                                          'Travel Mode Up Limit',                                                          style: TextStyle(color: Colors.deepPurple, fontWeight: FontWeight.w600, fontSize: 16),                                                        )),                                                      ],                                                      rows: [                                                        DataRow(cells: [                                                          DataCell(Text('GM and above')),                                                          DataCell(Text('Super-A\nA\nB\nC')),                                                          DataCell(Text('At Actual\nAt Actual\nAt Actual\nAt Actual')),                                                        ]),                                                        DataRow(cells: [                                                          DataCell(Text('DGM/Sr. Manager\n/Manager')),                                                          DataCell(Text('Super-A\nA\nB\nC')),                                                          DataCell(Text('₹1500\n₹1000\n₹750\n₹750')),                                                        ]),                                                        DataRow(cells: [                                                          DataCell(Text('Asst Manager/\nSr Engineer')),                                                          DataCell(Text('Super-A\nA\nB\nC')),                                                          DataCell(Text('₹1500\n₹1000\n₹750\n₹750')),                                                        ]),                                                        DataRow(cells: [                                                          DataCell(Text('Engineer/Asst \nEngineer/Trainee')),                                                          DataCell(Text('Super-A\nA\nB\nC')),                                                          DataCell(Text('₹1500\n₹1000\n₹750\n₹750')),                                                        ]),                                                        DataRow(cells: [                                                          DataCell(Text('All Grades')),                                                          DataCell(Text('D&E')),                                                          DataCell(Text('At Actual')),                                                        ]),                                                      ],                                                    ),                                                  )//                                                  ));                                        },                                        child: Container(                                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(4), color: Colors.red),                                          child: Padding(                                            padding: const EdgeInsets.all(10.0),                                            child: Row(                                              children: <Widget>[                                                Icon(                                                  Icons.assignment,                                                  color: Colors.white,                                                  size: 25,                                                ),                                                SizedBox(                                                  width: 10,                                                ),                                                Text(                                                  'T&C',                                                  style: TextStyle(fontSize: 15, color: Colors.white, fontWeight: FontWeight.w600),                                                ),                                              ],                                            ),                                          ),                                        ),                                      ),                                    ],                                  ),                                  Divider(),                                  Text(                                    'Business Meals:',                                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),                                  ),                                  SizedBox(                                    height: 4,                                  ),                                  Row(                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,                                    children: <Widget>[                                      Container(                                        width: 120,                                        padding: EdgeInsets.only(left: 5.0),                                        height: allGood ? 53 : 71,                                        decoration: BoxDecoration(                                          color: Colors.white30,                                          borderRadius: BorderRadius.circular(5),                                          border: Border.all(                                            color: Color.fromRGBO(143, 148, 251, 1),                                            width: 3.0,                                          ),                                        ),                                        child: Container(                                          padding: EdgeInsets.only(left: 5.0, bottom: 1),                                          child: FormBuilderTextField(                                            attribute: "businessmeals",//                                                onSaved: (val) {//                                                  setState(() {//                                                    businessmeals = val;//                                                  });//                                                },                                            validators: [                                              FormBuilderValidators.numeric(),                                              FormBuilderValidators.required(),                                            ],                                            keyboardType: TextInputType.number,                                            decoration: InputDecoration(border: InputBorder.none, hintText: "Enter amount", hintStyle: TextStyle(color: Colors.grey[300], fontSize: 15)),                                          ),                                        ),                                      ),                                      Container(                                        width: 190,                                        padding: EdgeInsets.only(left: 5.0),                                        height: 50,                                        decoration: BoxDecoration(                                          color: Colors.white30,                                          borderRadius: BorderRadius.circular(5),                                          border: Border.all(                                            color: Color.fromRGBO(143, 148, 251, 1),                                            width: 3.0,                                          ),                                        ),                                        child: Container(                                          padding: EdgeInsets.only(left: 5.0, bottom: 1),                                          child: FormBuilderTextField(                                            attribute: "mealdescption",                                            onSaved: (val) {                                              setState(() {                                                mealdescpt = val;                                              });                                            },                                            keyboardType: TextInputType.text,                                            decoration: InputDecoration(border: InputBorder.none, hintText: "Add Description if any", hintStyle: TextStyle(color: Colors.grey[300], fontSize: 15)),                                          ),                                        ),                                      ),                                    ],                                  ),                                  Divider(),                                  Text(                                    'Others:',                                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),                                  ),                                  SizedBox(                                    height: 4,                                  ),                                  Row(                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,                                    children: <Widget>[                                      Container(                                        width: 120,                                        padding: EdgeInsets.only(left: 5.0),                                        height: allGood ? 53 : 71,                                        decoration: BoxDecoration(                                          color: Colors.white30,                                          borderRadius: BorderRadius.circular(5),                                          border: Border.all(                                            color: Color.fromRGBO(143, 148, 251, 1),                                            width: 3.0,                                          ),                                        ),                                        child: FormBuilderTextField(                                          attribute: "other",//                                                onSaved: (val) {//                                                  setState(() {//                                                    other = val;//                                                  });//                                                },                                          validators: [                                            FormBuilderValidators.numeric(),                                            FormBuilderValidators.required(),                                          ],                                          keyboardType: TextInputType.number,                                          decoration: InputDecoration(border: InputBorder.none, hintText: "Enter amount", hintStyle: TextStyle(color: Colors.grey[300], fontSize: 15)),                                        ),                                      ),                                      Container(                                        width: 190,                                        padding: EdgeInsets.only(left: 5.0),                                        height: 50,                                        decoration: BoxDecoration(                                          color: Colors.white30,                                          borderRadius: BorderRadius.circular(5),                                          border: Border.all(                                            color: Color.fromRGBO(143, 148, 251, 1),                                            width: 3.0,                                          ),                                        ),                                        child: Container(                                          padding: EdgeInsets.only(left: 5.0, bottom: 1),                                          child: FormBuilderTextField(                                            attribute: 'otherdescription',                                            onSaved: (val) {                                              setState(() {                                                otherdescription = val;                                              });                                            },                                            keyboardType: TextInputType.text,                                            decoration: InputDecoration(border: InputBorder.none, hintText: "Add Description if any", hintStyle: TextStyle(color: Colors.grey[300], fontSize: 15)),                                          ),                                        ),                                      ),                                    ],                                  ),                                ],                              ),                            ),                          ),                          SizedBox(                            height: 4,                          ),                        ]),                      )),                ),                Center(                  child: RaisedButton(                    padding: EdgeInsets.all(8),                    onPressed: () {                      bool canProceed = true;                      if (_fbKey.currentState.saveAndValidate()) {                        formDetails.addAll({'destination': _fbKey.currentState.value['destination'], 'purpose of travel': _fbKey.currentState.value['purpose']});                        if (inttravel) {                          if (_fbKey.currentState.value['currency'] != null) {                            formDetails.addAll({'international trip': true, 'currency': _fbKey.currentState.value['currency']});                          } else {                            canProceed = false;                            _showDialog(title: 'Select currency', message: 'Currency is needed if trip is international');                          }                        }else{                          formDetails.remove('international trip');                          formDetails.remove('currency');                        }                        formDetails.addAll({                          'details of estimated expenses': {                            'travel amount': _fbKey.currentState.value['travelamt'],                            'lodging amount': _fbKey.currentState.value['lodgeamt'],                            'local travel amount':_fbKey.currentState.value['localamt'],                            'meals':_fbKey.currentState.value['meals'],                            'business meals':_fbKey.currentState.value['businessmeals'],                            'meal description':_fbKey.currentState.value['mealdescption'],                            'other expenses':_fbKey.currentState.value['other'],                            'other expenses description':_fbKey.currentState.value['otherdescription'],                          }                        });                        print(formDetails);                        if(canProceed==true){                          Navigator.push(                            context,                            MaterialPageRoute(                              builder: (context) =>                                  TravelItinerary(                                    basicFormInfo: formDetails,                                  ),                            ),                          );                        }                      } else {                        setState(() {                          allGood = false;                        });                      }                    },                    color: Color.fromRGBO(143, 148, 251, 1),                    shape: StadiumBorder(),                    child: Text(                      "Next",                      style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.w600),                    ),                  ),                ),              ],            ),          ),        ),      ),    );  }}

@@ -20,26 +20,21 @@ class TravelItinerary extends StatefulWidget {
 }
 
 bool allGood = true;
-List<Widget> Legs = [];
-double advAmount;
-String advDescription;
-bool checkboxValue = false;
-bool advVal = false;
-int noOfLegs = 1;
 
 class _TravelItineraryState extends State<TravelItinerary> {
   GlobalKey<FormBuilderState> advance = GlobalKey<FormBuilderState>();
+  List<Widget> Legs = [];
+  double advAmount;
+  String advDescription;
+  bool checkboxValue = false;
+  bool advVal = false;
+  int noOfLegs = 1;
 
   void addToFormDetails(int legNo) {
     formDetails.clear();
     formDetails.addAll(widget.basicFormInfo);
     if (advVal) {
-      formDetails.addAll({
-        'travel advance': true,
-        'travel advance amount': advance.currentState.value['advAmount'],
-        'travel advance description':
-            advance.currentState.value['advDescription']
-      });
+      formDetails.addAll({'travel advance': true, 'travel advance amount': advance.currentState.value['advAmount'], 'travel advance description': advance.currentState.value['advDescription']});
     } else {
       formDetails.addAll({'travel advance': false});
     }
@@ -58,8 +53,7 @@ class _TravelItineraryState extends State<TravelItinerary> {
           'flight number': advance.currentState.value['Leg $legNo flightNo'],
         });
         print('$legNo flight');
-      } else if (advance.currentState.value['Leg $legNo mode'] ==
-          'Rental Car') {
+      } else if (advance.currentState.value['Leg $legNo mode'] == 'Rental Car') {
         if (dateInfo['Leg $legNo Rental Car from date'] != null) {
           formDetails['Leg $legNo'].addAll({
             'rental car from date': dateInfo['Leg $legNo Rental Car from date'],
@@ -68,12 +62,9 @@ class _TravelItineraryState extends State<TravelItinerary> {
         }
         formDetails['Leg $legNo'].addAll({
           'mode': 'Rental Car',
-          'rental car company':
-              advance.currentState.value['Leg $legNo RetalName'],
-          'pickup address':
-              advance.currentState.value['Leg $legNo carPickupAddress'],
-          'dropoff address':
-              advance.currentState.value['Leg $legNo carDropOffAddress'],
+          'rental car company': advance.currentState.value['Leg $legNo RetalName'],
+          'pickup address': advance.currentState.value['Leg $legNo carPickupAddress'],
+          'dropoff address': advance.currentState.value['Leg $legNo carDropOffAddress'],
           'vehicle type': advance.currentState.value['Leg $legNo vehicleType'],
           'service type': advance.currentState.value['Leg $legNo serviceType'],
         });
@@ -83,22 +74,17 @@ class _TravelItineraryState extends State<TravelItinerary> {
           'depart from': advance.currentState.value['Leg $legNo departFrom'],
           'depart to': advance.currentState.value['Leg $legNo departTo'],
           'mode': 'Train',
-          'train details':
-              advance.currentState.value['Leg $legNo trainDetails'],
+          'train details': advance.currentState.value['Leg $legNo trainDetails'],
         });
-      } else if (advance.currentState.value['Leg $legNo mode'] ==
-          'Personal Car') {
+      } else if (advance.currentState.value['Leg $legNo mode'] == 'Personal Car') {
         formDetails['Leg $legNo'].addAll({
           'travel date': dateInfo['leg $legNo travel date'],
           'depart from': advance.currentState.value['Leg $legNo departFrom'],
           'depart to': advance.currentState.value['Leg $legNo departTo'],
           'mode': 'Personal Car',
-          'distance travelled':
-              advance.currentState.value['Leg $legNo personalCarDistance'],
-          'rate per km':
-              advance.currentState.value['Leg $legNo personalCarRate'],
-          'amount': advance.currentState.value['Leg $legNo personalCarRate'] *
-              advance.currentState.value['Leg $legNo personalCarDistance'],
+          'distance travelled': advance.currentState.value['Leg $legNo personalCarDistance'],
+          'rate per km': advance.currentState.value['Leg $legNo personalCarRate'],
+          'amount': advance.currentState.value['Leg $legNo personalCarRate'] * advance.currentState.value['Leg $legNo personalCarDistance'],
         });
       } else if (advance.currentState.value['Leg $legNo mode'] == 'Bus') {
         formDetails['Leg $legNo'].addAll({
@@ -114,14 +100,15 @@ class _TravelItineraryState extends State<TravelItinerary> {
   @override
   void initState() {
     super.initState();
+    Legs.clear();
     if (Legs.length == 0) {
+      print(widget.basicFormInfo['from date']);
       Legs.add(
         TravelCard(
           initialDate: widget.basicFormInfo['from date'],
           finalDate: widget.basicFormInfo['to date'],
           toPlace: 'Pune',
           fromPlace: 'Kol',
-          toDate: '21 Dec 2019',
         ),
       );
     }
@@ -196,8 +183,7 @@ class _TravelItineraryState extends State<TravelItinerary> {
                   children: <Widget>[
                     LinearProgressIndicator(
                       value: 0.7,
-                      valueColor: new AlwaysStoppedAnimation<Color>(
-                          Colors.orangeAccent),
+                      valueColor: new AlwaysStoppedAnimation<Color>(Colors.orangeAccent),
                     ),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -206,24 +192,19 @@ class _TravelItineraryState extends State<TravelItinerary> {
                         child: Container(
                           width: MediaQuery.of(context).size.width - 15,
                           padding: EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(4),
-                              color: Color.fromRGBO(143, 148, 251, 1)),
+                          decoration: BoxDecoration(borderRadius: BorderRadius.circular(4), color: Color.fromRGBO(143, 148, 251, 1)),
                           child: Column(
                             children: <Widget>[
                               Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
                                   Text(
                                     'Departing Date:',
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 17),
+                                    style: TextStyle(color: Colors.white, fontSize: 17),
                                   ),
                                   Text(
                                     'Return Date:',
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 17),
+                                    style: TextStyle(color: Colors.white, fontSize: 17),
                                   ),
                                 ],
                               ),
@@ -232,44 +213,15 @@ class _TravelItineraryState extends State<TravelItinerary> {
                                 color: Colors.white,
                               ),
                               Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
                                   Text(
-                                    DateFormat.d()
-                                            .format(widget
-                                                .basicFormInfo['from date'])
-                                            .toString() +
-                                        ' ' +
-                                        DateFormat.MMM()
-                                            .format(widget
-                                                .basicFormInfo['from date'])
-                                            .toString() +
-                                        ' ' +
-                                        DateFormat.y()
-                                            .format(widget
-                                                .basicFormInfo['from date'])
-                                            .toString(),
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 17),
+                                    DateFormat.d().format(widget.basicFormInfo['from date']).toString() + ' ' + DateFormat.MMM().format(widget.basicFormInfo['from date']).toString() + ' ' + DateFormat.y().format(widget.basicFormInfo['from date']).toString(),
+                                    style: TextStyle(color: Colors.white, fontSize: 17),
                                   ),
                                   Text(
-                                    DateFormat.d()
-                                            .format(
-                                                widget.basicFormInfo['to date'])
-                                            .toString() +
-                                        ' ' +
-                                        DateFormat.MMM()
-                                            .format(
-                                                widget.basicFormInfo['to date'])
-                                            .toString() +
-                                        ' ' +
-                                        DateFormat.y()
-                                            .format(
-                                                widget.basicFormInfo['to date'])
-                                            .toString(),
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 17),
+                                    DateFormat.d().format(widget.basicFormInfo['to date']).toString() + ' ' + DateFormat.MMM().format(widget.basicFormInfo['to date']).toString() + ' ' + DateFormat.y().format(widget.basicFormInfo['to date']).toString(),
+                                    style: TextStyle(color: Colors.white, fontSize: 17),
                                   ),
                                 ],
                               ),
@@ -299,8 +251,7 @@ class _TravelItineraryState extends State<TravelItinerary> {
 //                            : null,
                           title: new Text(
                             'Do you require Travel Advance?',
-                            style: TextStyle(
-                                fontSize: 14.0, fontWeight: FontWeight.w600),
+                            style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w600),
                           ),
                           controlAffinity: ListTileControlAffinity.platform,
                           activeColor: Colors.deepPurple.shade400,
@@ -330,20 +281,16 @@ class _TravelItineraryState extends State<TravelItinerary> {
                                   children: <Widget>[
                                     Text(
                                       'Amount: ',
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w600),
+                                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                                     ),
                                     Expanded(
                                       child: Container(
                                         height: 65,
                                         padding: EdgeInsets.all(2),
                                         decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(5),
+                                          borderRadius: BorderRadius.circular(5),
                                           border: Border.all(
-                                            color: Color.fromRGBO(
-                                                143, 148, 251, 8),
+                                            color: Color.fromRGBO(143, 148, 251, 8),
                                             width: 2.0,
                                           ),
                                         ),
@@ -353,10 +300,7 @@ class _TravelItineraryState extends State<TravelItinerary> {
                                           attribute: "advAmount",
                                           onSaved: (value) {
                                             setState(() {
-                                              value != ''
-                                                  ? advAmount =
-                                                      double.parse(value)
-                                                  : advAmount = 0.0;
+                                              value != '' ? advAmount = double.parse(value) : advAmount = 0.0;
                                             });
                                           },
                                           validators: [
@@ -365,12 +309,7 @@ class _TravelItineraryState extends State<TravelItinerary> {
                                             FormBuilderValidators.minLength(1),
                                           ],
                                           keyboardType: TextInputType.number,
-                                          decoration: InputDecoration(
-                                              border: InputBorder.none,
-                                              hintText: 'Amount',
-                                              hintStyle: TextStyle(
-                                                  color: Colors.grey[600],
-                                                  fontSize: 15)),
+                                          decoration: InputDecoration(border: InputBorder.none, hintText: 'Amount', hintStyle: TextStyle(color: Colors.grey[600], fontSize: 15)),
                                         ),
                                       ),
                                     )
@@ -381,20 +320,15 @@ class _TravelItineraryState extends State<TravelItinerary> {
                                   children: <Widget>[
                                     Text(
                                       '*Description: ',
-                                      style: TextStyle(
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.w600),
+                                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                                     ),
                                     Expanded(
                                       child: Container(
-                                        padding:
-                                            EdgeInsets.symmetric(horizontal: 2),
+                                        padding: EdgeInsets.symmetric(horizontal: 2),
                                         decoration: BoxDecoration(
-                                          borderRadius:
-                                              BorderRadius.circular(5),
+                                          borderRadius: BorderRadius.circular(5),
                                           border: Border.all(
-                                            color: Color.fromRGBO(
-                                                143, 148, 251, 8),
+                                            color: Color.fromRGBO(143, 148, 251, 8),
                                             width: 2.0,
                                           ),
                                         ),
@@ -403,9 +337,7 @@ class _TravelItineraryState extends State<TravelItinerary> {
                                           autovalidate: allGood ? false : true,
                                           attribute: "advDescription",
                                           onSaved: (value) {
-                                            value != null
-                                                ? advDescription = value
-                                                : advDescription = '';
+                                            value != null ? advDescription = value : advDescription = '';
                                           },
                                           validators: [
                                             FormBuilderValidators.required(),
@@ -413,12 +345,7 @@ class _TravelItineraryState extends State<TravelItinerary> {
                                           ],
                                           keyboardType: TextInputType.text,
                                           maxLines: 6,
-                                          decoration: InputDecoration(
-                                              border: InputBorder.none,
-                                              hintText: 'Description',
-                                              hintStyle: TextStyle(
-                                                  color: Colors.grey[600],
-                                                  fontSize: 15)),
+                                          decoration: InputDecoration(border: InputBorder.none, hintText: 'Description', hintStyle: TextStyle(color: Colors.grey[600], fontSize: 15)),
                                         ),
                                       ),
                                     )
@@ -454,12 +381,10 @@ class _TravelItineraryState extends State<TravelItinerary> {
                                     borderRadius: BorderRadius.circular(30.0),
                                   ),
                                   splashColor: Colors.redAccent,
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 50, vertical: 10),
+                                  padding: EdgeInsets.symmetric(horizontal: 50, vertical: 10),
                                   child: Text(
                                     'Delete last leg',
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 20),
+                                    style: TextStyle(color: Colors.white, fontSize: 20),
                                   ),
                                   color: Colors.red,
                                   onPressed: () {
@@ -481,8 +406,7 @@ class _TravelItineraryState extends State<TravelItinerary> {
                             borderRadius: BorderRadius.circular(30.0),
                           ),
                           splashColor: Colors.green,
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 77, vertical: 10),
+                          padding: EdgeInsets.symmetric(horizontal: 77, vertical: 10),
                           child: Text(
                             'Add Leg',
                             style: TextStyle(color: Colors.white, fontSize: 20),
@@ -493,13 +417,11 @@ class _TravelItineraryState extends State<TravelItinerary> {
                               noOfLegs++;
                               Legs.add(
                                 TravelCard(
-                                  initialDate:
-                                      widget.basicFormInfo['from date'],
+                                  initialDate: widget.basicFormInfo['from date'],
                                   finalDate: widget.basicFormInfo['to date'],
                                   legNo: noOfLegs,
                                   toPlace: 'Pune',
                                   fromPlace: 'Kol',
-                                  toDate: '21 Dec 2019',
                                 ),
                               );
                             });
@@ -512,8 +434,7 @@ class _TravelItineraryState extends State<TravelItinerary> {
                     ),
                     Center(
                       child: RaisedButton(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 60, vertical: 8),
+                        padding: EdgeInsets.symmetric(horizontal: 60, vertical: 8),
                         onPressed: () {
                           if (advance.currentState.saveAndValidate()) {
                             if (advVal) {
@@ -522,11 +443,7 @@ class _TravelItineraryState extends State<TravelItinerary> {
                             addToFormDetails(Legs.length);
 //                            print(dateInfo);
                             print(formDetails);
-                            if (widget.basicFormInfo['to date']
-                                    .difference(
-                                        widget.basicFormInfo['from date'])
-                                    .inDays ==
-                                0) {
+                            if (widget.basicFormInfo['to date'].difference(widget.basicFormInfo['from date']).inDays == 0) {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
@@ -544,10 +461,7 @@ class _TravelItineraryState extends State<TravelItinerary> {
                               );
                             }
                           } else {
-                            _showDialog(
-                                title: 'Incorrect Details',
-                                message:
-                                    'Please check the form for incorrect or incomplete details');
+                            _showDialog(title: 'Incorrect Details', message: 'Please check the form for incorrect or incomplete details');
                             setState(() {
                               allGood = false;
                             });
@@ -557,10 +471,7 @@ class _TravelItineraryState extends State<TravelItinerary> {
                         shape: StadiumBorder(),
                         child: Text(
                           "Next",
-                          style: TextStyle(
-                              fontSize: 18,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600),
+                          style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.w600),
                         ),
                       ),
                     ),
@@ -576,18 +487,11 @@ class _TravelItineraryState extends State<TravelItinerary> {
 }
 
 class TravelCard extends StatefulWidget {
-  TravelCard(
-      {this.fromPlace,
-      this.toDate,
-      this.toPlace,
-      this.legNo = 1,
-      this.finalDate,
-      this.initialDate});
+  TravelCard({this.fromPlace, this.toPlace, this.legNo = 1, this.finalDate, this.initialDate});
 
   final String toPlace;
   final int legNo;
   final String fromPlace;
-  final String toDate;
   final DateTime initialDate;
   final DateTime finalDate;
 
@@ -602,11 +506,7 @@ class _TravelCardState extends State<TravelCard> {
   DateTime selectedDate;
 
   Future<Null> _selectDate(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
-        context: context,
-        initialDate: selectedDate,
-        firstDate: widget.initialDate,
-        lastDate: widget.finalDate);
+    final DateTime picked = await showDatePicker(context: context, initialDate: selectedDate, firstDate: widget.initialDate, lastDate: widget.finalDate);
     if (picked != null && picked != selectedDate)
       setState(() {
         int legNo = widget.legNo;
@@ -659,10 +559,7 @@ class _TravelCardState extends State<TravelCard> {
                         children: <Widget>[
                           Text(
                             'Travel Date:',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.w600,
-                                fontSize: 16),
+                            style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 16),
                           ),
                           SizedBox(
                             width: 10,
@@ -680,18 +577,8 @@ class _TravelCardState extends State<TravelCard> {
                             child: GestureDetector(
                               onTap: () => _selectDate(context),
                               child: Text(
-                                DateFormat.d().format(selectedDate).toString() +
-                                    ' ' +
-                                    DateFormat.MMM()
-                                        .format(selectedDate)
-                                        .toString() +
-                                    ', ' +
-                                    DateFormat.y()
-                                        .format(selectedDate)
-                                        .toString(),
-                                style: TextStyle(
-                                    fontSize: 20,
-                                    color: Color.fromRGBO(143, 148, 251, 1)),
+                                DateFormat.d().format(selectedDate).toString() + ' ' + DateFormat.MMM().format(selectedDate).toString() + ', ' + DateFormat.y().format(selectedDate).toString(),
+                                style: TextStyle(fontSize: 20, color: Color.fromRGBO(143, 148, 251, 1)),
                               ),
                             ),
                           ),
@@ -714,15 +601,12 @@ class _TravelCardState extends State<TravelCard> {
                                 children: <Widget>[
                                   Text(
                                     'Depart From:',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 16),
+                                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
                                   ),
                                   Container(
                                     height: allGood ? 53 : 71,
                                     width: 160,
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 2, vertical: 1),
+                                    padding: EdgeInsets.symmetric(horizontal: 2, vertical: 1),
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(5),
                                       border: Border.all(
@@ -737,20 +621,13 @@ class _TravelCardState extends State<TravelCard> {
                                         autovalidate: allGood ? false : true,
                                         attribute: "Leg $legNo departFrom",
                                         onSaved: (value) {
-                                          value != null
-                                              ? departFrom = value
-                                              : departFrom = '';
+                                          value != null ? departFrom = value : departFrom = '';
                                         },
                                         validators: [
                                           FormBuilderValidators.required(),
                                         ],
                                         keyboardType: TextInputType.text,
-                                        decoration: InputDecoration(
-                                            border: InputBorder.none,
-                                            hintText: 'Place',
-                                            hintStyle: TextStyle(
-                                                color: Colors.grey[300],
-                                                fontSize: 15)),
+                                        decoration: InputDecoration(border: InputBorder.none, hintText: 'Place', hintStyle: TextStyle(color: Colors.grey[300], fontSize: 15)),
                                       ),
                                     ),
                                   ),
@@ -760,15 +637,12 @@ class _TravelCardState extends State<TravelCard> {
                                 children: <Widget>[
                                   Text(
                                     'Depart To:',
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 16),
+                                    style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
                                   ),
                                   Container(
                                     height: allGood ? 53 : 71,
                                     width: 160,
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 2, vertical: 1),
+                                    padding: EdgeInsets.symmetric(horizontal: 2, vertical: 1),
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(5),
                                       border: Border.all(
@@ -781,20 +655,13 @@ class _TravelCardState extends State<TravelCard> {
                                       autovalidate: allGood ? false : true,
                                       attribute: "Leg $legNo departTo",
                                       onSaved: (value) {
-                                        value != null
-                                            ? departTo = value
-                                            : departTo = '';
+                                        value != null ? departTo = value : departTo = '';
                                       },
                                       validators: [
                                         FormBuilderValidators.required(),
                                       ],
                                       keyboardType: TextInputType.text,
-                                      decoration: InputDecoration(
-                                          border: InputBorder.none,
-                                          hintText: 'Place',
-                                          hintStyle: TextStyle(
-                                              color: Colors.grey[300],
-                                              fontSize: 15)),
+                                      decoration: InputDecoration(border: InputBorder.none, hintText: 'Place', hintStyle: TextStyle(color: Colors.grey[300], fontSize: 15)),
                                     ),
                                   ),
                                 ],
@@ -806,8 +673,7 @@ class _TravelCardState extends State<TravelCard> {
                           ),
                           Text(
                             '*Mode of Transportation:',
-                            style: TextStyle(
-                                fontWeight: FontWeight.w600, fontSize: 16),
+                            style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
                           ),
                           SizedBox(
                             height: 10,
@@ -844,10 +710,7 @@ class _TravelCardState extends State<TravelCard> {
                                   ],
                                 ),
                                 validators: [FormBuilderValidators.required()],
-                                items: modes
-                                    .map((mode) => DropdownMenuItem(
-                                        value: mode, child: Text("$mode")))
-                                    .toList(),
+                                items: modes.map((mode) => DropdownMenuItem(value: mode, child: Text("$mode"))).toList(),
                               ),
                             ),
                           ),
@@ -890,14 +753,7 @@ class DescrBox extends StatefulWidget {
 }
 
 class _DescrBoxState extends State<DescrBox> {
-  List service = [
-    'Return',
-    'Drop only',
-    'Pickup only',
-    'Local',
-    'Outstation',
-    'Multistation'
-  ];
+  List service = ['Return', 'Drop only', 'Pickup only', 'Local', 'Outstation', 'Multistation'];
   List vehicle = ['Sedan', 'Hatchback', 'SUV', 'Premium'];
   String vehicleType;
   String serviceType;
@@ -928,12 +784,7 @@ class _DescrBoxState extends State<DescrBox> {
   }
 
   selectDate() async {
-    final List<DateTime> picked = await DateRagePicker.showDatePicker(
-        context: context,
-        initialFirstDate: fromDate,
-        initialLastDate: toDate,
-        firstDate: widget.initialDate,
-        lastDate: DateTime(2020, 4));
+    final List<DateTime> picked = await DateRagePicker.showDatePicker(context: context, initialFirstDate: fromDate, initialLastDate: toDate, firstDate: widget.initialDate, lastDate: widget.finalDate);
     if (picked != null && picked.length == 2) {
       setState(() {
         fromDate = picked[0];
@@ -949,13 +800,9 @@ class _DescrBoxState extends State<DescrBox> {
   }
 
   String whichDay(DateTime date) {
-    if (DateFormat.yMMMd().format(date).toString() ==
-        DateFormat.yMMMd().format(DateTime.now()).toString()) {
+    if (DateFormat.yMMMd().format(date).toString() == DateFormat.yMMMd().format(DateTime.now()).toString()) {
       return 'Today';
-    } else if (DateFormat.yMMMd().format(date).toString() ==
-        DateFormat.yMMMd()
-            .format(DateTime.now().add(Duration(days: 1)))
-            .toString()) {
+    } else if (DateFormat.yMMMd().format(date).toString() == DateFormat.yMMMd().format(DateTime.now().add(Duration(days: 1))).toString()) {
       return 'Tomorrow';
     } else {
       return new DateFormat.E().format(date).toString();
@@ -1005,11 +852,7 @@ class _DescrBoxState extends State<DescrBox> {
                       });
                     },
                     validators: [FormBuilderValidators.required()],
-                    decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'Rental Company Name',
-                        hintStyle:
-                            TextStyle(color: Colors.grey[300], fontSize: 15)),
+                    decoration: InputDecoration(border: InputBorder.none, hintText: 'Rental Company Name', hintStyle: TextStyle(color: Colors.grey[300], fontSize: 15)),
                   ),
                 ),
               )
@@ -1043,11 +886,7 @@ class _DescrBoxState extends State<DescrBox> {
                       });
                     },
                     validators: [FormBuilderValidators.required()],
-                    decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'PickUp address',
-                        hintStyle:
-                            TextStyle(color: Colors.grey[300], fontSize: 15)),
+                    decoration: InputDecoration(border: InputBorder.none, hintText: 'PickUp address', hintStyle: TextStyle(color: Colors.grey[300], fontSize: 15)),
                   ),
                 ),
               )
@@ -1082,11 +921,7 @@ class _DescrBoxState extends State<DescrBox> {
                     },
                     validators: [FormBuilderValidators.required()],
                     maxLines: 4,
-                    decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'Dropoff address',
-                        hintStyle:
-                            TextStyle(color: Colors.grey[300], fontSize: 15)),
+                    decoration: InputDecoration(border: InputBorder.none, hintText: 'Dropoff address', hintStyle: TextStyle(color: Colors.grey[300], fontSize: 15)),
                   ),
                 ),
               )
@@ -1127,10 +962,7 @@ class _DescrBoxState extends State<DescrBox> {
                         border: InputBorder.none,
                       ),
                       hint: Text('Select vehicle type'),
-                      items: vehicle
-                          .map((vehicle) => DropdownMenuItem(
-                              value: vehicle, child: Text("$vehicle")))
-                          .toList(),
+                      items: vehicle.map((vehicle) => DropdownMenuItem(value: vehicle, child: Text("$vehicle"))).toList(),
                     ),
                   ),
                 ],
@@ -1165,10 +997,7 @@ class _DescrBoxState extends State<DescrBox> {
                       // initialValue: 'Male',
                       hint: Text('Select service type'),
                       validators: [FormBuilderValidators.required()],
-                      items: service
-                          .map((service) => DropdownMenuItem(
-                              value: service, child: Text("$service")))
-                          .toList(),
+                      items: service.map((service) => DropdownMenuItem(value: service, child: Text("$service"))).toList(),
                     ),
                   ),
                 ],
@@ -1187,15 +1016,10 @@ class _DescrBoxState extends State<DescrBox> {
                       children: <Widget>[
                         Text(
                           'Pickup Date ',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w600),
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                         ),
                         Text(
-                          DateFormat.d().format(fromDate).toString() +
-                              ' ' +
-                              DateFormat.MMM().format(fromDate).toString() +
-                              ', ' +
-                              DateFormat.y().format(fromDate).toString(),
+                          DateFormat.d().format(fromDate).toString() + ' ' + DateFormat.MMM().format(fromDate).toString() + ', ' + DateFormat.y().format(fromDate).toString(),
                           style: TextStyle(color: Colors.black),
                         ),
                       ],
@@ -1203,12 +1027,9 @@ class _DescrBoxState extends State<DescrBox> {
                     GestureDetector(
                       onTap: selectDate,
                       child: Container(
-                        padding:
-                            EdgeInsets.symmetric(horizontal: 15, vertical: 8),
+                        padding: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
 //
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(100),
-                            color: Color.fromRGBO(143, 148, 251, 8)),
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(100), color: Color.fromRGBO(143, 148, 251, 8)),
                         child: Center(
                           child: Text(
                             'Select Dates',
@@ -1221,15 +1042,10 @@ class _DescrBoxState extends State<DescrBox> {
                       children: <Widget>[
                         Text(
                           'Dropoff Date: ',
-                          style: TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w600),
+                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                         ),
                         Text(
-                          DateFormat.d().format(toDate).toString() +
-                              ' ' +
-                              DateFormat.MMM().format(toDate).toString() +
-                              ', ' +
-                              DateFormat.y().format(toDate).toString(),
+                          DateFormat.d().format(toDate).toString() + ' ' + DateFormat.MMM().format(toDate).toString() + ', ' + DateFormat.y().format(toDate).toString(),
                           style: TextStyle(color: Colors.black),
                         ),
                       ],
@@ -1268,11 +1084,7 @@ class _DescrBoxState extends State<DescrBox> {
                   FormBuilderValidators.required(),
                 ],
                 autovalidate: allGood ? false : true,
-                decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: 'Flight No.',
-                    hintStyle:
-                        TextStyle(color: Colors.grey[300], fontSize: 15)),
+                decoration: InputDecoration(border: InputBorder.none, hintText: 'Flight No.', hintStyle: TextStyle(color: Colors.grey[300], fontSize: 15)),
               ),
             ),
           )
@@ -1308,11 +1120,7 @@ class _DescrBoxState extends State<DescrBox> {
                     traindeets = val;
                   });
                 },
-                decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: 'Train no. & Class',
-                    hintStyle:
-                        TextStyle(color: Colors.grey[300], fontSize: 15)),
+                decoration: InputDecoration(border: InputBorder.none, hintText: 'Train no. & Class', hintStyle: TextStyle(color: Colors.grey[300], fontSize: 15)),
               ),
             ),
           )
@@ -1348,11 +1156,7 @@ class _DescrBoxState extends State<DescrBox> {
                     busType = val;
                   });
                 },
-                decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: 'Luxury/Sleeper',
-                    hintStyle:
-                        TextStyle(color: Colors.grey[300], fontSize: 15)),
+                decoration: InputDecoration(border: InputBorder.none, hintText: 'Luxury/Sleeper', hintStyle: TextStyle(color: Colors.grey[300], fontSize: 15)),
               ),
             ),
           )
@@ -1402,17 +1206,11 @@ class _DescrBoxState extends State<DescrBox> {
                       attribute: "Leg $legNo personalCarDistance",
                       onSaved: (val) {
                         setState(() {
-                          val != ''
-                              ? personalCardist = double.parse(val)
-                              : personalCardist = 0.0;
+                          val != '' ? personalCardist = double.parse(val) : personalCardist = 0.0;
                         });
                       },
                       keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: 'Distance',
-                          hintStyle:
-                              TextStyle(color: Colors.grey[600], fontSize: 15)),
+                      decoration: InputDecoration(border: InputBorder.none, hintText: 'Distance', hintStyle: TextStyle(color: Colors.grey[600], fontSize: 15)),
                     ),
                   ),
                 ],
@@ -1447,17 +1245,11 @@ class _DescrBoxState extends State<DescrBox> {
                       attribute: "Leg $legNo personalCarRate",
                       onSaved: (val) {
                         setState(() {
-                          val != ''
-                              ? personalCarrate = double.parse(val)
-                              : personalCarrate = 0.0;
+                          val != '' ? personalCarrate = double.parse(val) : personalCarrate = 0.0;
                         });
                       },
                       keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                          border: InputBorder.none,
-                          hintText: 'Rate',
-                          hintStyle:
-                              TextStyle(color: Colors.grey[600], fontSize: 15)),
+                      decoration: InputDecoration(border: InputBorder.none, hintText: 'Rate', hintStyle: TextStyle(color: Colors.grey[600], fontSize: 15)),
                     ),
                   ),
                 ],
@@ -1494,17 +1286,11 @@ class _DescrBoxState extends State<DescrBox> {
                     attribute: "Leg $legNo personalCaramt",
                     onSaved: (val) {
                       setState(() {
-                        val != ''
-                            ? personalCaramt = double.parse(val)
-                            : personalCaramt = 0.0;
+                        val != '' ? personalCaramt = double.parse(val) : personalCaramt = 0.0;
                       });
                     },
                     keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                        border: InputBorder.none,
-                        hintText: 'Rate times cost per km',
-                        hintStyle:
-                            TextStyle(color: Colors.grey[300], fontSize: 15)),
+                    decoration: InputDecoration(border: InputBorder.none, hintText: 'Rate times cost per km', hintStyle: TextStyle(color: Colors.grey[300], fontSize: 15)),
                   ),
                 ),
               )

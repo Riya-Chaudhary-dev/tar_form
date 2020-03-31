@@ -1,9 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:date_range_picker/date_range_picker.dart' as DateRagePicker;
 import 'package:intl/intl.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 
 Map dateInfo = {};
 Map formDetails = {};
@@ -20,17 +20,17 @@ class HotelItinerary extends StatefulWidget {
 }
 
 bool allGood = true;
-List<Widget> hotels = [];
-double advAmount;
-String advDescription;
-bool checkboxValue = false;
-bool advVal = false;
-int noOfHotels = 1;
+
 
 class _HotelItineraryState extends State<HotelItinerary> {
   GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
   bool showSpinner = false;
-
+  List<Widget> hotels = [];
+  double advAmount;
+  String advDescription;
+  bool checkboxValue = false;
+  bool advVal = false;
+  int noOfHotels = 1;
   @override
   void initState() {
     super.initState();
@@ -43,6 +43,7 @@ class _HotelItineraryState extends State<HotelItinerary> {
   }
 
   void addToForm(int legNo) {
+
     formDetails.clear();
     formDetails.addAll(widget.travelFormInfo);
     while (legNo != 0) {
@@ -348,11 +349,15 @@ class _HotelItineraryState extends State<HotelItinerary> {
                                     showSpinner = true;
                                   });
                                   try{
-                                    FirebaseUser user = await FirebaseAuth
-                                        .instance
-                                        .currentUser();
-                                    print(user.email);
+                                   await Firestore.instance.collection('tar submissions').add({'form details':formDetails,'status':'pending'});
+                                   setState(() {
+                                     showSpinner = false;
+                                   });
+                                   _showDialog(title: 'Form Submitted',message: 'your form has been submitted and will be checked by your supervisor');
                                   }catch(e){
+                                    setState(() {
+                                      showSpinner = false;
+                                    });
                                     print(e);
                                   }
                                 } else {

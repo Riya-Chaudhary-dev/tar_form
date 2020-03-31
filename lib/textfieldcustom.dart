@@ -72,7 +72,7 @@ class _TextFieldCustomState extends State<TextFieldCustom> {
                     border: InputBorder.none,
                     hintText: widget.hint,
                     hintStyle:
-                        TextStyle(color: Colors.grey[600], fontSize: 15)),
+                        TextStyle(color: Colors.grey[300], fontSize: 15)),
               ),
             )),
         SizedBox(

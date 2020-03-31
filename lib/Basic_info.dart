@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:tar_form/travelItinerary.dart';
+import 'package:tar_form/destination_details.dart';
 import 'textfieldcustom.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:date_range_picker/date_range_picker.dart' as DateRagePicker;
@@ -36,7 +36,8 @@ class _BasicInfoState extends State<BasicInfo> {
   String project;
   bool allGood = true;
   String TANo;
-  bool hasData= false;
+  int empid;
+  bool hasData = false;
   String designation;
 
   selectDate() async {
@@ -47,21 +48,17 @@ class _BasicInfoState extends State<BasicInfo> {
         firstDate: (new DateTime.now()).subtract(new Duration(days: 1)),
         lastDate: new DateTime(2030));
     if (picked != null && picked.length == 2) {
-      setState(() {
-        fromDate = picked[0];
-        toDate = picked[1];
-        fromDay = whichDay(picked[0]);
-        toDay = whichDay(picked[1]);
-        noOfDays = (toDate.difference(fromDate).inDays + 1);
-      });
+      fromDate = picked[0];
+      toDate = picked[1];
+      fromDay = whichDay(picked[0]);
+      toDay = whichDay(picked[1]);
+      noOfDays = (toDate.difference(fromDate).inDays + 1);
     } else if (picked != null && picked.length == 1) {
-      setState(() {
-        fromDate = picked[0];
-        toDate = picked[0];
-        fromDay = whichDay(picked[0]);
-        toDay = whichDay(picked[0]);
-        noOfDays = (toDate.difference(fromDate).inDays + 1);
-      });
+      fromDate = picked[0];
+      toDate = picked[0];
+      fromDay = whichDay(picked[0]);
+      toDay = whichDay(picked[0]);
+      noOfDays = (toDate.difference(fromDate).inDays + 1);
     }
   }
 
@@ -102,22 +99,20 @@ class _BasicInfoState extends State<BasicInfo> {
     );
   }
 
+  Map autoFill;
+
   Future getInfo() async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    email = user.email;
     var info = await Firestore.instance.collection('users').getDocuments();
     for (var q in info.documents) {
       if (q.data['email'] == user.email) {
         hasData = true;
-        print(q.documentID);
-        name = q.data['name'];
-        email = user.email;
-        designation = q.data['designation'];
-        dept = q.data['department'];
-        div = q.data['division'];
+        autoFill = q.data;
       }
     }
-    if(hasData == false){
-      Navigator.pop(context,false);
+    if (hasData == false) {
+      Navigator.pop(context, false);
     }
     return info;
   }
@@ -263,7 +258,7 @@ class _BasicInfoState extends State<BasicInfo> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: <Widget>[
                                 TextFieldCustom(
-                                  initialValue: name,
+                                  initialValue: autoFill['name'],
                                   autovalidate: allGood ? false : true,
                                   height: allGood ? 56 : 71,
                                   attribute: 'name',
@@ -292,7 +287,7 @@ class _BasicInfoState extends State<BasicInfo> {
                                   },
                                 ),
                                 TextFieldCustom(
-                                  initialValue: dept,
+                                  initialValue: autoFill['department'],
                                   autovalidate: allGood ? false : true,
                                   height: allGood ? 56 : 71,
                                   attribute: 'department',
@@ -307,6 +302,19 @@ class _BasicInfoState extends State<BasicInfo> {
                                   },
                                 ),
                                 TextFieldCustom(
+                                  initialValue: autoFill['division'],
+                                  autovalidate: allGood ? false : true,
+                                  height: allGood ? 56 : 71,
+                                  attribute: 'division',
+                                  hint: 'Division',
+                                  keyboardstyle: TextInputType.text,
+                                  text: 'Division:',
+                                  validator: [FormBuilderValidators.required()],
+                                  onsaved: (value) {
+                                    div = value;
+                                  },
+                                ),
+                                TextFieldCustom(
                                   autovalidate: allGood ? false : true,
                                   height: allGood ? 56 : 71,
                                   attribute: 'supervisor email',
@@ -318,22 +326,9 @@ class _BasicInfoState extends State<BasicInfo> {
                                     FormBuilderValidators.email(),
                                   ],
                                   onsaved: (value) {
-                                    setState(() {
+
                                       supEmail = value;
-                                    });
-                                  },
-                                ),
-                                TextFieldCustom(
-                                  initialValue: div,
-                                  autovalidate: allGood ? false : true,
-                                  height: allGood ? 56 : 71,
-                                  attribute: 'division',
-                                  hint: 'Division',
-                                  keyboardstyle: TextInputType.text,
-                                  text: 'Division:',
-                                  validator: [FormBuilderValidators.required()],
-                                  onsaved: (value) {
-                                    div = value;
+
                                   },
                                 ),
                                 TextFieldCustom(
@@ -495,11 +490,15 @@ class _BasicInfoState extends State<BasicInfo> {
                                         formDetails = _fbKey.currentState.value;
                                         formDetails['from date'] = fromDate;
                                         formDetails['to date'] = toDate;
+                                        formDetails['designation'] = autoFill['designation'];
+                                        formDetails['employee id'] = autoFill['employee id'];
+//                                        print(autoFill);
+                                        print(formDetails);
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
                                             builder: (context) =>
-                                                TravelItinerary(
+                                                DestinationPage(
                                               basicFormInfo: formDetails,
                                             ),
                                           ),

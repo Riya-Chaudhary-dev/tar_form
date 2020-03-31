@@ -16,8 +16,8 @@ class _EditProfileState extends State<EditProfile> {
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
   bool showSpinner = false;
   Firestore _firestore = Firestore.instance;
-  Map formDetails = {};
   Color kTextColor = Color.fromRGBO(143, 148, 251, 1);
+  String email;
 
   String name;
   bool hasData = false;
@@ -37,14 +37,14 @@ class _EditProfileState extends State<EditProfile> {
 
   Future getInfo() async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    email = user.email;
     var info = await Firestore.instance.collection('users').getDocuments();
     for (var q in info.documents) {
       if (q.data['email'] == user.email) {
         hasData = true;
-        print(q.documentID);
         documentNo = q.documentID;
         name = q.data['name'];
-        empID = user.email;
+        empID = q.data['employee id'];
         designation = q.data['designation'];
         dept = q.data['department'];
         div = q.data['division'];
@@ -224,9 +224,8 @@ class _EditProfileState extends State<EditProfile> {
                                         onPressed: () async {
                                           if (_fbKey.currentState
                                               .saveAndValidate()) {
-                                            formDetails =
-                                                _fbKey.currentState.value;
-                                            print(formDetails);
+                                            print(_fbKey
+                                                .currentState.value['name']);
                                             setState(() {
                                               showSpinner = true;
                                             });
@@ -234,14 +233,53 @@ class _EditProfileState extends State<EditProfile> {
                                               if (hasData == false) {
                                                 await _firestore
                                                     .collection('users')
-                                                    .add(_fbKey
-                                                        .currentState.value);
+                                                    .add({
+                                                  'name': _fbKey.currentState
+                                                      .value['name']
+                                                      .toString(),
+                                                  'email': email,
+                                                  'employee id': _fbKey
+                                                      .currentState
+                                                      .value['employee id']
+                                                      .toString(),
+                                                  'designation': _fbKey
+                                                      .currentState
+                                                      .value['designation']
+                                                      .toString(),
+                                                  'division': _fbKey
+                                                      .currentState
+                                                      .value['division']
+                                                      .toString(),
+                                                  'department': _fbKey
+                                                      .currentState
+                                                      .value['department']
+                                                      .toString(),
+                                                });
                                               }
                                               await _firestore
                                                   .collection('users')
                                                   .document(documentNo)
-                                                  .updateData(_fbKey
-                                                      .currentState.value);
+                                                  .updateData({
+                                                'name': _fbKey
+                                                    .currentState.value['name']
+                                                    .toString(),
+                                                'email': email,
+                                                'employee id': _fbKey
+                                                    .currentState
+                                                    .value['employee id']
+                                                    .toString(),
+                                                'designation': _fbKey
+                                                    .currentState
+                                                    .value['designation']
+                                                    .toString(),
+                                                'division': _fbKey.currentState
+                                                    .value['division']
+                                                    .toString(),
+                                                'department': _fbKey
+                                                    .currentState
+                                                    .value['department']
+                                                    .toString(),
+                                              });
                                               setState(() {
                                                 showSpinner = false;
                                               });
