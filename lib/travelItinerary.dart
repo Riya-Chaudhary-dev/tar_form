@@ -52,7 +52,6 @@ class _TravelItineraryState extends State<TravelItinerary> {
           'mode': 'Flight',
           'flight number': advance.currentState.value['Leg $legNo flightNo'],
         });
-        print('$legNo flight');
       } else if (advance.currentState.value['Leg $legNo mode'] == 'Rental Car') {
         if (dateInfo['Leg $legNo Rental Car from date'] != null) {
           formDetails['Leg $legNo'].addAll({
@@ -91,7 +90,6 @@ class _TravelItineraryState extends State<TravelItinerary> {
           'mode': 'Bus',
           'bus type': advance.currentState.value['Leg $legNo BusType'],
         });
-        print('$legNo Bus');
       }
       legNo--;
     }
@@ -102,7 +100,6 @@ class _TravelItineraryState extends State<TravelItinerary> {
     super.initState();
     Legs.clear();
     if (Legs.length == 0) {
-      print(widget.basicFormInfo['from date']);
       Legs.add(
         TravelCard(
           initialDate: widget.basicFormInfo['from date'],
@@ -285,7 +282,7 @@ class _TravelItineraryState extends State<TravelItinerary> {
                                     ),
                                     Expanded(
                                       child: Container(
-                                        height: 65,
+                                        height: allGood ? 53 : 71,
                                         padding: EdgeInsets.all(2),
                                         decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(5),
@@ -437,28 +434,45 @@ class _TravelItineraryState extends State<TravelItinerary> {
                         padding: EdgeInsets.symmetric(horizontal: 60, vertical: 8),
                         onPressed: () {
                           if (advance.currentState.saveAndValidate()) {
-                            if (advVal) {
-                              print(advance.currentState.value);
-                            }
                             addToFormDetails(Legs.length);
-//                            print(dateInfo);
+                            int temp = 1;
+                            int tempLegNo = Legs.length;
                             print(formDetails);
-                            if (widget.basicFormInfo['to date'].difference(widget.basicFormInfo['from date']).inDays == 0) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => AuthorizationForm(),
-                                ),
-                              );
+                            formDetails.forEach((key, value) {
+                              if (key == 'Leg $tempLegNo') {
+                                int tempLegNo1 = tempLegNo - 1;
+                                formDetails.forEach((key1, value1) {
+                                  if (key1 == 'Leg $tempLegNo1') {
+                                    if (value1['travel date'] == value['travel date']) {
+                                      temp++;
+                                    }
+                                    tempLegNo1--;
+                                  }
+                                });
+                                tempLegNo--;
+                              }
+                            });
+                            if (temp >= 3) {
+                              _showDialog(title: 'More than 2 legs in one day selected', message: 'no more than 2 legs in a day are allowed please check the form and proceed');
                             } else {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => HotelItinerary(
-                                    travelFormInfo: formDetails,
+                              print(formDetails);
+                              if (widget.basicFormInfo['to date'].difference(widget.basicFormInfo['from date']).inDays == 0 || widget.basicFormInfo['details of estimated expenses']['lodging amount'] == null) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => AuthorizationForm(),
                                   ),
-                                ),
-                              );
+                                );
+                              } else {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => HotelItinerary(
+                                      travelFormInfo: formDetails,
+                                    ),
+                                  ),
+                                );
+                              }
                             }
                           } else {
                             _showDialog(title: 'Incorrect Details', message: 'Please check the form for incorrect or incomplete details');
@@ -507,7 +521,7 @@ class _TravelCardState extends State<TravelCard> {
 
   Future<Null> _selectDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(context: context, initialDate: selectedDate, firstDate: widget.initialDate, lastDate: widget.finalDate);
-    if (picked != null && picked != selectedDate)
+    if (picked != null && picked != selectedDate) {
       setState(() {
         int legNo = widget.legNo;
         dateInfo.remove('leg $legNo travel date');
@@ -515,8 +529,8 @@ class _TravelCardState extends State<TravelCard> {
         dateInfo.addAll({
           'leg $legNo travel date': selectedDate,
         });
-        print(dateInfo);
       });
+    }
   }
 
   @override

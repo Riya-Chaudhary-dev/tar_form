@@ -21,7 +21,6 @@ class HotelItinerary extends StatefulWidget {
 
 bool allGood = true;
 
-
 class _HotelItineraryState extends State<HotelItinerary> {
   GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
   bool showSpinner = false;
@@ -31,6 +30,7 @@ class _HotelItineraryState extends State<HotelItinerary> {
   bool checkboxValue = false;
   bool advVal = false;
   int noOfHotels = 1;
+
   @override
   void initState() {
     super.initState();
@@ -43,16 +43,13 @@ class _HotelItineraryState extends State<HotelItinerary> {
   }
 
   void addToForm(int legNo) {
-
     formDetails.clear();
     formDetails.addAll(widget.travelFormInfo);
     while (legNo != 0) {
       formDetails.addAll({
         'accomodation $legNo': {
-          'hotel name':
-              _fbKey.currentState.value['accomodation $legNo hotelName'],
-          'hotel address':
-              _fbKey.currentState.value['accomodation $legNo hotelAddress'],
+          'hotel name': _fbKey.currentState.value['accomodation $legNo hotelName'],
+          'hotel address': _fbKey.currentState.value['accomodation $legNo hotelAddress'],
           'check in date': dateInfo['accomodation $legNo from date'],
           'check out date': dateInfo['accomodation $legNo to date'],
         }
@@ -129,8 +126,7 @@ class _HotelItineraryState extends State<HotelItinerary> {
                       children: <Widget>[
                         LinearProgressIndicator(
                           value: 0.7,
-                          valueColor: new AlwaysStoppedAnimation<Color>(
-                              Colors.orangeAccent),
+                          valueColor: new AlwaysStoppedAnimation<Color>(Colors.orangeAccent),
                         ),
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -139,24 +135,19 @@ class _HotelItineraryState extends State<HotelItinerary> {
                             child: Container(
                               width: MediaQuery.of(context).size.width - 15,
                               padding: EdgeInsets.all(8),
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(4),
-                                  color: Color.fromRGBO(143, 148, 251, 1)),
+                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(4), color: Color.fromRGBO(143, 148, 251, 1)),
                               child: Column(
                                 children: <Widget>[
                                   Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: <Widget>[
                                       Text(
                                         'Departing Date:',
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 17),
+                                        style: TextStyle(color: Colors.white, fontSize: 17),
                                       ),
                                       Text(
                                         'Return Date:',
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 17),
+                                        style: TextStyle(color: Colors.white, fontSize: 17),
                                       ),
                                     ],
                                   ),
@@ -165,44 +156,15 @@ class _HotelItineraryState extends State<HotelItinerary> {
                                     color: Colors.white,
                                   ),
                                   Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: <Widget>[
                                       Text(
-                                        DateFormat.d()
-                                                .format(widget.travelFormInfo[
-                                                    'from date'])
-                                                .toString() +
-                                            ' ' +
-                                            DateFormat.MMM()
-                                                .format(widget.travelFormInfo[
-                                                    'from date'])
-                                                .toString() +
-                                            ' ' +
-                                            DateFormat.y()
-                                                .format(widget.travelFormInfo[
-                                                    'from date'])
-                                                .toString(),
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 17),
+                                        DateFormat.d().format(widget.travelFormInfo['from date']).toString() + ' ' + DateFormat.MMM().format(widget.travelFormInfo['from date']).toString() + ' ' + DateFormat.y().format(widget.travelFormInfo['from date']).toString(),
+                                        style: TextStyle(color: Colors.white, fontSize: 17),
                                       ),
                                       Text(
-                                        DateFormat.d()
-                                                .format(widget
-                                                    .travelFormInfo['to date'])
-                                                .toString() +
-                                            ' ' +
-                                            DateFormat.MMM()
-                                                .format(widget
-                                                    .travelFormInfo['to date'])
-                                                .toString() +
-                                            ' ' +
-                                            DateFormat.y()
-                                                .format(widget
-                                                    .travelFormInfo['to date'])
-                                                .toString(),
-                                        style: TextStyle(
-                                            color: Colors.white, fontSize: 17),
+                                        DateFormat.d().format(widget.travelFormInfo['to date']).toString() + ' ' + DateFormat.MMM().format(widget.travelFormInfo['to date']).toString() + ' ' + DateFormat.y().format(widget.travelFormInfo['to date']).toString(),
+                                        style: TextStyle(color: Colors.white, fontSize: 17),
                                       ),
                                     ],
                                   ),
@@ -216,20 +178,16 @@ class _HotelItineraryState extends State<HotelItinerary> {
                         ),
                         hotels.length > 1
                             ? Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 10, horizontal: 30),
+                                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
                                 child: Center(
                                   child: RaisedButton(
                                       shape: RoundedRectangleBorder(
-                                        borderRadius:
-                                            BorderRadius.circular(25.0),
+                                        borderRadius: BorderRadius.circular(25.0),
                                       ),
                                       splashColor: Colors.redAccent,
-                                      padding: const EdgeInsets.symmetric(
-                                          vertical: 10, horizontal: 30),
+                                      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
                                       child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                        mainAxisAlignment: MainAxisAlignment.center,
                                         children: <Widget>[
                                           Icon(
                                             Icons.delete,
@@ -240,9 +198,7 @@ class _HotelItineraryState extends State<HotelItinerary> {
                                           ),
                                           Text(
                                             'Delete Accomodation',
-                                            style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 20),
+                                            style: TextStyle(color: Colors.white, fontSize: 20),
                                           ),
                                         ],
                                       ),
@@ -258,16 +214,14 @@ class _HotelItineraryState extends State<HotelItinerary> {
                               )
                             : SizedBox(),
                         Padding(
-                          padding: const EdgeInsets.symmetric(
-                              vertical: 10, horizontal: 30),
+                          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
                           child: Center(
                             child: RaisedButton(
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(25.0),
                               ),
                               splashColor: Colors.green,
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 10, horizontal: 30),
+                              padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 30),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: <Widget>[
@@ -280,8 +234,7 @@ class _HotelItineraryState extends State<HotelItinerary> {
                                   ),
                                   Text(
                                     'Add Accomodation',
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 20),
+                                    style: TextStyle(color: Colors.white, fontSize: 20),
                                   ),
                                 ],
                               ),
@@ -291,8 +244,7 @@ class _HotelItineraryState extends State<HotelItinerary> {
                                   noOfHotels++;
                                   hotels.add(HotelDetails(
                                     legNo: noOfHotels,
-                                    initialDate:
-                                        widget.travelFormInfo['from date'],
+                                    initialDate: widget.travelFormInfo['from date'],
                                     finalDate: widget.travelFormInfo['to date'],
                                   ));
                                 });
@@ -324,9 +276,7 @@ class _HotelItineraryState extends State<HotelItinerary> {
                                   : null,
                               title: new Text(
                                 'I hereby confirm that the information filled in this TAR are as per Holtec\'s travel policy.',
-                                style: TextStyle(
-                                    fontSize: 14.0,
-                                    fontWeight: FontWeight.w600),
+                                style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w600),
                               ),
                               controlAffinity: ListTileControlAffinity.leading,
                               activeColor: Colors.deepPurple.shade400,
@@ -338,39 +288,56 @@ class _HotelItineraryState extends State<HotelItinerary> {
                         ),
                         Center(
                           child: RaisedButton(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 60, vertical: 8),
+                            padding: EdgeInsets.symmetric(horizontal: 60, vertical: 8),
                             onPressed: () async {
                               if (_fbKey.currentState.saveAndValidate()) {
                                 if (checkboxValue == true) {
+                                  bool acceptable = false;
+                                  int tempLegNo = hotels.length;
                                   addToForm(hotels.length);
                                   print(formDetails);
-                                  setState(() {
-                                    showSpinner = true;
+                                  formDetails.forEach((key, value) {
+                                    if (key == 'accomodation $tempLegNo') {
+                                      int tempLegNo1 = tempLegNo - 1;
+                                      formDetails.forEach((key1, value1) {
+                                        if (key1 == 'accomodation $tempLegNo1') {
+                                          print(value1['check out date']);
+                                          print(value['check in date']);
+                                          if (value['check in date'].isAfter(value1['check out date'].subtract(Duration(days: 1)))) {
+                                            acceptable = true;
+                                          }
+                                          tempLegNo1--;
+                                        }
+                                      });
+                                      tempLegNo--;
+                                    }
                                   });
-                                  try{
-                                   await Firestore.instance.collection('tar submissions').add({'form details':formDetails,'status':'pending'});
-                                   setState(() {
-                                     showSpinner = false;
-                                   });
-                                   _showDialog(title: 'Form Submitted',message: 'your form has been submitted and will be checked by your supervisor');
-                                  }catch(e){
-                                    setState(() {
-                                      showSpinner = false;
-                                    });
-                                    print(e);
+                                  if (acceptable) {
+                                    print('upload to firebase');
+//                                   setState(() {
+//                                    showSpinner = true;
+//                                  });
+//                                  try{
+//                                   await Firestore.instance.collection('tar submissions').add({'form details':formDetails,'status':'pending'});
+//                                   setState(() {
+//                                     showSpinner = false;
+//                                   });
+//                                   _showDialog(title: 'Form Submitted',message: 'your form has been submitted and will be checked by your supervisor');
+//                                  }catch(e){
+//                                    setState(() {
+//                                      showSpinner = false;
+//                                    });
+//                                    print(e);
+//                                  }
+                                  } else {
+                                    _showDialog(title: 'Hotel dates not valid', message: 'Please check the accomodation check in and check out dates and submit');
                                   }
+//
                                 } else {
-                                  _showDialog(
-                                      title: 'Agree to Terms and Conditions',
-                                      message:
-                                          'Please agree to the terms and conditions to submit the form');
+                                  _showDialog(title: 'Agree to Terms and Conditions', message: 'Please agree to the terms and conditions to submit the form');
                                 }
                               } else {
-                                _showDialog(
-                                    title: 'Incorrect Details',
-                                    message:
-                                        'Please check the form for incorrect or incomplete details');
+                                _showDialog(title: 'Incorrect Details', message: 'Please check the form for incorrect or incomplete details');
                                 setState(() {
                                   allGood = false;
                                 });
@@ -380,10 +347,7 @@ class _HotelItineraryState extends State<HotelItinerary> {
                             shape: StadiumBorder(),
                             child: Text(
                               "Submit",
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w600),
+                              style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.w600),
                             ),
                           ),
                         ),
@@ -430,12 +394,7 @@ class _HotelDetailsState extends State<HotelDetails> {
   String hotelAddress;
 
   selectDate() async {
-    final List<DateTime> picked = await DateRagePicker.showDatePicker(
-        context: context,
-        initialFirstDate: fromDate,
-        initialLastDate: toDate,
-        firstDate: widget.initialDate,
-        lastDate: widget.finalDate);
+    final List<DateTime> picked = await DateRagePicker.showDatePicker(context: context, initialFirstDate: fromDate, initialLastDate: toDate, firstDate: widget.initialDate, lastDate: widget.finalDate);
     if (picked != null && picked.length == 2) {
       setState(() {
         int legNo = widget.legNo;
@@ -452,13 +411,9 @@ class _HotelDetailsState extends State<HotelDetails> {
   }
 
   String whichDay(DateTime date) {
-    if (DateFormat.yMMMd().format(date).toString() ==
-        DateFormat.yMMMd().format(DateTime.now()).toString()) {
+    if (DateFormat.yMMMd().format(date).toString() == DateFormat.yMMMd().format(DateTime.now()).toString()) {
       return 'Today';
-    } else if (DateFormat.yMMMd().format(date).toString() ==
-        DateFormat.yMMMd()
-            .format(DateTime.now().add(Duration(days: 1)))
-            .toString()) {
+    } else if (DateFormat.yMMMd().format(date).toString() == DateFormat.yMMMd().format(DateTime.now().add(Duration(days: 1))).toString()) {
       return 'Tomorrow';
     } else {
       return new DateFormat.E().format(date).toString();
@@ -537,17 +492,10 @@ class _HotelDetailsState extends State<HotelDetails> {
                             children: <Widget>[
                               Text(
                                 'CheckIn Date ',
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.w600),
+                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                               ),
                               Text(
-                                DateFormat.d().format(fromDate).toString() +
-                                    ' ' +
-                                    DateFormat.MMM()
-                                        .format(fromDate)
-                                        .toString() +
-                                    ', ' +
-                                    DateFormat.y().format(fromDate).toString(),
+                                DateFormat.d().format(fromDate).toString() + ' ' + DateFormat.MMM().format(fromDate).toString() + ', ' + DateFormat.y().format(fromDate).toString(),
                                 style: TextStyle(color: Colors.black),
                               ),
                             ],
@@ -555,17 +503,13 @@ class _HotelDetailsState extends State<HotelDetails> {
                           GestureDetector(
                             onTap: selectDate,
                             child: Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 15, vertical: 8),
+                              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 8),
 //
-                              decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(100),
-                                  color: Colors.redAccent),
+                              decoration: BoxDecoration(borderRadius: BorderRadius.circular(100), color: Colors.redAccent),
                               child: Center(
                                 child: Text(
                                   'Select Dates',
-                                  style: TextStyle(
-                                      color: Colors.white, fontSize: 14),
+                                  style: TextStyle(color: Colors.white, fontSize: 14),
                                 ),
                               ),
                             ),
@@ -574,15 +518,10 @@ class _HotelDetailsState extends State<HotelDetails> {
                             children: <Widget>[
                               Text(
                                 'CheckOut Date: ',
-                                style: TextStyle(
-                                    fontSize: 16, fontWeight: FontWeight.w600),
+                                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                               ),
                               Text(
-                                DateFormat.d().format(toDate).toString() +
-                                    ' ' +
-                                    DateFormat.MMM().format(toDate).toString() +
-                                    ', ' +
-                                    DateFormat.y().format(toDate).toString(),
+                                DateFormat.d().format(toDate).toString() + ' ' + DateFormat.MMM().format(toDate).toString() + ', ' + DateFormat.y().format(toDate).toString(),
                                 style: TextStyle(color: Colors.black),
                               ),
                             ],
@@ -602,8 +541,7 @@ class _HotelDetailsState extends State<HotelDetails> {
 }
 
 class InfoRows extends StatefulWidget {
-  InfoRows(
-      {this.title, this.attribute, this.onSaved, this.validtors, this.legNo});
+  InfoRows({this.title, this.attribute, this.onSaved, this.validtors, this.legNo});
 
   String title;
   String attribute;
@@ -645,11 +583,7 @@ class _InfoRowsState extends State<InfoRows> {
                 validators: [FormBuilderValidators.required()],
                 attribute: widget.attribute,
                 onSaved: widget.onSaved,
-                decoration: InputDecoration(
-                    border: InputBorder.none,
-                    hintText: widget.title,
-                    hintStyle:
-                        TextStyle(color: Colors.grey[400], fontSize: 15)),
+                decoration: InputDecoration(border: InputBorder.none, hintText: widget.title, hintStyle: TextStyle(color: Colors.grey[400], fontSize: 15)),
               )),
         ),
       ],
