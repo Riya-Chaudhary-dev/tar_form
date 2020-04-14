@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:tar_form/Basic_info.dart';
-import 'package:tar_form/destination_details.dart';
 import 'package:tar_form/editProfile.dart';
 import 'package:tar_form/home_page.dart';
 import 'package:tar_form/hotelItinerary.dart';
@@ -8,6 +7,7 @@ import 'package:tar_form/login_page.dart';
 import 'package:tar_form/registration.dart';
 import 'package:tar_form/travelItinerary.dart';
 import 'package:tar_form/travel_log.dart';
+import 'package:tar_form/SummaryPage.dart';
 
 void main() => runApp(MyApp());
 
@@ -33,6 +33,7 @@ class MyApp extends StatelessWidget {
           BasicInfo.id: (context) => BasicInfo(),
           TravelItinerary.id: (context) => TravelItinerary(),
           HotelItinerary.id: (context) => HotelItinerary(),
+          SummaryPage.id: (context) => SummaryPage(),
         });
   }
 }

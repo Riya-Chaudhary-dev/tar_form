@@ -1,9 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:date_range_picker/date_range_picker.dart' as DateRagePicker;
 import 'package:intl/intl.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:tar_form/SummaryPage.dart';
 
 Map dateInfo = {};
 Map formDetails = {};
@@ -159,11 +159,19 @@ class _HotelItineraryState extends State<HotelItinerary> {
                                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                     children: <Widget>[
                                       Text(
-                                        DateFormat.d().format(widget.travelFormInfo['from date']).toString() + ' ' + DateFormat.MMM().format(widget.travelFormInfo['from date']).toString() + ' ' + DateFormat.y().format(widget.travelFormInfo['from date']).toString(),
+                                        DateFormat.d().format(widget.travelFormInfo['from date']).toString() +
+                                            ' ' +
+                                            DateFormat.MMM().format(widget.travelFormInfo['from date']).toString() +
+                                            ' ' +
+                                            DateFormat.y().format(widget.travelFormInfo['from date']).toString(),
                                         style: TextStyle(color: Colors.white, fontSize: 17),
                                       ),
                                       Text(
-                                        DateFormat.d().format(widget.travelFormInfo['to date']).toString() + ' ' + DateFormat.MMM().format(widget.travelFormInfo['to date']).toString() + ' ' + DateFormat.y().format(widget.travelFormInfo['to date']).toString(),
+                                        DateFormat.d().format(widget.travelFormInfo['to date']).toString() +
+                                            ' ' +
+                                            DateFormat.MMM().format(widget.travelFormInfo['to date']).toString() +
+                                            ' ' +
+                                            DateFormat.y().format(widget.travelFormInfo['to date']).toString(),
                                         style: TextStyle(color: Colors.white, fontSize: 17),
                                       ),
                                     ],
@@ -292,28 +300,40 @@ class _HotelItineraryState extends State<HotelItinerary> {
                             onPressed: () async {
                               if (_fbKey.currentState.saveAndValidate()) {
                                 if (checkboxValue == true) {
-                                  bool acceptable = false;
+                                  bool acceptable = true;
                                   int tempLegNo = hotels.length;
                                   addToForm(hotels.length);
                                   print(formDetails);
-                                  formDetails.forEach((key, value) {
-                                    if (key == 'accomodation $tempLegNo') {
-                                      int tempLegNo1 = tempLegNo - 1;
-                                      formDetails.forEach((key1, value1) {
-                                        if (key1 == 'accomodation $tempLegNo1') {
-                                          print(value1['check out date']);
-                                          print(value['check in date']);
-                                          if (value['check in date'].isAfter(value1['check out date'].subtract(Duration(days: 1)))) {
-                                            acceptable = true;
+                                  if (hotels.length != 1) {
+                                    acceptable = false;
+                                    formDetails.forEach((key, value) {
+                                      if (key == 'accomodation $tempLegNo') {
+                                        int tempLegNo1 = tempLegNo - 1;
+                                        formDetails.forEach((key1, value1) {
+                                          if (key1 == 'accomodation $tempLegNo1') {
+                                            print(value1['check out date']);
+                                            print(value['check in date']);
+                                            if (value['check in date'].isAfter(value1['check out date'].subtract(Duration(days: 1)))) {
+                                              acceptable = true;
+                                            }
+                                            tempLegNo1--;
                                           }
-                                          tempLegNo1--;
-                                        }
-                                      });
-                                      tempLegNo--;
-                                    }
-                                  });
+                                        });
+                                        tempLegNo--;
+                                      }
+                                    });
+                                  }
                                   if (acceptable) {
-                                    print('upload to firebase');
+                                    print('push to submit');
+                                    formDetails.addAll({'hotels count': hotels.length});
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => SummaryPage(
+                                          formInfo: formDetails,
+                                        ),
+                                      ),
+                                    );
 //                                   setState(() {
 //                                    showSpinner = true;
 //                                  });
@@ -330,11 +350,14 @@ class _HotelItineraryState extends State<HotelItinerary> {
 //                                    print(e);
 //                                  }
                                   } else {
-                                    _showDialog(title: 'Hotel dates not valid', message: 'Please check the accomodation check in and check out dates and submit');
+                                    _showDialog(
+                                        title: 'Hotel dates not valid',
+                                        message: 'Please check the accomodation check in and check out dates and submit');
                                   }
 //
                                 } else {
-                                  _showDialog(title: 'Agree to Terms and Conditions', message: 'Please agree to the terms and conditions to submit the form');
+                                  _showDialog(
+                                      title: 'Agree to Terms and Conditions', message: 'Please agree to the terms and conditions to submit the form');
                                 }
                               } else {
                                 _showDialog(title: 'Incorrect Details', message: 'Please check the form for incorrect or incomplete details');
@@ -394,7 +417,8 @@ class _HotelDetailsState extends State<HotelDetails> {
   String hotelAddress;
 
   selectDate() async {
-    final List<DateTime> picked = await DateRagePicker.showDatePicker(context: context, initialFirstDate: fromDate, initialLastDate: toDate, firstDate: widget.initialDate, lastDate: widget.finalDate);
+    final List<DateTime> picked = await DateRagePicker.showDatePicker(
+        context: context, initialFirstDate: fromDate, initialLastDate: toDate, firstDate: widget.initialDate, lastDate: widget.finalDate);
     if (picked != null && picked.length == 2) {
       setState(() {
         int legNo = widget.legNo;
@@ -495,7 +519,11 @@ class _HotelDetailsState extends State<HotelDetails> {
                                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                               ),
                               Text(
-                                DateFormat.d().format(fromDate).toString() + ' ' + DateFormat.MMM().format(fromDate).toString() + ', ' + DateFormat.y().format(fromDate).toString(),
+                                DateFormat.d().format(fromDate).toString() +
+                                    ' ' +
+                                    DateFormat.MMM().format(fromDate).toString() +
+                                    ', ' +
+                                    DateFormat.y().format(fromDate).toString(),
                                 style: TextStyle(color: Colors.black),
                               ),
                             ],
@@ -521,7 +549,11 @@ class _HotelDetailsState extends State<HotelDetails> {
                                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                               ),
                               Text(
-                                DateFormat.d().format(toDate).toString() + ' ' + DateFormat.MMM().format(toDate).toString() + ', ' + DateFormat.y().format(toDate).toString(),
+                                DateFormat.d().format(toDate).toString() +
+                                    ' ' +
+                                    DateFormat.MMM().format(toDate).toString() +
+                                    ', ' +
+                                    DateFormat.y().format(toDate).toString(),
                                 style: TextStyle(color: Colors.black),
                               ),
                             ],
@@ -565,9 +597,8 @@ class _InfoRowsState extends State<InfoRows> {
         SizedBox(
           width: 4,
         ),
-        Expanded(
+        Flexible(
           child: Container(
-              height: allGood ? 53 : 71,
               padding: EdgeInsets.only(left: 5.0),
               decoration: BoxDecoration(
                 color: Colors.white30,
@@ -583,7 +614,8 @@ class _InfoRowsState extends State<InfoRows> {
                 validators: [FormBuilderValidators.required()],
                 attribute: widget.attribute,
                 onSaved: widget.onSaved,
-                decoration: InputDecoration(border: InputBorder.none, hintText: widget.title, hintStyle: TextStyle(color: Colors.grey[400], fontSize: 15)),
+                decoration:
+                    InputDecoration(border: InputBorder.none, hintText: widget.title, hintStyle: TextStyle(color: Colors.grey[400], fontSize: 15)),
               )),
         ),
       ],

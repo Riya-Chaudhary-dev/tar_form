@@ -83,7 +83,7 @@ class _TravelItineraryState extends State<TravelItinerary> {
           'mode': 'Personal Car',
           'distance travelled': advance.currentState.value['Leg $legNo personalCarDistance'],
           'rate per km': advance.currentState.value['Leg $legNo personalCarRate'],
-          'amount': advance.currentState.value['Leg $legNo personalCarRate'] * advance.currentState.value['Leg $legNo personalCarDistance'],
+          'amount': int.parse(advance.currentState.value['Leg $legNo personalCarRate']) * int.parse(advance.currentState.value['Leg $legNo personalCarDistance']),
         });
       } else if (advance.currentState.value['Leg $legNo mode'] == 'Bus') {
         formDetails['Leg $legNo'].addAll({
@@ -280,9 +280,8 @@ class _TravelItineraryState extends State<TravelItinerary> {
                                       'Amount: ',
                                       style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                                     ),
-                                    Expanded(
+                                    Flexible(
                                       child: Container(
-                                        height: allGood ? 53 : 71,
                                         padding: EdgeInsets.all(2),
                                         decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(5),
@@ -319,7 +318,7 @@ class _TravelItineraryState extends State<TravelItinerary> {
                                       '*Description: ',
                                       style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                                     ),
-                                    Expanded(
+                                    Flexible(
                                       child: Container(
                                         padding: EdgeInsets.symmetric(horizontal: 2),
                                         decoration: BoxDecoration(
@@ -452,6 +451,8 @@ class _TravelItineraryState extends State<TravelItinerary> {
                                 tempLegNo--;
                               }
                             });
+                            formDetails.addAll({'legs count': Legs.length});
+
                             if (temp >= 3) {
                               _showDialog(title: 'More than 2 legs in one day selected', message: 'no more than 2 legs in a day are allowed please check the form and proceed');
                             } else {
@@ -845,10 +846,9 @@ class _DescrBoxState extends State<DescrBox> {
                 'Rental Company Name: ',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
               ),
-              Expanded(
+              Flexible(
                 child: Container(
                   padding: EdgeInsets.symmetric(horizontal: 4),
-                  height: allGood ? 53 : 71,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
                     border: Border.all(
@@ -879,9 +879,8 @@ class _DescrBoxState extends State<DescrBox> {
                 'Pickup Address: ',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
               ),
-              Expanded(
+              Flexible(
                 child: Container(
-                  height: allGood ? 53 : 71,
                   padding: EdgeInsets.symmetric(horizontal: 4),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
@@ -913,9 +912,8 @@ class _DescrBoxState extends State<DescrBox> {
                 'Dropoff Address: ',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
               ),
-              Expanded(
+              Flexible(
                 child: Container(
-                  height: allGood ? 53 : 71,
                   padding: EdgeInsets.symmetric(horizontal: 4),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),
@@ -934,7 +932,6 @@ class _DescrBoxState extends State<DescrBox> {
                       });
                     },
                     validators: [FormBuilderValidators.required()],
-                    maxLines: 4,
                     decoration: InputDecoration(border: InputBorder.none, hintText: 'Dropoff address', hintStyle: TextStyle(color: Colors.grey[300], fontSize: 15)),
                   ),
                 ),
@@ -1075,9 +1072,8 @@ class _DescrBoxState extends State<DescrBox> {
             'Flight No.: ',
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
           ),
-          Expanded(
+          Flexible(
             child: Container(
-              height: allGood ? 53 : 71,
               padding: EdgeInsets.symmetric(horizontal: 4),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
@@ -1111,9 +1107,8 @@ class _DescrBoxState extends State<DescrBox> {
             'Train No. & Class: ',
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
           ),
-          Expanded(
+          Flexible(
             child: Container(
-              height: allGood ? 53 : 71,
               padding: EdgeInsets.symmetric(horizontal: 4),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
@@ -1147,9 +1142,8 @@ class _DescrBoxState extends State<DescrBox> {
             'Bus Type: ',
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
           ),
-          Expanded(
+          Flexible(
             child: Container(
-              height: allGood ? 53 : 71,
               padding: EdgeInsets.symmetric(horizontal: 4),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(5),
@@ -1218,11 +1212,7 @@ class _DescrBoxState extends State<DescrBox> {
                       ],
                       autovalidate: allGood ? false : true,
                       attribute: "Leg $legNo personalCarDistance",
-                      onSaved: (val) {
-                        setState(() {
-                          val != '' ? personalCardist = double.parse(val) : personalCardist = 0.0;
-                        });
-                      },
+
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(border: InputBorder.none, hintText: 'Distance', hintStyle: TextStyle(color: Colors.grey[600], fontSize: 15)),
                     ),
@@ -1257,11 +1247,7 @@ class _DescrBoxState extends State<DescrBox> {
                       ],
                       autovalidate: allGood ? false : true,
                       attribute: "Leg $legNo personalCarRate",
-                      onSaved: (val) {
-                        setState(() {
-                          val != '' ? personalCarrate = double.parse(val) : personalCarrate = 0.0;
-                        });
-                      },
+
                       keyboardType: TextInputType.number,
                       decoration: InputDecoration(border: InputBorder.none, hintText: 'Rate', hintStyle: TextStyle(color: Colors.grey[600], fontSize: 15)),
                     ),
@@ -1279,9 +1265,8 @@ class _DescrBoxState extends State<DescrBox> {
                 'Amount: ',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
               ),
-              Expanded(
+              Flexible(
                 child: Container(
-                  height: allGood ? 53 : 71,
                   padding: EdgeInsets.symmetric(horizontal: 4),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(5),

@@ -2,19 +2,88 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class SummaryPage extends StatelessWidget {
+  static String id = 'summary';
+
+  SummaryPage({this.formInfo});
+
+  Map formInfo;
   bool isSupervisor;
   bool isSummary;
+
+  List<Widget> legs() {
+    List<Widget> legs = [];
+    int nooflegs = formInfo['legs count'];
+    formInfo.forEach((key, value) {
+      if (key == 'Leg $nooflegs') {
+        legs.add(Card(
+            color: Colors.black,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 5),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Text(
+                        'Leg $nooflegs :',
+                        style: TextStyle(fontSize: 20, color: Colors.white),
+                      ),
+                      Text(
+                        DateFormat.d().format(value['travel date']).toString() +
+                            ' ' +
+                            DateFormat.MMM().format(value['travel date']).toString() +
+                            ' ' +
+                            DateFormat.y().format(value['travel date']).toString(),
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+                travelCard(legInfo: value),
+              ],
+            )));
+        nooflegs--;
+      }
+    });
+    return legs.reversed.toList();
+  }
+
+  List<Widget> hotels() {
+    List<Widget> hotels = [];
+    int noOfHotels = formInfo['hotels count'];
+    formInfo.forEach((key, value) {
+      if (key == 'accomodation $noOfHotels') {
+        hotels.add(Card(
+            color: Colors.blue,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 18.0, vertical: 5),
+                  child: Text(
+                    'Accomodation $noOfHotels :',
+                    style: TextStyle(fontSize: 20, color: Colors.white),
+                  ),
+                ),
+                accomodation(hotelInfo: value),
+              ],
+            )));
+        noOfHotels--;
+      }
+    });
+    return hotels.reversed.toList();
+  }
+
   @override
   Widget build(BuildContext context) {
-    if(isSupervisor==true){
-      isSummary=false;
-    }
-    else if(isSummary==true){
-      isSupervisor=false;
-    }
-    else {
-      isSupervisor=false;
-      isSummary=false;
+    if (isSupervisor == true) {
+      isSummary = false;
+    } else if (isSummary == true) {
+      isSupervisor = false;
+    } else {
+      isSupervisor = false;
+      isSummary = false;
     }
     return Scaffold(
       appBar: AppBar(
@@ -34,129 +103,192 @@ class SummaryPage extends StatelessWidget {
             children: <Widget>[
               LinearProgressIndicator(
                 value: 0.99,
-                valueColor:
-                    new AlwaysStoppedAnimation<Color>(Colors.orangeAccent),
+                valueColor: new AlwaysStoppedAnimation<Color>(Colors.orangeAccent),
               ),
-              SizedBox(height: 20,),
-              headerTile(
-                title: 'Traveler\'s Details',
-                color: [
-                  Color.fromRGBO(143, 148, 251, 1),
-                  Color.fromRGBO(143, 148, 251, .6),
-                ],
+              SizedBox(
+                height: 20,
               ),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-//                child: basicInfo(),
-              ),
-              headerTile(
-                title: 'Expense Details',
-                color: [
-                  Color.fromRGBO(220, 20, 60, 1),
-                  Color.fromRGBO(220, 20, 60, .6),
-                ],
-              ),
-              expenseCard(
-                  intrnational: true,
-                  meals: 111,
-                  local: 123,
-                  travel: 123,
-                  lodging: 234),
-              headerTile(
-                title: 'Travel Itinerary',
-                color: [
-                  Color.fromRGBO(0, 128, 255, 1),
-                  Color.fromRGBO(0, 128, 255, 0.2),
-                ],
-              ),
-              travelCard('Flight'),
-              travelCard('Bus'),
-              travelCard('Personal Car'),
-              travelCard('Rental Car'),
-              travelCard('Train'),
-              headerTile(
-                title: 'Accomodation Details',
-                color: [
-                  Color.fromRGBO(109, 54, 111, 0.8),
-                  Color.fromRGBO(109, 54, 111, 0.2),
-                ],
-              ),
-              accomodation(),
-//                travelCard('Bus'),
-              isSupervisor?
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+              Card(
+                color: Colors.black,
+                child: Column(
                   children: <Widget>[
-                    Center(
-                      child: RaisedButton(
-                        padding:
-                        EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                        onPressed: () {
-//                      if (_fbKey.currentState.saveAndValidate()) {
-//                        print(_fbKey.currentState.value);
-//                        Scaffold.of(context).showSnackBar(
-//                            SnackBar(content: Text('Processing Data')));
-//                      }
-                        },
-                        color: Colors.green,
-                        shape: StadiumBorder(),
-                        child: Text(
-                          "Approve",
-                          style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600),
-                        ),
-                      ),
+                    headerTile(
+                      title: 'Traveler\'s Details',
+                      color: Colors.black,
                     ),
-                    Center(
-                      child: RaisedButton(
-                        padding:
-                        EdgeInsets.symmetric(horizontal: 40, vertical: 10),
-                        onPressed: () {
-
-                        },
-                        color: Colors.red,
-                        shape: StadiumBorder(),
-                        child: Text(
-                          "Reject",
-                          style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+//                child: basicInfo(),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Card(
+                          child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Column(
+                          children: <Widget>[
+                            SummaryTiles(
+                              title: 'Name ',
+                              input: formInfo['name'],
+                            ),
+                            SummaryTiles(
+                              title: 'Email ',
+                              input: formInfo['email'],
+                            ),
+                            SummaryTiles(
+                              title: 'Department ',
+                              input: formInfo['department'],
+                            ),
+                            SummaryTiles(
+                              title: 'Division ',
+                              input: formInfo['division'],
+                            ),
+                            SummaryTiles(
+                              title: 'Supervisor email',
+                              input: formInfo['supervisor email'],
+                            ),
+                            SummaryTiles(
+                              title: 'Project',
+                              input: formInfo['project'],
+                            ),
+                            SummaryTiles(
+                              title: 'Supervisor email',
+                              input: formInfo['supervisor email'],
+                            ),
+                            SummaryTiles(
+                              title: 'To Date',
+                              input: DateFormat.d().format(formInfo['to date']).toString() +
+                                  ' ' +
+                                  DateFormat.MMM().format(formInfo['to date']).toString() +
+                                  ' ' +
+                                  DateFormat.y().format(formInfo['to date']).toString(),
+                            ),
+                            SummaryTiles(
+                              title: 'From Date',
+                              input: DateFormat.d().format(formInfo['from date']).toString() +
+                                  ' ' +
+                                  DateFormat.MMM().format(formInfo['from date']).toString() +
+                                  ' ' +
+                                  DateFormat.y().format(formInfo['from date']).toString(),
+                            ),
+                          ],
                         ),
-                      ),
+                      )),
                     ),
                   ],
                 ),
-              )
-                  :isSummary?Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Center(
-                  child: RaisedButton(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-                    onPressed: () {
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Card(
+                color: Colors.blue,
+                child: Column(
+                  children: <Widget>[
+                    headerTile(
+                      title: 'Expense Details',
+                      color: Colors.blue,
+                    ),
+                    expenseCard(formInfo: formInfo),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Card(
+                color: Colors.black,
+                child: Column(
+                  children: <Widget>[
+                    headerTile(
+                      title: 'Travel Itinerary',
+                      color: Colors.black,
+                    ),
+                    Column(
+                      children: legs(),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Card(
+                color: Colors.blue,
+                child: Column(
+                  children: <Widget>[
+                    headerTile(
+                      title: 'Accomodation Details',
+                      color: Colors.blue,
+                    ),
+                    Column(
+                      children: hotels(),
+                    ),
+                  ],
+                ),
+              ),
+              isSupervisor
+                  ? Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: <Widget>[
+                          Center(
+                            child: RaisedButton(
+                              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                              onPressed: () {
 //                      if (_fbKey.currentState.saveAndValidate()) {
 //                        print(_fbKey.currentState.value);
 //                        Scaffold.of(context).showSnackBar(
 //                            SnackBar(content: Text('Processing Data')));
 //                      }
-                    },
-                    color: Color.fromRGBO(143, 148, 251, 1),
-                    shape: StadiumBorder(),
-                    child: Text(
-                      "Submit",
-                      style: TextStyle(
-                          fontSize: 25,
-                          color: Colors.white,
-                          fontWeight: FontWeight.w600),
-                    ),
-                  ),
-                ),
-              ):SizedBox()
+                              },
+                              color: Colors.green,
+                              shape: StadiumBorder(),
+                              child: Text(
+                                "Approve",
+                                style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                          ),
+                          Center(
+                            child: RaisedButton(
+                              padding: EdgeInsets.symmetric(horizontal: 40, vertical: 10),
+                              onPressed: () {},
+                              color: Colors.red,
+                              shape: StadiumBorder(),
+                              child: Text(
+                                "Reject",
+                                style: TextStyle(fontSize: 20, color: Colors.white, fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  : isSummary
+                      ? Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Center(
+                            child: RaisedButton(
+                              padding: EdgeInsets.symmetric(horizontal: 30, vertical: 10),
+                              onPressed: () {
+//                      if (_fbKey.currentState.saveAndValidate()) {
+//                        print(_fbKey.currentState.value);
+//                        Scaffold.of(context).showSnackBar(
+//                            SnackBar(content: Text('Processing Data')));
+//                      }
+                              },
+                              color: Color.fromRGBO(143, 148, 251, 1),
+                              shape: StadiumBorder(),
+                              child: Text(
+                                "Submit",
+                                style: TextStyle(fontSize: 25, color: Colors.white, fontWeight: FontWeight.w600),
+                              ),
+                            ),
+                          ),
+                        )
+                      : SizedBox()
             ],
           ),
         ),
@@ -165,21 +297,8 @@ class SummaryPage extends StatelessWidget {
   }
 }
 
-Widget basicInfo(
-    String name,
-    String email,
-    String supEmail,
-    DateTime RequestedOn,
-    String From,
-    String To,
-    int noofdays,
-    DateTime fromDate,
-    DateTime toDate,
-    String Division,
-    String TANo,
-    String Project,
-    String Department
-    ) {
+Widget basicInfo(String name, String email, String supEmail, DateTime RequestedOn, String From, String To, int noofdays, DateTime fromDate,
+    DateTime toDate, String Division, String TANo, String Project, String Department) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Card(
@@ -191,10 +310,17 @@ Widget basicInfo(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: <Widget>[
                 Row(
-
                   children: <Widget>[
-                    Text('TA No.:',style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600,),),
-                    SizedBox(width: 2,),
+                    Text(
+                      'TA No.:',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 2,
+                    ),
                     Container(
 //                                padding: EdgeInsets.only(left:5.0),
                       padding: EdgeInsets.all(2),
@@ -207,17 +333,25 @@ Widget basicInfo(
                           width: 2.0,
                         ),
                       ),
-                      child: Text('TANo',style: TextStyle(
-                          letterSpacing: 2,
-                          fontSize: 14
-                      ),),
+                      child: Text(
+                        'TANo',
+                        style: TextStyle(letterSpacing: 2, fontSize: 14),
+                      ),
                     ),
                   ],
                 ),
                 Row(
                   children: <Widget>[
-                    Text('Requested on:',style: TextStyle(fontSize: 16,fontWeight: FontWeight.w600,),),
-                    SizedBox(width: 2,),
+                    Text(
+                      'Requested on:',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    SizedBox(
+                      width: 2,
+                    ),
                     Container(
 //                                padding: EdgeInsets.only(left:5.0),
                         padding: EdgeInsets.all(2),
@@ -242,13 +376,14 @@ Widget basicInfo(
 //                              .toString(),style: TextStyle(
 //                          fontSize: 14
 //                      ),),
-                    )
+                        )
                   ],
                 ),
-
               ],
             ),
-            SizedBox(height: 9,),
+            SizedBox(
+              height: 9,
+            ),
             SummaryTiles(
               title: 'Name: ',
             ),
@@ -261,7 +396,7 @@ Widget basicInfo(
             SummaryTiles(
               title: 'Division: ',
             ),
-            SummaryTiles(title:'Supervisor\'s Email ID: '),
+            SummaryTiles(title: 'Supervisor\'s Email ID: '),
             SummaryTiles(
               title: 'Project: ',
             ),
@@ -272,15 +407,16 @@ Widget basicInfo(
                 children: <Widget>[
                   Column(
                     children: <Widget>[
-                      Text('From:',style: TextStyle(
-                  fontSize: 17,
-                  fontWeight: FontWeight.w600),),
-                      SizedBox(height: 3,),
+                      Text(
+                        'From:',
+                        style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
+                      ),
+                      SizedBox(
+                        height: 3,
+                      ),
                       Text(
                         From,
-                        style: TextStyle(
-                            fontSize: 17,
-                            fontWeight: FontWeight.w600),
+                        style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
                       ),
                       Container(
                         height: 35,
@@ -293,42 +429,33 @@ Widget basicInfo(
                           ),
                         ),
                         child: Center(
-                          child:
-                        Text(
-                          DateFormat.d()
-                              .format(fromDate)
-                              .toString() +
-                              ' ' +
-                              DateFormat.MMM()
-                                  .format(fromDate)
-                                  .toString() +
-                              ' ' +
-                              DateFormat.y()
-                                  .format(fromDate)
-                                  .toString(),
-                        ),
+                          child: Text(
+                            DateFormat.d().format(fromDate).toString() +
+                                ' ' +
+                                DateFormat.MMM().format(fromDate).toString() +
+                                ' ' +
+                                DateFormat.y().format(fromDate).toString(),
+                          ),
                         ),
                       ),
                     ],
                   ),
                   Text(
-                    'No of days : ' +noofdays.toString(),
-                    style: TextStyle(
-                        color: Colors.blueGrey[700],
-                        fontWeight: FontWeight.w600),
+                    'No of days : ' + noofdays.toString(),
+                    style: TextStyle(color: Colors.blueGrey[700], fontWeight: FontWeight.w600),
                   ),
                   Column(
                     children: <Widget>[
-                      Text('To:',style: TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.w600),),
-                      SizedBox(height: 3,),
+                      Text(
+                        'To:',
+                        style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
+                      ),
+                      SizedBox(
+                        height: 3,
+                      ),
                       Text(
                         To,
-                        style: TextStyle(
-                            fontSize: 17,
-
-                            fontWeight: FontWeight.w600),
+                        style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
                       ),
                       Container(
                         height: 35,
@@ -343,18 +470,13 @@ Widget basicInfo(
                           borderRadius: BorderRadius.circular(30),
                         ),
                         child: Center(
-                          child:
-                        Text(
-                          DateFormat.d().format(toDate).toString() +
-                              ' ' +
-                              DateFormat.MMM()
-                                  .format(toDate)
-                                  .toString() +
-                              ' ' +
-                              DateFormat.y()
-                                  .format(toDate)
-                                  .toString(),
-                        ),
+                          child: Text(
+                            DateFormat.d().format(toDate).toString() +
+                                ' ' +
+                                DateFormat.MMM().format(toDate).toString() +
+                                ' ' +
+                                DateFormat.y().format(toDate).toString(),
+                          ),
                         ),
                       ),
                     ],
@@ -369,12 +491,7 @@ Widget basicInfo(
   );
 }
 
-Widget accomodation(
-    {String hotelName,
-    String address,
-    DateTime checkin,
-    DateTime checkout,
-    int noofdaya}) {
+Widget accomodation({Map hotelInfo}) {
   return Padding(
     padding: const EdgeInsets.all(8.0),
     child: Card(
@@ -384,16 +501,28 @@ Widget accomodation(
           children: <Widget>[
             SummaryTiles(
               title: 'Hotel Name: ',
+              input: hotelInfo['hotel name'],
             ),
             SummaryTiles(
               title: 'Hotel Address: ',
+              input: hotelInfo['hotel address'],
             ),
             SummaryTiles(
               title: 'Checkin Date: ',
+              input: DateFormat.d().format(hotelInfo['check in date']).toString() +
+                  ' ' +
+                  DateFormat.MMM().format(hotelInfo['check in date']).toString() +
+                  ' ' +
+                  DateFormat.y().format(hotelInfo['check in date']).toString(),
             ),
             SummaryTiles(
               title: 'Checkout Date: ',
-            )
+              input: DateFormat.d().format(hotelInfo['check out date']).toString() +
+                  ' ' +
+                  DateFormat.MMM().format(hotelInfo['check out date']).toString() +
+                  ' ' +
+                  DateFormat.y().format(hotelInfo['check out date']).toString(),
+            ),
           ],
         ),
       ),
@@ -401,61 +530,40 @@ Widget accomodation(
   );
 }
 
-Widget expenseCard(
-    {double travel,
-    double meals,
-    double businessmeal,
-    String purpose,
-    String otherdes,
-    double other,
-    double lodging,
-    double local,
-    bool intrnational,
-    String destination,
-    String businessdesc}) {
+Widget expenseCard({Map formInfo}) {
   return Padding(
-    padding: const EdgeInsets.all(4.0),
+    padding: const EdgeInsets.all(8.0),
     child: Card(
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: <Widget>[
-            intrnational
+            formInfo['international trip'] == true
                 ? Container(
                     padding: EdgeInsets.symmetric(vertical: 5),
                     decoration: BoxDecoration(
-                      gradient: LinearGradient(colors: [
-                        Color.fromRGBO(127, 183, 198, 0.8),
-                        Color.fromRGBO(127, 183, 198, 0.2)
-                      ]),
+                      color: Colors.blue[100],
                       borderRadius: BorderRadius.circular(5),
                     ),
                     child: Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 110, vertical: 5),
+                      padding: EdgeInsets.symmetric(horizontal: 110, vertical: 5),
                       child: Text(
                         'International Trip',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, fontSize: 18),
+                        style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
                       ),
                     ),
                   )
                 : Container(
                     padding: EdgeInsets.symmetric(vertical: 10),
                     decoration: BoxDecoration(
-                      gradient: LinearGradient(colors: [
-                        Color.fromRGBO(193, 194, 4, 0.6),
-                        Color.fromRGBO(193, 194, 4, 0.2)
-                      ]),
+                      color: Colors.green[100],
                       borderRadius: BorderRadius.circular(5),
                     ),
                     child: Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 120, vertical: 5),
+                      padding: EdgeInsets.symmetric(horizontal: 120, vertical: 5),
                       child: Text(
                         'Domestic Trip',
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, fontSize: 18),
+                        style: TextStyle(fontWeight: FontWeight.w600, fontSize: 18),
                       ),
                     ),
                   ),
@@ -463,36 +571,57 @@ Widget expenseCard(
               height: 5,
             ),
             SummaryTiles(
-              title: 'Travel: ',
+              title: 'Destination: ',
+              input: formInfo['destination'],
             ),
-            lodging != null
+            SummaryTiles(
+              title: 'Purpose of travel: ',
+              input: formInfo['purpose of travel'],
+            ),
+            SummaryTiles(
+              title: 'Travel (to & fro destination) :',
+              input: formInfo['details of estimated expenses']['travelamt'],
+            ),
+            formInfo['details of estimated expenses']['lodging amount'] != null
                 ? SummaryTiles(
                     title: 'Lodging: ',
+                    input: formInfo['details of estimated expenses']['lodging amount'],
                   )
-                : Text(''),
-            local != null
+                : SizedBox(),
+            formInfo['details of estimated expenses']['local travel amount'] != null
                 ? SummaryTiles(
                     title: 'Local Travel: ',
+                    input: formInfo['details of estimated expenses']['local travel amount'],
                   )
-                : Text(''),
+                : SizedBox(),
             SummaryTiles(
               title: 'Meals: ',
+              input: formInfo['details of estimated expenses']['meals'],
             ),
-            businessmeal != null
+            formInfo['details of estimated expenses']['business meals'] != null
                 ? SummaryTiles(
                     title: 'Business Meals: ',
+                    input: formInfo['details of estimated expenses']['business meals'],
                   )
-                : Text(''),
-            businessdesc != null
+                : SizedBox(),
+            formInfo['details of estimated expenses']['business meal description'] != null
                 ? SummaryTiles(
-                    title: 'Description:',
+                    title: 'Meal description:',
+                    input: formInfo['details of estimated expenses']['business meal description'],
                   )
-                : Text(''),
-            other != null
+                : SizedBox(),
+            formInfo['details of estimated expenses']['other expenses'] != null
                 ? SummaryTiles(
                     title: 'Others: ',
+                    input: formInfo['details of estimated expenses']['other expenses'],
                   )
-                : Text('')
+                : SizedBox(),
+            formInfo['details of estimated expenses']['other expenses description'] != null
+                ? SummaryTiles(
+                    title: 'Others descriptions: ',
+                    input: formInfo['details of estimated expenses']['other expenses description'],
+                  )
+                : SizedBox(),
           ],
         ),
       ),
@@ -500,8 +629,8 @@ Widget expenseCard(
   );
 }
 
-Widget travelCard(mode) {
-  if (mode == 'Rental Car') {
+Widget travelCard({Map legInfo}) {
+  if (legInfo['mode'] == 'Rental Car') {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Card(
@@ -511,10 +640,7 @@ Widget travelCard(mode) {
               children: <Widget>[
                 headerTile(
                   title: 'Rental Car',
-                  color: [
-                    Color.fromRGBO(236, 111, 176, 0.8),
-                    Color.fromRGBO(236, 111, 176, 0.4),
-                  ],
+                  color: Colors.black,
                 ),
                 SummaryTiles(
                   title: 'Pickup Date: ',
@@ -541,7 +667,7 @@ Widget travelCard(mode) {
             )),
       ),
     );
-  } else if (mode == 'Flight') {
+  } else if (legInfo['mode'] == 'Flight') {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Card(
@@ -551,20 +677,18 @@ Widget travelCard(mode) {
             children: <Widget>[
               headerTile(
                 title: 'Flight',
-                color: [
-                  Color.fromRGBO(210, 145, 188, 0.9),
-                  Color.fromRGBO(210, 145, 188, 0.2),
-                ],
+                color: Colors.black,
               ),
               SummaryTiles(
                 title: 'Flight No.:',
+                input: legInfo['flight number'],
               ),
             ],
           ),
         ),
       ),
     );
-  } else if (mode == 'Bus') {
+  } else if (legInfo['mode'] == 'Bus') {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Card(
@@ -574,20 +698,18 @@ Widget travelCard(mode) {
             children: <Widget>[
               headerTile(
                 title: 'Bus',
-                color: [
-                  Color.fromRGBO(144, 201, 120, 0.9),
-                  Color.fromRGBO(144, 201, 120, 0.2),
-                ],
+                color: Colors.black,
               ),
               SummaryTiles(
                 title: 'Bus Type:',
+                input: legInfo['bus type'],
               )
             ],
           ),
         ),
       ),
     );
-  } else if (mode == 'Personal Car') {
+  } else if (legInfo['mode'] == 'Personal Car') {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Card(
@@ -597,26 +719,26 @@ Widget travelCard(mode) {
             children: <Widget>[
               headerTile(
                 title: 'Personal Car',
-                color: [
-                  Color.fromRGBO(255, 214, 0, 0.9),
-                  Color.fromRGBO(255, 214, 0, 0.3),
-                ],
+                color: Colors.black,
               ),
               SummaryTiles(
                 title: 'Distance (km): ',
+                input: legInfo['distance travelled'],
               ),
               SummaryTiles(
                 title: 'Rate per km:',
+                input: legInfo['rate per km'],
               ),
               SummaryTiles(
                 title: 'Amount: ',
+                input: legInfo['amount'].toString(),
               )
             ],
           ),
         ),
       ),
     );
-  } else if (mode == 'Train') {
+  } else if (legInfo['mode'] == 'Train') {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Card(
@@ -626,13 +748,11 @@ Widget travelCard(mode) {
             children: <Widget>[
               headerTile(
                 title: 'Train',
-                color: [
-                  Color.fromRGBO(255, 127, 79, 0.8),
-                  Color.fromRGBO(255, 127, 79, 0.2),
-                ],
+                color: Colors.black,
               ),
               SummaryTiles(
                 title: 'Train No. & Class',
+                input: legInfo['t'],
               ),
             ],
           ),
@@ -646,16 +766,14 @@ class headerTile extends StatelessWidget {
   headerTile({this.title, this.color});
 
   String title;
-  List<Color> color;
+  Color color;
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: MediaQuery.of(context).size.width - 15,
       padding: EdgeInsets.all(10),
-      decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(4),
-          gradient: LinearGradient(colors: color)),
+      color: color,
       child: Text(
         title,
         style: TextStyle(color: Colors.white, fontSize: 17),
@@ -683,10 +801,9 @@ class SummaryTiles extends StatelessWidget {
           SizedBox(
             width: 4,
           ),
-          Expanded(
+          Flexible(
             child: Container(
-              height: 43,
-//                padding: EdgeInsets.symmetric(vertical: 10),
+              padding: EdgeInsets.symmetric(vertical: 10, horizontal: 8),
               decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(10),
@@ -695,13 +812,13 @@ class SummaryTiles extends StatelessWidget {
                   ),
                   boxShadow: [
                     BoxShadow(
-                        color: Color.fromRGBO(143, 148, 251, .2),
-                        blurRadius: 5.0,
-                        offset: Offset(0, 6))
+                      color: Color.fromRGBO(143, 148, 251, .2),
+                      blurRadius: 5.0,
+                    )
                   ]),
               child: Center(
                   child: Text(
-                'll',
+                input != null ? input : 'LL',
                 style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
               )),
             ),
