@@ -297,7 +297,7 @@ class _HotelItineraryState extends State<HotelItinerary> {
                         Center(
                           child: RaisedButton(
                             padding: EdgeInsets.symmetric(horizontal: 60, vertical: 8),
-                            onPressed: () async {
+                            onPressed: () {
                               if (_fbKey.currentState.saveAndValidate()) {
                                 if (checkboxValue == true) {
                                   bool acceptable = true;
@@ -326,29 +326,19 @@ class _HotelItineraryState extends State<HotelItinerary> {
                                   if (acceptable) {
                                     print('push to submit');
                                     formDetails.addAll({'hotels count': hotels.length});
+                                    print(formDetails['details of estimated expenses']);
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) => SummaryPage(
                                           formInfo: formDetails,
+                                          fromFirebase: false,
+                                          isSupervisor: false,
+                                          isSummary: true,
                                         ),
                                       ),
                                     );
-//                                   setState(() {
-//                                    showSpinner = true;
-//                                  });
-//                                  try{
-//                                   await Firestore.instance.collection('tar submissions').add({'form details':formDetails,'status':'pending'});
-//                                   setState(() {
-//                                     showSpinner = false;
-//                                   });
-//                                   _showDialog(title: 'Form Submitted',message: 'your form has been submitted and will be checked by your supervisor');
-//                                  }catch(e){
-//                                    setState(() {
-//                                      showSpinner = false;
-//                                    });
-//                                    print(e);
-//                                  }
+//
                                   } else {
                                     _showDialog(
                                         title: 'Hotel dates not valid',

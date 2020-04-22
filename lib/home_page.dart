@@ -56,10 +56,7 @@ class _HomePageState extends State<HomePage> {
                                   color: Color.fromRGBO(143, 148, 251, 1),
                                   child: Text(
                                     "Edit Profile",
-                                    style: TextStyle(
-                                        fontSize: 26,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w600),
+                                    style: TextStyle(fontSize: 26, color: Colors.white, fontWeight: FontWeight.w600),
                                   ),
                                 ),
                               ),
@@ -76,37 +73,34 @@ class _HomePageState extends State<HomePage> {
                                 child: RaisedButton(
                                   padding: EdgeInsets.all(8),
                                   onPressed: () async {
-                                  var q = await  Navigator.pushNamed(context, BasicInfo.id);
-                                  if(q == false){
-                                    showDialog(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        // return object of type Dialog
-                                        return AlertDialog(
-                                          title: Text('Basic info not filled'),
-                                          content: Text('Please fill the basic info before filling the form'),
-                                          actions: <Widget>[
-                                            // usually buttons at the bottom of the dialog
-                                            FlatButton(
-                                              child: Text("Close"),
-                                              onPressed: () {
-                                                Navigator.of(context).pop();
-                                              },
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    );
-                                  }
+                                    var q = await Navigator.pushNamed(context, BasicInfo.id);
+                                    if (q == false) {
+                                      showDialog(
+                                        context: context,
+                                        builder: (BuildContext context) {
+                                          // return object of type Dialog
+                                          return AlertDialog(
+                                            title: Text('Basic info not filled'),
+                                            content: Text('Please fill the basic info before filling the form'),
+                                            actions: <Widget>[
+                                              // usually buttons at the bottom of the dialog
+                                              FlatButton(
+                                                child: Text("Close"),
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                              ),
+                                            ],
+                                          );
+                                        },
+                                      );
+                                    }
                                   },
                                   shape: StadiumBorder(),
                                   color: Color.fromRGBO(143, 148, 251, 1),
                                   child: Text(
                                     "Fill a TAR Form",
-                                    style: TextStyle(
-                                        fontSize: 26,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w600),
+                                    style: TextStyle(fontSize: 26, color: Colors.white, fontWeight: FontWeight.w600),
                                   ),
                                 ),
                               ),
@@ -123,16 +117,19 @@ class _HomePageState extends State<HomePage> {
                                 child: RaisedButton(
                                   padding: EdgeInsets.all(8),
                                   onPressed: () {
-                                    Navigator.pushNamed(context, TravelLogPage.id);
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => TravelLogPage(),
+                                        settings: RouteSettings(name: "Foo"),
+                                      ),
+                                    );
                                   },
                                   shape: StadiumBorder(),
                                   color: Color.fromRGBO(143, 148, 251, 1),
                                   child: Text(
                                     "Travel Logs",
-                                    style: TextStyle(
-                                        fontSize: 26,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w600),
+                                    style: TextStyle(fontSize: 26, color: Colors.white, fontWeight: FontWeight.w600),
                                   ),
                                 ),
                               ),
@@ -148,16 +145,16 @@ class _HomePageState extends State<HomePage> {
                                 width: 350,
                                 child: RaisedButton(
                                   padding: EdgeInsets.all(8),
-                                  onPressed: () async{
+                                  onPressed: () async {
                                     setState(() {
                                       showSpinner = true;
                                     });
-                                    try{
+                                    try {
                                       FirebaseAuth.instance.signOut();
                                       setState(() {
                                         showSpinner = false;
                                       });
-                                    }catch(e){
+                                    } catch (e) {
                                       print(e);
                                     }
                                   },
@@ -165,10 +162,7 @@ class _HomePageState extends State<HomePage> {
                                   color: Color.fromRGBO(143, 148, 251, 1),
                                   child: Text(
                                     "Sign Out",
-                                    style: TextStyle(
-                                        fontSize: 26,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w600),
+                                    style: TextStyle(fontSize: 26, color: Colors.white, fontWeight: FontWeight.w600),
                                   ),
                                 ),
                               ),
@@ -192,11 +186,8 @@ class _HomePageState extends State<HomePage> {
                             children: <Widget>[
                               Container(
                                   height: 350,
-                                  decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                          image: AssetImage(
-                                              'assets/images/background.png'),
-                                          fit: BoxFit.fill)),
+                                  decoration:
+                                      BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/background.png'), fit: BoxFit.fill)),
                                   child: Stack(children: <Widget>[
                                     Positioned(
                                       left: 30,
@@ -205,10 +196,7 @@ class _HomePageState extends State<HomePage> {
                                       child: FadeAnimation(
                                           1,
                                           Container(
-                                            decoration: BoxDecoration(
-                                                image: DecorationImage(
-                                                    image: AssetImage(
-                                                        'assets/images/light-1.png'))),
+                                            decoration: BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/light-1.png'))),
                                           )),
                                     ),
                                     Positioned(
@@ -218,10 +206,7 @@ class _HomePageState extends State<HomePage> {
                                       child: FadeAnimation(
                                           1.3,
                                           Container(
-                                            decoration: BoxDecoration(
-                                                image: DecorationImage(
-                                                    image: AssetImage(
-                                                        'assets/images/light-2.png'))),
+                                            decoration: BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/light-2.png'))),
                                           )),
                                     ),
                                     Positioned(
@@ -232,26 +217,18 @@ class _HomePageState extends State<HomePage> {
                                       child: FadeAnimation(
                                           1.5,
                                           Container(
-                                            decoration: BoxDecoration(
-                                                image: DecorationImage(
-                                                    image: AssetImage(
-                                                        'assets/images/clock.png'))),
+                                            decoration: BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/clock.png'))),
                                           )),
                                     ),
                                     Positioned(
                                         child: FadeAnimation(
                                             1.6,
                                             Container(
-                                                margin:
-                                                    EdgeInsets.only(top: 100,left: 35),
+                                                margin: EdgeInsets.only(top: 100, left: 35),
                                                 child: Center(
                                                     child: Text(
                                                   "Holtec Asia Travel Authorization Request Form",
-                                                  style: TextStyle(
-                                                      color: Colors.white,
-                                                      fontSize: 30,
-                                                      fontWeight:
-                                                          FontWeight.bold),
+                                                  style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold),
                                                 ))))),
                                   ])),
                               SizedBox(
@@ -266,9 +243,7 @@ class _HomePageState extends State<HomePage> {
                                       child: RaisedButton(
                                         padding: EdgeInsets.all(8),
                                         onPressed: () async {
-                                          var logout =
-                                              await Navigator.pushNamed(
-                                                  context, LoginPage.id);
+                                          var logout = await Navigator.pushNamed(context, LoginPage.id);
                                           if (logout != null) {
                                             setState(() {});
                                           }
@@ -277,10 +252,7 @@ class _HomePageState extends State<HomePage> {
                                         shape: StadiumBorder(),
                                         child: Text(
                                           "Login",
-                                          style: TextStyle(
-                                              fontSize: 26,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w600),
+                                          style: TextStyle(fontSize: 26, color: Colors.white, fontWeight: FontWeight.w600),
                                         ),
                                       ),
                                     ),
@@ -297,17 +269,13 @@ class _HomePageState extends State<HomePage> {
                                       child: RaisedButton(
                                         padding: EdgeInsets.all(8),
                                         onPressed: () {
-                                          Navigator.pushNamed(
-                                              context, RegistrationPage.id);
+                                          Navigator.pushNamed(context, RegistrationPage.id);
                                         },
                                         color: Color.fromRGBO(143, 148, 251, 1),
                                         shape: StadiumBorder(),
                                         child: Text(
                                           "Register",
-                                          style: TextStyle(
-                                              fontSize: 26,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w600),
+                                          style: TextStyle(fontSize: 26, color: Colors.white, fontWeight: FontWeight.w600),
                                         ),
                                       ),
                                     ),
@@ -321,13 +289,14 @@ class _HomePageState extends State<HomePage> {
               return Scaffold(
                 appBar: AppBar(
                   backgroundColor: Color.fromRGBO(143, 148, 251, 1),
-                  leading: IconButton(icon: Icon(Icons.arrow_back_ios),color: Colors.white,onPressed: ()
-                    {
-                      Navigator.pushNamed(
-                          context, LoginPage.id);
-                    },),
-                  title:
-                  Text(
+                  leading: IconButton(
+                    icon: Icon(Icons.arrow_back_ios),
+                    color: Colors.white,
+                    onPressed: () {
+                      Navigator.pushNamed(context, LoginPage.id);
+                    },
+                  ),
+                  title: Text(
                     'Tarvel Authorization Form',
                     style: TextStyle(color: Colors.white),
                   ),
@@ -336,19 +305,22 @@ class _HomePageState extends State<HomePage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Container(
-                      height:80,
+                      height: 80,
                       width: 80,
                       decoration: BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('assets/images/error.png'),
-                        )
+                          image: DecorationImage(
+                        image: AssetImage('assets/images/error.png'),
+                      )),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Center(
+                      child: Text(
+                        'Please verify your email to continue.',
+                        style: TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
                       ),
                     ),
-                    SizedBox(height: 10,),
-                    Center(child: Text('Please verify your email to continue.',style: TextStyle(
-                      fontSize: 17,
-                      fontWeight: FontWeight.w600
-                    ),),),
                   ],
                 ),
               );

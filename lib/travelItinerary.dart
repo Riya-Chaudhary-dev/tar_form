@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:date_range_picker/date_range_picker.dart' as DateRagePicker;
 import 'package:intl/intl.dart';
-import 'package:tar_form/authorizationform.dart';
+import 'package:tar_form/SummaryPage.dart';
 import 'package:tar_form/hotelItinerary.dart';
 
 Map dateInfo = {};
@@ -34,7 +34,11 @@ class _TravelItineraryState extends State<TravelItinerary> {
     formDetails.clear();
     formDetails.addAll(widget.basicFormInfo);
     if (advVal) {
-      formDetails.addAll({'travel advance': true, 'travel advance amount': advance.currentState.value['advAmount'], 'travel advance description': advance.currentState.value['advDescription']});
+      formDetails.addAll({
+        'travel advance': true,
+        'travel advance amount': advance.currentState.value['advAmount'],
+        'travel advance description': advance.currentState.value['advDescription']
+      });
     } else {
       formDetails.addAll({'travel advance': false});
     }
@@ -83,7 +87,8 @@ class _TravelItineraryState extends State<TravelItinerary> {
           'mode': 'Personal Car',
           'distance travelled': advance.currentState.value['Leg $legNo personalCarDistance'],
           'rate per km': advance.currentState.value['Leg $legNo personalCarRate'],
-          'amount': int.parse(advance.currentState.value['Leg $legNo personalCarRate']) * int.parse(advance.currentState.value['Leg $legNo personalCarDistance']),
+          'amount': int.parse(advance.currentState.value['Leg $legNo personalCarRate']) *
+              int.parse(advance.currentState.value['Leg $legNo personalCarDistance']),
         });
       } else if (advance.currentState.value['Leg $legNo mode'] == 'Bus') {
         formDetails['Leg $legNo'].addAll({
@@ -213,11 +218,19 @@ class _TravelItineraryState extends State<TravelItinerary> {
                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                 children: <Widget>[
                                   Text(
-                                    DateFormat.d().format(widget.basicFormInfo['from date']).toString() + ' ' + DateFormat.MMM().format(widget.basicFormInfo['from date']).toString() + ' ' + DateFormat.y().format(widget.basicFormInfo['from date']).toString(),
+                                    DateFormat.d().format(widget.basicFormInfo['from date']).toString() +
+                                        ' ' +
+                                        DateFormat.MMM().format(widget.basicFormInfo['from date']).toString() +
+                                        ' ' +
+                                        DateFormat.y().format(widget.basicFormInfo['from date']).toString(),
                                     style: TextStyle(color: Colors.white, fontSize: 17),
                                   ),
                                   Text(
-                                    DateFormat.d().format(widget.basicFormInfo['to date']).toString() + ' ' + DateFormat.MMM().format(widget.basicFormInfo['to date']).toString() + ' ' + DateFormat.y().format(widget.basicFormInfo['to date']).toString(),
+                                    DateFormat.d().format(widget.basicFormInfo['to date']).toString() +
+                                        ' ' +
+                                        DateFormat.MMM().format(widget.basicFormInfo['to date']).toString() +
+                                        ' ' +
+                                        DateFormat.y().format(widget.basicFormInfo['to date']).toString(),
                                     style: TextStyle(color: Colors.white, fontSize: 17),
                                   ),
                                 ],
@@ -305,7 +318,10 @@ class _TravelItineraryState extends State<TravelItinerary> {
                                             FormBuilderValidators.minLength(1),
                                           ],
                                           keyboardType: TextInputType.number,
-                                          decoration: InputDecoration(border: InputBorder.none, hintText: 'Amount', hintStyle: TextStyle(color: Colors.grey[600], fontSize: 15)),
+                                          decoration: InputDecoration(
+                                              border: InputBorder.none,
+                                              hintText: 'Amount',
+                                              hintStyle: TextStyle(color: Colors.grey[600], fontSize: 15)),
                                         ),
                                       ),
                                     )
@@ -341,7 +357,10 @@ class _TravelItineraryState extends State<TravelItinerary> {
                                           ],
                                           keyboardType: TextInputType.text,
                                           maxLines: 6,
-                                          decoration: InputDecoration(border: InputBorder.none, hintText: 'Description', hintStyle: TextStyle(color: Colors.grey[600], fontSize: 15)),
+                                          decoration: InputDecoration(
+                                              border: InputBorder.none,
+                                              hintText: 'Description',
+                                              hintStyle: TextStyle(color: Colors.grey[600], fontSize: 15)),
                                         ),
                                       ),
                                     )
@@ -454,14 +473,21 @@ class _TravelItineraryState extends State<TravelItinerary> {
                             formDetails.addAll({'legs count': Legs.length});
 
                             if (temp >= 3) {
-                              _showDialog(title: 'More than 2 legs in one day selected', message: 'no more than 2 legs in a day are allowed please check the form and proceed');
+                              _showDialog(
+                                  title: 'More than 2 legs in one day selected',
+                                  message: 'no more than 2 legs in a day are allowed please check the form and proceed');
                             } else {
                               print(formDetails);
-                              if (widget.basicFormInfo['to date'].difference(widget.basicFormInfo['from date']).inDays == 0 || widget.basicFormInfo['details of estimated expenses']['lodging amount'] == null) {
+                              if (widget.basicFormInfo['to date'].difference(widget.basicFormInfo['from date']).inDays == 0 ||
+                                  widget.basicFormInfo['details of estimated expenses']['lodging amount'] == null) {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => AuthorizationForm(),
+                                    builder: (context) => SummaryPage(
+                                      fromFirebase: false,
+                                      isSupervisor: false,
+                                      formInfo: formDetails,
+                                    ),
                                   ),
                                 );
                               } else {
@@ -521,7 +547,8 @@ class _TravelCardState extends State<TravelCard> {
   DateTime selectedDate;
 
   Future<Null> _selectDate(BuildContext context) async {
-    final DateTime picked = await showDatePicker(context: context, initialDate: selectedDate, firstDate: widget.initialDate, lastDate: widget.finalDate);
+    final DateTime picked =
+        await showDatePicker(context: context, initialDate: selectedDate, firstDate: widget.initialDate, lastDate: widget.finalDate);
     if (picked != null && picked != selectedDate) {
       setState(() {
         int legNo = widget.legNo;
@@ -592,7 +619,11 @@ class _TravelCardState extends State<TravelCard> {
                             child: GestureDetector(
                               onTap: () => _selectDate(context),
                               child: Text(
-                                DateFormat.d().format(selectedDate).toString() + ' ' + DateFormat.MMM().format(selectedDate).toString() + ', ' + DateFormat.y().format(selectedDate).toString(),
+                                DateFormat.d().format(selectedDate).toString() +
+                                    ' ' +
+                                    DateFormat.MMM().format(selectedDate).toString() +
+                                    ', ' +
+                                    DateFormat.y().format(selectedDate).toString(),
                                 style: TextStyle(fontSize: 20, color: Color.fromRGBO(143, 148, 251, 1)),
                               ),
                             ),
@@ -642,7 +673,8 @@ class _TravelCardState extends State<TravelCard> {
                                           FormBuilderValidators.required(),
                                         ],
                                         keyboardType: TextInputType.text,
-                                        decoration: InputDecoration(border: InputBorder.none, hintText: 'Place', hintStyle: TextStyle(color: Colors.grey[300], fontSize: 15)),
+                                        decoration: InputDecoration(
+                                            border: InputBorder.none, hintText: 'Place', hintStyle: TextStyle(color: Colors.grey[300], fontSize: 15)),
                                       ),
                                     ),
                                   ),
@@ -676,7 +708,8 @@ class _TravelCardState extends State<TravelCard> {
                                         FormBuilderValidators.required(),
                                       ],
                                       keyboardType: TextInputType.text,
-                                      decoration: InputDecoration(border: InputBorder.none, hintText: 'Place', hintStyle: TextStyle(color: Colors.grey[300], fontSize: 15)),
+                                      decoration: InputDecoration(
+                                          border: InputBorder.none, hintText: 'Place', hintStyle: TextStyle(color: Colors.grey[300], fontSize: 15)),
                                     ),
                                   ),
                                 ],
@@ -799,7 +832,8 @@ class _DescrBoxState extends State<DescrBox> {
   }
 
   selectDate() async {
-    final List<DateTime> picked = await DateRagePicker.showDatePicker(context: context, initialFirstDate: fromDate, initialLastDate: toDate, firstDate: widget.initialDate, lastDate: widget.finalDate);
+    final List<DateTime> picked = await DateRagePicker.showDatePicker(
+        context: context, initialFirstDate: fromDate, initialLastDate: toDate, firstDate: widget.initialDate, lastDate: widget.finalDate);
     if (picked != null && picked.length == 2) {
       setState(() {
         fromDate = picked[0];
@@ -866,7 +900,8 @@ class _DescrBoxState extends State<DescrBox> {
                       });
                     },
                     validators: [FormBuilderValidators.required()],
-                    decoration: InputDecoration(border: InputBorder.none, hintText: 'Rental Company Name', hintStyle: TextStyle(color: Colors.grey[300], fontSize: 15)),
+                    decoration: InputDecoration(
+                        border: InputBorder.none, hintText: 'Rental Company Name', hintStyle: TextStyle(color: Colors.grey[300], fontSize: 15)),
                   ),
                 ),
               )
@@ -899,7 +934,8 @@ class _DescrBoxState extends State<DescrBox> {
                       });
                     },
                     validators: [FormBuilderValidators.required()],
-                    decoration: InputDecoration(border: InputBorder.none, hintText: 'PickUp address', hintStyle: TextStyle(color: Colors.grey[300], fontSize: 15)),
+                    decoration: InputDecoration(
+                        border: InputBorder.none, hintText: 'PickUp address', hintStyle: TextStyle(color: Colors.grey[300], fontSize: 15)),
                   ),
                 ),
               )
@@ -932,7 +968,8 @@ class _DescrBoxState extends State<DescrBox> {
                       });
                     },
                     validators: [FormBuilderValidators.required()],
-                    decoration: InputDecoration(border: InputBorder.none, hintText: 'Dropoff address', hintStyle: TextStyle(color: Colors.grey[300], fontSize: 15)),
+                    decoration: InputDecoration(
+                        border: InputBorder.none, hintText: 'Dropoff address', hintStyle: TextStyle(color: Colors.grey[300], fontSize: 15)),
                   ),
                 ),
               )
@@ -1030,7 +1067,11 @@ class _DescrBoxState extends State<DescrBox> {
                           style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                         ),
                         Text(
-                          DateFormat.d().format(fromDate).toString() + ' ' + DateFormat.MMM().format(fromDate).toString() + ', ' + DateFormat.y().format(fromDate).toString(),
+                          DateFormat.d().format(fromDate).toString() +
+                              ' ' +
+                              DateFormat.MMM().format(fromDate).toString() +
+                              ', ' +
+                              DateFormat.y().format(fromDate).toString(),
                           style: TextStyle(color: Colors.black),
                         ),
                       ],
@@ -1056,7 +1097,11 @@ class _DescrBoxState extends State<DescrBox> {
                           style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                         ),
                         Text(
-                          DateFormat.d().format(toDate).toString() + ' ' + DateFormat.MMM().format(toDate).toString() + ', ' + DateFormat.y().format(toDate).toString(),
+                          DateFormat.d().format(toDate).toString() +
+                              ' ' +
+                              DateFormat.MMM().format(toDate).toString() +
+                              ', ' +
+                              DateFormat.y().format(toDate).toString(),
                           style: TextStyle(color: Colors.black),
                         ),
                       ],
@@ -1094,7 +1139,8 @@ class _DescrBoxState extends State<DescrBox> {
                   FormBuilderValidators.required(),
                 ],
                 autovalidate: allGood ? false : true,
-                decoration: InputDecoration(border: InputBorder.none, hintText: 'Flight No.', hintStyle: TextStyle(color: Colors.grey[300], fontSize: 15)),
+                decoration:
+                    InputDecoration(border: InputBorder.none, hintText: 'Flight No.', hintStyle: TextStyle(color: Colors.grey[300], fontSize: 15)),
               ),
             ),
           )
@@ -1129,7 +1175,8 @@ class _DescrBoxState extends State<DescrBox> {
                     traindeets = val;
                   });
                 },
-                decoration: InputDecoration(border: InputBorder.none, hintText: 'Train no. & Class', hintStyle: TextStyle(color: Colors.grey[300], fontSize: 15)),
+                decoration: InputDecoration(
+                    border: InputBorder.none, hintText: 'Train no. & Class', hintStyle: TextStyle(color: Colors.grey[300], fontSize: 15)),
               ),
             ),
           )
@@ -1164,7 +1211,8 @@ class _DescrBoxState extends State<DescrBox> {
                     busType = val;
                   });
                 },
-                decoration: InputDecoration(border: InputBorder.none, hintText: 'Luxury/Sleeper', hintStyle: TextStyle(color: Colors.grey[300], fontSize: 15)),
+                decoration: InputDecoration(
+                    border: InputBorder.none, hintText: 'Luxury/Sleeper', hintStyle: TextStyle(color: Colors.grey[300], fontSize: 15)),
               ),
             ),
           )
@@ -1212,9 +1260,9 @@ class _DescrBoxState extends State<DescrBox> {
                       ],
                       autovalidate: allGood ? false : true,
                       attribute: "Leg $legNo personalCarDistance",
-
                       keyboardType: TextInputType.number,
-                      decoration: InputDecoration(border: InputBorder.none, hintText: 'Distance', hintStyle: TextStyle(color: Colors.grey[600], fontSize: 15)),
+                      decoration: InputDecoration(
+                          border: InputBorder.none, hintText: 'Distance', hintStyle: TextStyle(color: Colors.grey[600], fontSize: 15)),
                     ),
                   ),
                 ],
@@ -1247,9 +1295,9 @@ class _DescrBoxState extends State<DescrBox> {
                       ],
                       autovalidate: allGood ? false : true,
                       attribute: "Leg $legNo personalCarRate",
-
                       keyboardType: TextInputType.number,
-                      decoration: InputDecoration(border: InputBorder.none, hintText: 'Rate', hintStyle: TextStyle(color: Colors.grey[600], fontSize: 15)),
+                      decoration:
+                          InputDecoration(border: InputBorder.none, hintText: 'Rate', hintStyle: TextStyle(color: Colors.grey[600], fontSize: 15)),
                     ),
                   ),
                 ],
@@ -1289,7 +1337,8 @@ class _DescrBoxState extends State<DescrBox> {
                       });
                     },
                     keyboardType: TextInputType.number,
-                    decoration: InputDecoration(border: InputBorder.none, hintText: 'Rate times cost per km', hintStyle: TextStyle(color: Colors.grey[300], fontSize: 15)),
+                    decoration: InputDecoration(
+                        border: InputBorder.none, hintText: 'Rate times cost per km', hintStyle: TextStyle(color: Colors.grey[300], fontSize: 15)),
                   ),
                 ),
               )
