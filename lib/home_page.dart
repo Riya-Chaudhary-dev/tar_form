@@ -121,7 +121,6 @@ class _HomePageState extends State<HomePage> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) => TravelLogPage(),
-                                        settings: RouteSettings(name: "Foo"),
                                       ),
                                     );
                                   },
@@ -172,7 +171,6 @@ class _HomePageState extends State<HomePage> {
                   );
                 }
               }
-              //if logged out show auth screen
               else {
                 return Scaffold(
                     backgroundColor: Colors.white,

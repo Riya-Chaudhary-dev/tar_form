@@ -27,13 +27,7 @@ class _EditProfileState extends State<EditProfile> {
   String div;
   String designation;
   bool allGood = true;
-  List Designation = [
-    'GM and Above',
-    'DGM/Sr. Manager/Manager',
-    'Asst Manager/Sr Engineer',
-    'Engineer/Asst Engineer/Trainee',
-    'All Grade'
-  ];
+  List Designation = ['GM and Above', 'DGM/Sr. Manager/Manager', 'Asst Manager/Sr Engineer', 'Engineer/Asst Engineer/Trainee', 'All Grade'];
 
   Future getInfo() async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
@@ -79,8 +73,7 @@ class _EditProfileState extends State<EditProfile> {
                           children: <Widget>[
                             LinearProgressIndicator(
                               value: 0.3,
-                              valueColor: new AlwaysStoppedAnimation<Color>(
-                                  Colors.orangeAccent.shade200),
+                              valueColor: new AlwaysStoppedAnimation<Color>(Colors.orangeAccent.shade200),
                             ),
                             Padding(
                               padding: const EdgeInsets.all(20.0),
@@ -113,9 +106,7 @@ class _EditProfileState extends State<EditProfile> {
                                       hint: 'employee id',
                                       keyboardstyle: TextInputType.text,
                                       text: 'employee id: ',
-                                      validator: [
-                                        FormBuilderValidators.required()
-                                      ],
+                                      validator: [FormBuilderValidators.required()],
                                       onsaved: (value) {
                                         empID = value;
                                       },
@@ -143,24 +134,17 @@ class _EditProfileState extends State<EditProfile> {
                                       hint: 'Division',
                                       keyboardstyle: TextInputType.text,
                                       text: 'Division:',
-                                      validator: [
-                                        FormBuilderValidators.required()
-                                      ],
+                                      validator: [FormBuilderValidators.required()],
                                       onsaved: (value) {
                                         div = value;
                                       },
                                     ),
                                     Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: <Widget>[
                                         Text(
                                           'Designation',
-                                          style: TextStyle(
-                                              fontSize: 18,
-                                              color: Color.fromRGBO(
-                                                  143, 148, 251, 1),
-                                              fontWeight: FontWeight.w600),
+                                          style: TextStyle(fontSize: 18, color: Color.fromRGBO(143, 148, 251, 1), fontWeight: FontWeight.w600),
                                         ),
                                         SizedBox(
                                           height: 3,
@@ -168,26 +152,13 @@ class _EditProfileState extends State<EditProfile> {
                                         Container(
                                           padding: EdgeInsets.only(left: 5.0),
                                           height: 65,
-                                          decoration: BoxDecoration(
-                                              color: Colors.white,
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                    color: Color.fromRGBO(
-                                                        143, 148, 251, .2),
-                                                    blurRadius: 15.0,
-                                                    offset: Offset(0, 10))
-                                              ]),
+                                          decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10), boxShadow: [
+                                            BoxShadow(color: Color.fromRGBO(143, 148, 251, .2), blurRadius: 15.0, offset: Offset(0, 10))
+                                          ]),
                                           child: Center(
                                             child: FormBuilderDropdown(
                                               initialValue: designation,
                                               attribute: "designation",
-//                                              onChanged: (val) {
-//                                                setState(() {
-//                                                  designation = val;
-//                                                });
-//                                              },
                                               onSaved: (val) {
                                                 setState(() {
                                                   designation = val;
@@ -198,14 +169,8 @@ class _EditProfileState extends State<EditProfile> {
                                               ),
                                               // initialValue: 'Male',
                                               hint: Text('Select designation'),
-                                              validators: [
-                                                FormBuilderValidators.required()
-                                              ],
-                                              items: Designation.map((mode) =>
-                                                      DropdownMenuItem(
-                                                          value: mode,
-                                                          child: Text("$mode")))
-                                                  .toList(),
+                                              validators: [FormBuilderValidators.required()],
+                                              items: Designation.map((mode) => DropdownMenuItem(value: mode, child: Text("$mode"))).toList(),
                                             ),
                                           ),
                                         ),
@@ -219,67 +184,33 @@ class _EditProfileState extends State<EditProfile> {
                                     ),
                                     Center(
                                       child: RaisedButton(
-                                        padding: EdgeInsets.symmetric(
-                                            vertical: 10, horizontal: 150),
+                                        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 150),
                                         onPressed: () async {
-                                          if (_fbKey.currentState
-                                              .saveAndValidate()) {
-                                            print(_fbKey
-                                                .currentState.value['name']);
+                                          if (_fbKey.currentState.saveAndValidate()) {
+                                            print(_fbKey.currentState.value['name']);
                                             setState(() {
                                               showSpinner = true;
                                             });
                                             try {
                                               if (hasData == false) {
-                                                await _firestore
-                                                    .collection('users')
-                                                    .add({
-                                                  'name': _fbKey.currentState
-                                                      .value['name']
-                                                      .toString(),
+                                                await _firestore.collection('users').add({
+                                                  'name':  _fbKey.currentState.value['name'].toString(),
                                                   'email': email,
-                                                  'employee id': _fbKey
-                                                      .currentState
-                                                      .value['employee id']
-                                                      .toString(),
-                                                  'designation': _fbKey
-                                                      .currentState
-                                                      .value['designation']
-                                                      .toString(),
-                                                  'division': _fbKey
-                                                      .currentState
-                                                      .value['division']
-                                                      .toString(),
-                                                  'department': _fbKey
-                                                      .currentState
-                                                      .value['department']
-                                                      .toString(),
+                                                  'employee id': _fbKey.currentState.value['employee id'].toString(),
+                                                  'designation': _fbKey.currentState.value['designation'].toString(),
+                                                  'division': _fbKey.currentState.value['division'].toString(),
+                                                  'department': _fbKey.currentState.value['department'].toString(),
+                                                });
+                                              } else {
+                                                await _firestore.collection('users').document(documentNo).updateData({
+                                                  'name': _fbKey.currentState.value['name'].toString(),
+                                                  'email': email,
+                                                  'employee id': _fbKey.currentState.value['employee id'].toString(),
+                                                  'designation': _fbKey.currentState.value['designation'].toString(),
+                                                  'division': _fbKey.currentState.value['division'].toString(),
+                                                  'department': _fbKey.currentState.value['department'].toString(),
                                                 });
                                               }
-                                              await _firestore
-                                                  .collection('users')
-                                                  .document(documentNo)
-                                                  .updateData({
-                                                'name': _fbKey
-                                                    .currentState.value['name']
-                                                    .toString(),
-                                                'email': email,
-                                                'employee id': _fbKey
-                                                    .currentState
-                                                    .value['employee id']
-                                                    .toString(),
-                                                'designation': _fbKey
-                                                    .currentState
-                                                    .value['designation']
-                                                    .toString(),
-                                                'division': _fbKey.currentState
-                                                    .value['division']
-                                                    .toString(),
-                                                'department': _fbKey
-                                                    .currentState
-                                                    .value['department']
-                                                    .toString(),
-                                              });
                                               setState(() {
                                                 showSpinner = false;
                                               });
@@ -299,10 +230,7 @@ class _EditProfileState extends State<EditProfile> {
                                         shape: StadiumBorder(),
                                         child: Text(
                                           "Save",
-                                          style: TextStyle(
-                                              fontSize: 18,
-                                              color: Colors.white,
-                                              fontWeight: FontWeight.w600),
+                                          style: TextStyle(fontSize: 18, color: Colors.white, fontWeight: FontWeight.w600),
                                         ),
                                       ),
                                     ),

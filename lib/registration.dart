@@ -17,24 +17,28 @@ class _RegistrationPageState extends State<RegistrationPage> {
   final _auth = FirebaseAuth.instance;
   final GlobalKey<FormBuilderState> _fbKey = GlobalKey<FormBuilderState>();
   bool showSpinner = false;
+  bool completed = false;
 
-  void _showDialog(code) {
-    if (code == 'ERROR_EMAIL_ALREADY_IN_USE') {
-      showDialog(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-                title: Text("Email already in use"),
-                content: Text("Please login with your email"),
-                actions: <Widget>[
-                  FlatButton(
-                      child: Text("Close"),
-                      onPressed: () {
-                        Navigator.of(context).pop();
-                      })
-                ]);
-          });
-    }
+  void _showDialog({String title, String message}) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            FlatButton(
+              child: Text("Close"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -53,11 +57,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                     children: <Widget>[
                       Container(
                           height: 350,
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                                  image: AssetImage(
-                                      'assets/images/background.png'),
-                                  fit: BoxFit.fill)),
+                          decoration: BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/background.png'), fit: BoxFit.fill)),
                           child: Stack(children: <Widget>[
                             Positioned(
                               left: 30,
@@ -66,10 +66,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                               child: FadeAnimation(
                                   1,
                                   Container(
-                                    decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                            image: AssetImage(
-                                                'assets/images/light-1.png'))),
+                                    decoration: BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/light-1.png'))),
                                   )),
                             ),
                             Positioned(
@@ -79,10 +76,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                               child: FadeAnimation(
                                   1.3,
                                   Container(
-                                    decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                            image: AssetImage(
-                                                'assets/images/light-2.png'))),
+                                    decoration: BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/light-2.png'))),
                                   )),
                             ),
                             Positioned(
@@ -93,10 +87,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                               child: FadeAnimation(
                                   1.5,
                                   Container(
-                                    decoration: BoxDecoration(
-                                        image: DecorationImage(
-                                            image: AssetImage(
-                                                'assets/images/clock.png'))),
+                                    decoration: BoxDecoration(image: DecorationImage(image: AssetImage('assets/images/clock.png'))),
                                   )),
                             ),
                             Positioned(
@@ -107,10 +98,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                         child: Center(
                                             child: Text(
                                           "Register",
-                                          style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 40,
-                                              fontWeight: FontWeight.bold),
+                                          style: TextStyle(color: Colors.white, fontSize: 40, fontWeight: FontWeight.bold),
                                         )))))
                           ])),
                       Padding(
@@ -124,38 +112,22 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                     decoration: BoxDecoration(
                                         color: Colors.white,
                                         borderRadius: BorderRadius.circular(10),
-                                        boxShadow: [
-                                          BoxShadow(
-                                              color: Color.fromRGBO(
-                                                  143, 148, 251, .2),
-                                              blurRadius: 20.0,
-                                              offset: Offset(0, 10))
-                                        ]),
+                                        boxShadow: [BoxShadow(color: Color.fromRGBO(143, 148, 251, .2), blurRadius: 20.0, offset: Offset(0, 10))]),
                                     child: FormBuilder(
                                         key: _fbKey,
                                         child: Column(children: <Widget>[
                                           Container(
                                             padding: EdgeInsets.all(8.0),
-                                            decoration: BoxDecoration(
-                                                border: Border(
-                                                    bottom: BorderSide(
-                                                        color:
-                                                            Colors.grey[100]))),
+                                            decoration: BoxDecoration(border: Border(bottom: BorderSide(color: Colors.grey[100]))),
                                             child: FormBuilderTextField(
                                               attribute: "email",
-                                              validators: [
-                                                FormBuilderValidators.email(),
-                                                FormBuilderValidators.required()
-                                              ],
-                                              keyboardType:
-                                                  TextInputType.emailAddress,
+                                              validators: [FormBuilderValidators.email(), FormBuilderValidators.required()],
+                                              keyboardType: TextInputType.emailAddress,
                                               decoration: InputDecoration(
-                                                  prefixIcon: Icon(Icons.email,
-                                                      color: Colors.grey[400]),
+                                                  prefixIcon: Icon(Icons.email, color: Colors.grey[400]),
                                                   border: InputBorder.none,
                                                   hintText: "Email",
-                                                  hintStyle: TextStyle(
-                                                      color: Colors.grey[400])),
+                                                  hintStyle: TextStyle(color: Colors.grey[400])),
                                             ),
                                           ),
                                           Container(
@@ -165,21 +137,14 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                                 obscureText: true,
                                                 maxLines: 1,
                                                 validators: [
-                                                  FormBuilderValidators
-                                                      .required(),
-                                                  FormBuilderValidators
-                                                      .minLength(8),
+                                                  FormBuilderValidators.required(),
+                                                  FormBuilderValidators.minLength(8),
                                                 ],
                                                 decoration: InputDecoration(
-                                                    prefixIcon: Icon(
-                                                        Icons.lock_outline,
-                                                        color:
-                                                            Colors.grey[400]),
+                                                    prefixIcon: Icon(Icons.lock_outline, color: Colors.grey[400]),
                                                     border: InputBorder.none,
                                                     hintText: "Password",
-                                                    hintStyle: TextStyle(
-                                                        color:
-                                                            Colors.grey[400])),
+                                                    hintStyle: TextStyle(color: Colors.grey[400])),
                                               ))
                                         ])))),
                             SizedBox(
@@ -194,25 +159,29 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                         showSpinner = true;
                                       });
                                       try {
-                                        await _auth
-                                            .createUserWithEmailAndPassword(
-                                                email: _fbKey.currentState
-                                                    .value['email'],
-                                                password: _fbKey.currentState
-                                                    .value['password']);
-                                        FirebaseUser user =
-                                            await _auth.currentUser();
+                                        await _auth.createUserWithEmailAndPassword(
+                                            email: _fbKey.currentState.value['email'], password: _fbKey.currentState.value['password']);
+                                        FirebaseUser user = await _auth.currentUser();
+                                        await user.sendEmailVerification();
+                                        await FirebaseAuth.instance.signOut();
 
-                                        user.sendEmailVerification();
                                         setState(() {
                                           showSpinner = false;
+                                          completed = true;
                                         });
+                                        if (completed == true) {
+                                          _showDialog(
+                                              title: "Verification email sent",
+                                              message: "A verification link has been sent to your email please verify your email to login");
+                                        }
                                       } catch (e) {
                                         if (e is PlatformException) {
                                           setState(() {
                                             showSpinner = false;
                                           });
-                                          _showDialog(e.code);
+                                          if (e.code == 'ERROR_EMAIL_ALREADY_IN_USE') {
+                                            _showDialog(title: "Email already in use", message: "Please login with your email");
+                                          }
                                         }
                                       }
                                     }
@@ -220,8 +189,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                   child: Container(
                                     height: 50,
                                     decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(100),
+                                        borderRadius: BorderRadius.circular(100),
                                         gradient: LinearGradient(colors: [
                                           Color.fromRGBO(143, 148, 251, 1),
                                           Color.fromRGBO(143, 148, 251, .6),
@@ -229,10 +197,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                     child: Center(
                                       child: Text(
                                         "Register",
-                                        style: TextStyle(
-                                            fontSize: 25,
-                                            color: Colors.white,
-                                            fontWeight: FontWeight.bold),
+                                        style: TextStyle(fontSize: 25, color: Colors.white, fontWeight: FontWeight.bold),
                                       ),
                                     ),
                                   ),
@@ -244,8 +209,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                                 1.5,
                                 Text(
                                   "Already registered? Login",
-                                  style: TextStyle(
-                                      color: Color.fromRGBO(143, 148, 251, 1)),
+                                  style: TextStyle(color: Color.fromRGBO(143, 148, 251, 1)),
                                 )),
                           ],
                         ),

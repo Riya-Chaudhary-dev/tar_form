@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:tar_form/SummaryPage.dart';
+import 'package:tar_form/SummaryPage.dart';import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:intl/intl.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 class TravelLogPage extends StatefulWidget {
   static String id = 'travel_logs';
@@ -13,80 +15,107 @@ class TravelLogPage extends StatefulWidget {
 bool isSupervisor = true;
 
 class _TravelLogPageState extends State<TravelLogPage> {
+  
+  Future userDetails ()async{
+    var users = await Firestore.instance.collection('users').getDocuments();
+    var currentUser = await FirebaseAuth.instance.currentUser();
+    for(var q in users.documents){
+      if (q.data['email'] == currentUser.email){
+
+      }
+    }
+  }
+  
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder(
-        stream: Firestore.instance.collection('tar submissions').snapshots(),
-        builder: (context, snapshot) {
-          List<TravelLogCards> pending = [];
-          List<TravelLogCards> completed = [];
-          if (snapshot.hasData) {
-            for (var q in snapshot.data.documents) {
-              if (q.data['status'] == 'pending') {
-                pending.add(TravelLogCards(
-                  formDetails: q.data['form details'],
-                  status: 'PENDING',
-                  taNo: q.data['TA no'],
-                  documentId: q.documentID,
-                ));
-              } else if (q.data['status'] == 'rejected') {
-                completed.add(TravelLogCards(
-                  formDetails: q.data['form details'],
-                  status: 'REJECTED',
-                  taNo: q.data['TA no'],
-                  documentId: q.documentID,
-                ));
-              } else if (q.data['status'] == 'approved') {
-                completed.add(TravelLogCards(
-                  formDetails: q.data['form details'],
-                  status: 'APPROVED',
-                  taNo: q.data['TA no'],
-                  documentId: q.documentID,
-                ));
-              }
-            }
+    return FutureBuilder(
+        future: userDetails(),
+        builder: (BuildContext context, AsyncSnapshot user) {
+          if (user.connectionState == ConnectionState.done) {
+            return StreamBuilder(
+                stream: Firestore.instance.collection('tar submissions').snapshots(),
+                builder: (context, snapshot) {
+                  List<TravelLogCards> pending = [];
+                  List<TravelLogCards> completed = [];
+                  if (snapshot.hasData) {
+                    for (var q in snapshot.data.documents) {
+                      if (q.data['status'] == 'pending') {
+                        pending.add(TravelLogCards(
+                          formDetails: q.data['form details'],
+                          status: 'PENDING',
+                          taNo: q.data['TA no'],
+                          documentId: q.documentID,
+                        ));
+                      } else if (q.data['status'] == 'rejected') {
+                        completed.add(TravelLogCards(
+                          formDetails: q.data['form details'],
+                          status: 'REJECTED',
+                          taNo: q.data['TA no'],
+                          documentId: q.documentID,
+                        ));
+                      } else if (q.data['status'] == 'approved') {
+                        completed.add(TravelLogCards(
+                          formDetails: q.data['form details'],
+                          status: 'APPROVED',
+                          taNo: q.data['TA no'],
+                          documentId: q.documentID,
+                        ));
+                      }
+                    }
+                  }
+                  return DefaultTabController(
+                    length: 2,
+                    child: Scaffold(
+                      appBar: AppBar(
+                        leading: IconButton(
+                            icon: Icon(Icons.arrow_back),
+                            color: Colors.white,
+                            onPressed: () {
+                              Navigator.pop(context);
+                            }),
+                        bottom: TabBar(
+                          tabs: [
+                            Padding(
+                              padding: const EdgeInsets.all(18.0),
+                              child: Text(
+                                'PENDING',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(18.0),
+                              child: Text(
+                                'COMPLETED',
+                                style: TextStyle(color: Colors.white),
+                              ),
+                            ),
+                          ],
+                        ),
+                        title: Text(
+                          'Travel Logs',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ),
+                      body: TabBarView(
+                        children: [
+                          SingleChildScrollView(child: Column(children: pending)),
+                          SingleChildScrollView(child: Column(children: completed)),
+                        ],
+                      ),
+                    ),
+                  );
+                });
           }
-          return DefaultTabController(
-            length: 2,
-            child: Scaffold(
-              appBar: AppBar(
-                leading: IconButton(
-                    icon: Icon(Icons.arrow_back),
+          else if (user.connectionState == ConnectionState.waiting) {
+            return Scaffold(
+              backgroundColor: Colors.deepPurpleAccent,
+              body: Center(
+                  child: SpinKitWave(
                     color: Colors.white,
-                    onPressed: () {
-                      Navigator.pop(context);
-                    }),
-                bottom: TabBar(
-                  tabs: [
-                    Padding(
-                      padding: const EdgeInsets.all(18.0),
-                      child: Text(
-                        'PENDING',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(18.0),
-                      child: Text(
-                        'COMPLETED',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                  ],
-                ),
-                title: Text(
-                  'Travel Logs',
-                  style: TextStyle(color: Colors.white),
-                ),
-              ),
-              body: TabBarView(
-                children: [
-                  SingleChildScrollView(child: Column(children: pending)),
-                  SingleChildScrollView(child: Column(children: completed)),
-                ],
-              ),
-            ),
-          );
+                  )),
+            );
+          }
+          return Text('Unknown error occured! Please contact support.');
         });
   }
 }

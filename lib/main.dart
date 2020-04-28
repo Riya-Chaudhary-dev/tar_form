@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:tar_form/Basic_info.dart';
+import 'package:tar_form/delivery_item_page.dart';
 import 'package:tar_form/editProfile.dart';
 import 'package:tar_form/home_page.dart';
 import 'package:tar_form/hotelItinerary.dart';
