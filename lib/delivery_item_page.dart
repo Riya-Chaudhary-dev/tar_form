@@ -21,10 +21,46 @@ class _SupplyPageState extends State<SupplyPage> {
   List CatAge = ['Kitten', 'Adult'];
   List DogBreed = ['Beagle', 'Boxer', 'German Shepherd'];
   List CatBreed = ['Persian', 'British Shorthair'];
-  List Selected = [];
+  List Selected = ['kkk', 'kk'];
+  List<Map> cartInfo = [];
+  int totalNoOfItems;
+
+  //callback function to add the info to the cart
+  addToCart(Map info) {
+    setState(() {
+      cartInfo.add(info);
+    });
+  }
+
+  //callback function to update the info in the cart with the action given
+  updateQuantity(Map info, String action) {
+    Map toRemove;
+    for (var q in cartInfo) {
+      if (q['name'] == info['name'] && q['actualPrice'] == info['actualPrice']) {
+        if (action == 'add') {
+          setState(() {
+            q['itemQuantity'] += 1;
+          });
+        } else {
+          if (q['itemQuantity'] == 1) {
+            setState(() {
+              toRemove = q;
+            });
+          }
+          setState(() {
+            q['itemQuantity'] -= 1;
+          });
+        }
+      }
+    }
+    if (toRemove != null) {
+      cartInfo.remove(toRemove);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    print(cartInfo);
     return StreamBuilder<QuerySnapshot>(
         stream: _firestore.collection('Store').snapshots(),
         builder: (context, snapshot) {
@@ -35,12 +71,15 @@ class _SupplyPageState extends State<SupplyPage> {
               bool veg = store.data['Veg'];
               String img = store.data['Image link'];
               String name = store.data['Name '];
-              String actualPrice = store.data['actualPrice'];
-              String inflatedPrice = store.data['inflatedPrice'];
+              int actualPrice = store.data['actualPrice'];
+              int inflatedPrice = store.data['inflatedPrice'];
               String quantity = store.data['Quantity'];
 
               allItems.add(
                 ItemPurchaseCard(
+                  updateQuantity: updateQuantity,
+                  addToCart: addToCart,
+                  cartInfo: cartInfo,
                   name: name,
                   image: img,
                   actualPrice: actualPrice,
@@ -52,289 +91,358 @@ class _SupplyPageState extends State<SupplyPage> {
               );
             }
 
-            return Scaffold(
-                appBar: AppBar(backgroundColor: Colors.green),
-                body: DefaultTabController(
-                  length: 3,
-                  child: Column(
-                    children: <Widget>[
-                      Container(
-                        constraints: BoxConstraints.expand(height: 50),
-                        child: TabBar(tabs: [
-                          Tab(text: "dogs"),
-                          Tab(text: "cats"),
-                          Tab(text: "nibbas"),
-                        ]),
-                      ),
-                      Expanded(
+            return SafeArea(
+              child: DefaultTabController(
+                length: 2,
+                child: Scaffold(
+                    appBar: AppBar(
+                      actions: <Widget>[
+                        IconButton(
+                          icon: Icon(
+                            Icons.search,
+                            color: Colors.white,
+                          ),
+                          onPressed: () {
+                            showSearch(context: context, delegate: CustomSearchDelegate());
+                          },
+                        )
+                      ],
+                      bottom: PreferredSize(
+                        preferredSize: Size(50, 40),
                         child: Container(
-                          child: TabBarView(children: [
-                            SingleChildScrollView(child: Column(children: allItems)),
-                            SingleChildScrollView(child: Column(children: allItems)),
-                            SingleChildScrollView(child: Column(children: allItems)),
-
-                          ]),
+                          width: MediaQuery.of(context).size.width,
+                          height: 40,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+//
+                          ),
+                          child: TabBar(
+                              labelColor: Colors.green,
+                              indicatorColor: Colors.green[400],
+                              indicatorWeight: 4,
+                              indicatorSize: TabBarIndicatorSize.tab,
+                              unselectedLabelColor: Colors.grey,
+                              isScrollable: true,
+                              tabs: petType.map(
+                                (type) {
+                                  return Tab(
+                                    text: type,
+                                  );
+                                },
+                              ).toList()),
                         ),
-                      )
-                    ],
-                  ),
-                ),
-                floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-                floatingActionButton: InCartFloatingActionButton()
+                      ),
+                      backgroundColor: Colors.green,
+                      leading: IconButton(
+                        icon: Icon(
+                          Icons.arrow_back,
+                          color: Colors.white,
+                        ),
+                      ),
+                      title: Text(
+                        'Pet Food',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                    body: Column(
+                      children: <Widget>[
+                        Expanded(
+                          child: Container(
+                            child: TabBarView(children: [
+                              SingleChildScrollView(child: Column(children: allItems)),
+                              SingleChildScrollView(child: Column(children: allItems)),
+                            ]),
+                          ),
+                        )
+                      ],
+                    ),
+                    floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+                    floatingActionButton: InCartFloatingActionButton(Selected)),
+              ),
             );
           }
           return Text('');
         });
   }
 
-  Widget EmptyCartFloatingButton(){
-    return RaisedButton(
-      onPressed: showMenu,
-      color: Colors.green,
-      shape: StadiumBorder(),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Container(
-          width: 85,
-          child: Row(
-            children: <Widget>[
-              Container(
-                width: 25,
-                height: 25,
-                decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: AssetImage('assets/images/filter.jpg')
-                    )
-                ),
-              ),
-              Text('  Filter',style: TextStyle(color: Colors.white,fontSize: 17),),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
+// Shows the filter menu on the bottom
   showMenu() {
     showModalBottomSheet(
+        isScrollControlled: true,
         context: context,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16.0),
         ),
         builder: (BuildContext context) {
-          return Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: <Widget>[
-              Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(color: Colors.grey[300], blurRadius: 5.0, offset: Offset(0.0, 0.75)),
-                  ],
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(16.0),
-                    topRight: Radius.circular(16.0),
+          return Container(
+            height: MediaQuery.of(context).size.height / 1.5,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(16.0),
+                      topRight: Radius.circular(16.0),
+                    ),
+                  ),
+                  padding: EdgeInsets.all(15),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: <Widget>[
+                      Row(
+                        children: <Widget>[
+                          Icon(
+                            Icons.settings,
+                            color: Colors.black,
+                          ),
+                          Text(
+                            ' Filter & Sort',
+                            style: TextStyle(color: Colors.black, fontSize: 17, fontWeight: FontWeight.w600),
+                          ),
+                        ],
+                      ),
+                      Row(
+                        children: <Widget>[
+                          Icon(
+                            Icons.close,
+                            color: Colors.green,
+                          ),
+                          Text(
+                            'Clear All',
+                            style: TextStyle(color: Colors.green),
+                          ),
+                        ],
+                      )
+                    ],
                   ),
                 ),
-                padding: EdgeInsets.all(15),
-                child: Row(
-                  children: <Widget>[
-                    Icon(
-                      Icons.settings,
-                      color: Colors.black,
-                    ),
-                    Text(
-                      '    Filter Pet Food',
-                      style: TextStyle(color: Colors.black, fontSize: 17, fontWeight: FontWeight.w600),
-                    )
-                  ],
-                ),
-              ),
-              Row(
-                children: <Widget>[
-                  DefaultTabController(
-                    length: 4,
-                    child: Container(
-                      height: MediaQuery
-                          .of(context)
-                          .size
-                          .height / 2.5,
-                      width: MediaQuery
-                          .of(context)
-                          .size
-                          .width / 2.4,
-                      color: Colors.grey[200],
-                      child: RotatedBox(
-                        quarterTurns: 1,
-                        child: TabBar(
-                            indicator: ShapeDecoration(color: Colors.green.withOpacity(0.1), shape: ContinuousRectangleBorder()),
-                            labelColor: Colors.green,
-                            unselectedLabelColor: Colors.grey,
-                            isScrollable: true,
-                            tabs: FirstFilter.map(
+                Expanded(
+                  child: Row(
+                    children: <Widget>[
+                      DefaultTabController(
+                        length: 4,
+                        child: Container(
+                          height: MediaQuery.of(context).size.height / 2.9,
+                          width: MediaQuery.of(context).size.width / 2.4,
+                          color: Colors.grey[200],
+                          child: RotatedBox(
+                            quarterTurns: 1,
+                            child: TabBar(
+                                indicator: ShapeDecoration(color: Colors.green.withOpacity(0.1), shape: ContinuousRectangleBorder()),
+                                labelColor: Colors.green,
+                                unselectedLabelColor: Colors.grey,
+                                isScrollable: true,
+                                tabs: FirstFilter.map(
                                   (type) {
-                                return getItem(
-                                  text: type,
-                                );
-                              },
-                            ).toList()),
+                                    return getItem(
+                                      text: type,
+                                    );
+                                  },
+                                ).toList()),
+                          ),
+                        ),
+                      ),
+//
+                    ],
+                  ),
+                ),
+                Container(
+                  height: 65,
+                  width: MediaQuery.of(context).size.width,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    boxShadow: [
+                      BoxShadow(color: Colors.grey[400], blurRadius: 7.0, offset: Offset(0.0, 0.75)),
+                    ],
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Container(
+                      height: 20,
+                      width: MediaQuery.of(context).size.width - 20,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(Radius.circular(6)),
+                        boxShadow: [
+                          BoxShadow(color: Colors.grey[400], blurRadius: 7.0, offset: Offset(0.0, 0.75)),
+                        ],
+                      ),
+                      child: FlatButton(
+                        onPressed: () {},
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(6))),
+                        color: Colors.green,
+                        child: Text(
+                          'APPLY',
+                          style: TextStyle(color: Colors.white, fontSize: 17),
+                        ),
                       ),
                     ),
                   ),
-                  Container(
-                    height: MediaQuery
-                        .of(context)
-                        .size
-                        .height / 2.5,
-                    width: MediaQuery
-                        .of(context)
-                        .size
-                        .width / 1.719,
-//                    child: ListView(
-//                            children: values.map((String key) {
-//                        return new CheckboxListTile(
-//                          title: new Text(key),
-//                          value: false,
-//                          activeColor: Colors.pink,
-//                          checkColor: Colors.white,
-//                          onChanged: (bool value) {
-//                            setState(() {
-//                              values[key] = value;
-//                            });
-//                          },
-//                        );
-//                      }).toList(),
-//                    ),
-                  )
-                ],
-              ),
-              Container(
-                height: 67,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  boxShadow: [
-                    BoxShadow(color: Colors.grey[400], blurRadius: 7.0, offset: Offset(0.0, 0.75)),
-                  ],
-                ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: <Widget>[
-                    ButtonTheme(
-                      minWidth: MediaQuery
-                          .of(context)
-                          .size
-                          .width / 2 - 25,
-                      child: FlatButton(
-                        onPressed: () {},
-                        shape: RoundedRectangleBorder(side: BorderSide(color: Colors.green), borderRadius: BorderRadius.all(Radius.circular(4))),
-                        padding: const EdgeInsets.all(8.0),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                          child: new Text(
-                            "CLEAR",
-                            style: TextStyle(fontWeight: FontWeight.w600, color: Colors.green, fontSize: 17),
-                          ),
-                        ),
-                      ),
-                    ),
-                    ButtonTheme(
-                      minWidth: MediaQuery
-                          .of(context)
-                          .size
-                          .width / 2 - 25,
-                      child: FlatButton(
-                        onPressed: () {},
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(4))),
-                        color: Colors.green,
-                        padding: const EdgeInsets.all(8.0),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                          child: Text(
-                            'APPLY',
-                            style: TextStyle(color: Colors.white, fontSize: 17),
-                          ),
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              )
-            ],
+                )
+              ],
+            ),
           );
         });
   }
 
-  Widget InCartFloatingActionButton() {
+// Shows the cart on the bottom
+  showCart() {
+    showModalBottomSheet(
+        isScrollControlled: true,
+        context: context,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16.0),
+        ),
+        builder: (BuildContext context) {
+          // another class was created to update the cart as the modal sheet is stateless
+          return CartModalBottomSheet(
+            cartInfo: cartInfo,
+            updateQuantity: updateQuantity,
+          );
+        });
+  }
+
+  Widget InCartFloatingActionButton(List Selected) {
+    bool nofilter;
+    if (Selected.length == 0) {
+      nofilter = false;
+    } else {
+      nofilter = true;
+    }
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Row(
-        children: <Widget>[
-          GestureDetector(
-            onTap: showMenu,
-            child: Container(
-              height: MediaQuery
-                  .of(context)
-                  .size
-                  .width / 4 - 38,
-              width: MediaQuery
-                  .of(context)
-                  .size
-                  .width / 4 - 38,
-              decoration: BoxDecoration(color: Colors.green, borderRadius: BorderRadius.all(Radius.circular(8))),
-              child: Icon(
-                Icons.settings,
-                color: Colors.white,
-              ),
-            ),
-          ),
-          SizedBox(
-            width: 15,
-          ),
-          Container(
-            height: MediaQuery
-                .of(context)
-                .size
-                .width / 4 - 38,
-            width: MediaQuery
-                .of(context)
-                .size
-                .width * 3 / 4 - 20,
-            padding: EdgeInsets.all(8),
-            decoration: BoxDecoration(color: Colors.green, borderRadius: BorderRadius.all(Radius.circular(8))),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: cartInfo.length == 0
+          ? filterButton(Selected)
+          : Row(
               children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Text(
-                      '1 Item | ',
-                      style: TextStyle(color: Colors.white, fontSize: 18),
+                GestureDetector(
+                  onTap: showMenu,
+                  child: Container(
+                    height: 50,
+                    width: MediaQuery.of(context).size.width / 4 - 38,
+                    decoration: BoxDecoration(color: Colors.green, borderRadius: BorderRadius.all(Radius.circular(8))),
+                    child: Container(
+                      child: Stack(
+                        children: <Widget>[
+                          Center(
+                            child: Icon(
+                              Icons.settings,
+                              color: Colors.white,
+                            ),
+                          ),
+                          Visibility(
+                            visible: nofilter,
+                            child: Positioned(
+                              left: 35,
+                              top: 10,
+                              child: Container(
+                                height: 20,
+                                width: 20,
+                                decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(10)),
+                                child: Center(
+                                    child: Text(
+                                  Selected.length.toString(),
+                                  style: TextStyle(color: Colors.green),
+                                )),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
                     ),
-                    Text(
-                      '₹ 255',
-                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 18),
-                    ),
-                  ],
+                  ),
                 ),
-                Row(
-                  children: <Widget>[
-                    Text(
-                      'View Cart ',
-                      style: TextStyle(color: Colors.white, fontSize: 18),
-                    ),
-                    Icon(
-                      Icons.shopping_basket,
-                      color: Colors.white,
-                    )
-                  ],
+                SizedBox(
+                  width: 15,
                 ),
+                GestureDetector(
+                  onTap: showCart,
+                  child: Container(
+                    height: 50,
+                    width: MediaQuery.of(context).size.width * 3 / 4 - 20,
+                    padding: EdgeInsets.all(8),
+                    decoration: BoxDecoration(color: Colors.green, borderRadius: BorderRadius.all(Radius.circular(8))),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Row(
+                          children: <Widget>[
+                            Text(
+                              //TODO: add a total number of items
+                              cartInfo.length.toString()+' items |',
+                              style: TextStyle(color: Colors.white, fontSize: 18),
+                            ),
+                            Text(
+                              '₹ 255',
+                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 18),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: <Widget>[
+                            Text(
+                              'View Cart ',
+                              style: TextStyle(color: Colors.white, fontSize: 18),
+                            ),
+                            Icon(
+                              Icons.shopping_basket,
+                              color: Colors.white,
+                            )
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                )
               ],
             ),
-          )
-        ],
-      ),
     );
+  }
+
+  Widget filterButton(List selected) {
+    String text;
+    if (selected.length == 1) {
+      text = ' filter applied';
+    } else {
+      text = ' filters applied';
+    }
+    if (selected.length == 0) {
+      return RaisedButton(
+        onPressed: showMenu,
+        color: Colors.green,
+        shape: StadiumBorder(),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            width: 85,
+            child: Text(
+              '  Filter',
+              style: TextStyle(color: Colors.white, fontSize: 17),
+            ),
+          ),
+        ),
+      );
+    } else {
+      return RaisedButton(
+        onPressed: showMenu,
+        color: Colors.green,
+        shape: StadiumBorder(),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            width: MediaQuery.of(context).size.width / 2.5,
+            child: Text(
+              ' ' + selected.length.toString() + text,
+              style: TextStyle(color: Colors.white, fontSize: 17),
+            ),
+          ),
+        ),
+      );
+    }
   }
 
   Widget getItem({String text}) {
@@ -346,6 +454,313 @@ class _SupplyPageState extends State<SupplyPage> {
           padding: const EdgeInsets.only(left: 8.0),
           child: Text(text),
         ),
+      ),
+    );
+  }
+}
+
+// For the search button
+class CustomSearchDelegate extends SearchDelegate {
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(
+        icon: Icon(Icons.clear),
+        onPressed: () {
+          query = '';
+        },
+      ),
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+      icon: Icon(Icons.arrow_back),
+      onPressed: () {
+        close(context, null);
+      },
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    if (query.length < 3) {
+      return Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Center(
+            child: Text(
+              "Search term must be longer than two letters.",
+            ),
+          )
+        ],
+      );
+    }
+
+    return Column(
+      children: <Widget>[
+        Text('mmmm')
+        //Build the results based on the searchResults stream in the searchBloc
+      ],
+    );
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    // This method is called everytime the search term changes.
+    // If you want to add search suggestions as the user enters their search term, this is the place to do that.
+    return Column();
+  }
+}
+
+// This is the card in the cart
+class CartCards extends StatefulWidget {
+  CartCards(
+      {this.name,
+      this.image,
+      this.originalPrice,
+      this.inflatedPrice,
+      this.quantity,
+      this.updateQuantity,
+      this.itemQuantity,
+      this.cartInfo,
+      this.veg,
+      this.description,
+      this.refreshCart});
+
+  final String image;
+  final int originalPrice;
+  final int inflatedPrice;
+  final String name;
+  Function refreshCart;
+  Function updateQuantity;
+  List<Map> cartInfo;
+  bool veg;
+  String quantity;
+  String description;
+  int itemQuantity;
+
+  @override
+  _CartCardsState createState() => _CartCardsState();
+}
+
+class _CartCardsState extends State<CartCards> {
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
+      child: Card(
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Container(
+                child: Row(children: [
+              Container(
+                height: 80,
+                width: 80,
+                child: Image.network(
+                  widget.image,
+                ),
+              ),
+              SizedBox(width: 10.0),
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Text(widget.name, style: TextStyle(fontFamily: 'Montserrat', fontSize: 17.0, fontWeight: FontWeight.bold)),
+                Row(
+                  children: <Widget>[
+                    widget.inflatedPrice != null
+//                    widget.inflatedPrice != widget.originalPrice
+                        ? Text(
+                            '₹' + widget.inflatedPrice.toString(),
+                            style: TextStyle(color: Colors.grey, fontStyle: FontStyle.italic, decoration: TextDecoration.lineThrough),
+                          )
+                        : SizedBox(
+                            width: 6,
+                          ),
+                    SizedBox(
+                      width: 6,
+                    ),
+                    Text(
+                      '₹' + widget.originalPrice.toString(),
+                      style: TextStyle(fontStyle: FontStyle.italic),
+                    ),
+                  ],
+                ),
+              ])
+            ])),
+            Row(
+              children: <Widget>[
+                widget.itemQuantity != 1
+                    ? IconButton(
+                        icon: Icon(Icons.remove_circle),
+                        color: Colors.green,
+                        onPressed: () {
+                          setState(() {
+                            widget.itemQuantity--;
+                          });
+                          widget.updateQuantity({
+                            'name': widget.name,
+                            'actualPrice': widget.originalPrice,
+                          }, 'subtract');
+                        })
+                    : IconButton(
+                        icon: Icon(Icons.delete),
+                        onPressed: () {
+                          widget.updateQuantity({
+                            'name': widget.name,
+                            'actualPrice': widget.originalPrice,
+                          }, 'subtract');
+                          widget.refreshCart();
+                        },
+                      ),
+                Text(widget.itemQuantity.toString()),
+                IconButton(
+                    icon: Icon(Icons.add_circle),
+                    color: Colors.green,
+                    onPressed: () {
+                      setState(() {
+                        widget.itemQuantity++;
+                      });
+                      widget.updateQuantity({
+                        'name': widget.name,
+                        'actualPrice': widget.originalPrice,
+                      }, 'add');
+                    })
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class CartModalBottomSheet extends StatefulWidget {
+  CartModalBottomSheet({this.cartInfo, this.updateQuantity});
+
+  List<Map> cartInfo;
+  Function updateQuantity;
+
+  @override
+  _CartModalBottomSheetState createState() => _CartModalBottomSheetState();
+}
+
+class _CartModalBottomSheetState extends State<CartModalBottomSheet> {
+  refreshCart() {
+    setState(() {});
+  }
+
+  List<CartCards> cartList({List<Map> cartInfo}) {
+    List<CartCards> cards = [];
+    for (var q in cartInfo) {
+      cards.add(CartCards(
+        updateQuantity: widget.updateQuantity,
+        name: q['name'],
+        image: q['image'],
+        originalPrice: q['actualPrice'],
+        inflatedPrice: q['inflatedPrice'],
+        cartInfo: cartInfo,
+        veg: q['veg'],
+        quantity: q['quantity'],
+        description: 'kkkkk',
+        itemQuantity: q['itemQuantity'],
+        refreshCart: refreshCart,
+      ));
+    }
+    return cards;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: MediaQuery.of(context).size.height / 1.2,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.end,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Container(
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(16.0),
+                topRight: Radius.circular(16.0),
+              ),
+            ),
+            padding: EdgeInsets.all(10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Row(
+                  children: <Widget>[
+                    Icon(
+                      Icons.shopping_cart,
+                      color: Colors.black,
+                    ),
+                    Text(
+                      ' Cart',
+                      style: TextStyle(color: Colors.black, fontSize: 17, fontWeight: FontWeight.w600),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: <Widget>[
+                    Icon(
+                      Icons.close,
+                      color: Colors.green,
+                    ),
+                    Text(
+                      'Clear All',
+                      style: TextStyle(color: Colors.green),
+                    ),
+                  ],
+                )
+              ],
+            ),
+          ),
+          widget.cartInfo.length == 0
+              ? Center(
+                  child: Text('Cart Empty'),
+                )
+              : Expanded(
+                  child: ListView(
+                    children: cartList(cartInfo: widget.cartInfo),
+                  ),
+                ),
+          Container(
+            height: 65,
+            width: MediaQuery.of(context).size.width,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              boxShadow: [
+                BoxShadow(color: Colors.grey[400], blurRadius: 7.0, offset: Offset(0.0, 0.75)),
+              ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Container(
+                height: 20,
+                width: MediaQuery.of(context).size.width - 20,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(6)),
+                  boxShadow: [
+                    BoxShadow(color: Colors.grey[400], blurRadius: 7.0, offset: Offset(0.0, 0.75)),
+                  ],
+                ),
+                child: FlatButton(
+                  onPressed: () {},
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(6))),
+                  color: Colors.green,
+                  child: Text(
+                    'Checkout',
+                    style: TextStyle(color: Colors.white, fontSize: 17),
+                  ),
+                ),
+              ),
+            ),
+          )
+        ],
       ),
     );
   }
