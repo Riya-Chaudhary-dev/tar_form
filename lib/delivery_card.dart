@@ -10,7 +10,7 @@ class ItemPurchaseCard extends StatelessWidget {
     this.inflatedPrice,
     this.veg,
     this.quantity,
-    this.cartInfo,
+    this.items,
     this.addToCart,
     this.updateQuantity,
   });
@@ -18,7 +18,7 @@ class ItemPurchaseCard extends StatelessWidget {
   String name;
   Function addToCart;
   Function updateQuantity;
-  List<Map> cartInfo;
+  List items;
   int inflatedPrice;
   int actualPrice;
   String description = 'jjjjjjj';
@@ -120,7 +120,6 @@ class ItemPurchaseCard extends StatelessWidget {
                                   ),
                                 ),
                               ),
-
                               SizedBox(
                                 width: 5,
                               ),
@@ -134,7 +133,8 @@ class ItemPurchaseCard extends StatelessWidget {
                                     style: TextStyle(color: Colors.grey, fontSize: 11, fontWeight: FontWeight.w400),
                                   ),
                                 ),
-                              ),SizedBox(
+                              ),
+                              SizedBox(
                                 width: 5,
                               ),
                               Container(
@@ -147,7 +147,8 @@ class ItemPurchaseCard extends StatelessWidget {
                                     style: TextStyle(color: Colors.grey, fontSize: 11, fontWeight: FontWeight.w400),
                                   ),
                                 ),
-                              ),SizedBox(
+                              ),
+                              SizedBox(
                                 width: 5,
                               ),
                               Container(
@@ -186,7 +187,7 @@ class ItemPurchaseCard extends StatelessWidget {
           ),
           QuantityButton(
             updateQuantity: updateQuantity,
-            cartInfo: cartInfo,
+            items: items,
             addToCart: addToCart,
             name: name,
             veg: veg,
@@ -202,11 +203,11 @@ class ItemPurchaseCard extends StatelessWidget {
 }
 
 class AddToCartButton extends StatelessWidget {
-  AddToCartButton({this.name, this.cartInfo, this.actualPrice, this.inflatedPrice, this.image, this.description, this.veg, this.addToCart});
+  AddToCartButton({this.name, this.list, this.actualPrice, this.inflatedPrice, this.image, this.description, this.veg, this.addToCart});
 
   Function addToCart;
   String name;
-  List<Map> cartInfo;
+  List list;
   int inflatedPrice;
   int actualPrice;
   String description = 'jjjjjjj';
@@ -252,14 +253,14 @@ class QuantityButton extends StatefulWidget {
       this.veg,
       this.image,
       this.updateQuantity,
-      this.cartInfo});
+      this.items});
 
   int quantity;
   Function addToCart;
   Function updateQuantity;
 
   String name;
-  List<Map> cartInfo;
+  List items;
   int inflatedPrice;
   int actualPrice;
   String description = 'jjjjjjj';
@@ -274,9 +275,8 @@ class QuantityButton extends StatefulWidget {
 
 class _QuantityButtonState extends State<QuantityButton> {
   checkCart() {
-    for (var q in widget.cartInfo) {
+    for (var q in widget.items) {
       if (q['name'] == widget.name) {
-        print(widget.name);
         setState(() {
           widget.inCart = true;
           widget.itemQuantity = q['itemQuantity'];
@@ -291,7 +291,7 @@ class _QuantityButtonState extends State<QuantityButton> {
     checkCart();
     return widget.inCart != true
         ? AddToCartButton(
-            cartInfo: widget.cartInfo,
+            list: widget.items,
             addToCart: widget.addToCart,
             name: widget.name,
             actualPrice: widget.actualPrice,

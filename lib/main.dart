@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
           accentColor: Color.fromRGBO(143, 148, 251, 1),
           splashColor: Color.fromRGBO(143, 148, 251, 1),
         ),
-        home: SupplyPage(),
+        home: StorePage(),
         routes: {
           HomePage.id: (context) => HomePage(),
           TravelLogPage.id: (context) => TravelLogPage(),

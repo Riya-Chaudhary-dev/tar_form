@@ -4,14 +4,50 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'delivery_card.dart';
 
+class StorePage extends StatefulWidget {
+  @override
+  _StorePageState createState() => _StorePageState();
+}
+
+Future<DocumentSnapshot> getInitialCart() async {
+  //TODO: add the get current user and get their document id
+  var cartData = await Firestore.instance.collection('Users').document('ZUFQFLDZwvc1G1yKqsMj').get();
+  return cartData;
+}
+
+class _StorePageState extends State<StorePage> {
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+        future: getInitialCart(),
+        builder: (BuildContext context, AsyncSnapshot cartData) {
+          if (cartData.connectionState == ConnectionState.done) {
+            return SupplyPage(
+              initialCart: cartData.data.data['cart_info'],
+            );
+          } else {
+            return Scaffold(body: Center(child: Text('loading...')));
+          }
+        });
+  }
+}
+
 class SupplyPage extends StatefulWidget {
-  SupplyPage();
+  SupplyPage({this.initialCart});
+
+  final Map initialCart;
 
   @override
   _SupplyPageState createState() => _SupplyPageState();
 }
 
 class _SupplyPageState extends State<SupplyPage> {
+  @override
+  void initState() {
+    super.initState();
+    cartInfo['items'] = widget.initialCart['items'];
+  }
+
   final _firestore = Firestore.instance;
   List petType = ['DOGS', 'CATS'];
   List FirstFilter = ['Type', 'Brand', 'Age', 'Breed'];
@@ -22,20 +58,21 @@ class _SupplyPageState extends State<SupplyPage> {
   List DogBreed = ['Beagle', 'Boxer', 'German Shepherd'];
   List CatBreed = ['Persian', 'British Shorthair'];
   List Selected = ['kkk', 'kk'];
-  List<Map> cartInfo = [];
+  Map cartInfo = {'items': []};
   int totalNoOfItems;
 
   //callback function to add the info to the cart
   addToCart(Map info) {
     setState(() {
-      cartInfo.add(info);
+      cartInfo['items'].add(info);
+      getUserCart();
     });
   }
 
   //callback function to update the info in the cart with the action given
   updateQuantity(Map info, String action) {
     Map toRemove;
-    for (var q in cartInfo) {
+    for (var q in cartInfo['items']) {
       if (q['name'] == info['name'] && q['actualPrice'] == info['actualPrice']) {
         if (action == 'add') {
           setState(() {
@@ -54,97 +91,101 @@ class _SupplyPageState extends State<SupplyPage> {
       }
     }
     if (toRemove != null) {
-      cartInfo.remove(toRemove);
+      cartInfo['items'].remove(toRemove);
     }
+    getUserCart();
+  }
+
+  void getUserCart() async {
+    var data = await Firestore.instance.collection('Users').document('ZUFQFLDZwvc1G1yKqsMj').updateData({'cart_info': cartInfo});
   }
 
   @override
   Widget build(BuildContext context) {
-    print(cartInfo);
-    return StreamBuilder<QuerySnapshot>(
-        stream: _firestore.collection('Store').snapshots(),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            final stores = snapshot.data.documents;
-            List<ItemPurchaseCard> allItems = [];
-            for (var store in stores) {
-              bool veg = store.data['Veg'];
-              String img = store.data['Image link'];
-              String name = store.data['Name '];
-              int actualPrice = store.data['actualPrice'];
-              int inflatedPrice = store.data['inflatedPrice'];
-              String quantity = store.data['Quantity'];
-
-              allItems.add(
-                ItemPurchaseCard(
-                  updateQuantity: updateQuantity,
-                  addToCart: addToCart,
-                  cartInfo: cartInfo,
-                  name: name,
-                  image: img,
-                  actualPrice: actualPrice,
-                  inflatedPrice: inflatedPrice,
-                  veg: veg,
-                  quantity: quantity,
-                  description: 'kkkkk',
-                ),
-              );
-            }
-
-            return SafeArea(
-              child: DefaultTabController(
-                length: 2,
-                child: Scaffold(
-                    appBar: AppBar(
-                      actions: <Widget>[
-                        IconButton(
-                          icon: Icon(
-                            Icons.search,
-                            color: Colors.white,
-                          ),
-                          onPressed: () {
-                            showSearch(context: context, delegate: CustomSearchDelegate());
-                          },
-                        )
-                      ],
-                      bottom: PreferredSize(
-                        preferredSize: Size(50, 40),
-                        child: Container(
-                          width: MediaQuery.of(context).size.width,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
+    return SafeArea(
+      child: DefaultTabController(
+        length: 2,
+        child: Scaffold(
+            appBar: AppBar(
+              actions: <Widget>[
+                IconButton(
+                  icon: Icon(
+                    Icons.search,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    showSearch(context: context, delegate: CustomSearchDelegate());
+                  },
+                )
+              ],
+              bottom: PreferredSize(
+                preferredSize: Size(50, 40),
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
 //
-                          ),
-                          child: TabBar(
-                              labelColor: Colors.green,
-                              indicatorColor: Colors.green[400],
-                              indicatorWeight: 4,
-                              indicatorSize: TabBarIndicatorSize.tab,
-                              unselectedLabelColor: Colors.grey,
-                              isScrollable: true,
-                              tabs: petType.map(
-                                (type) {
-                                  return Tab(
-                                    text: type,
-                                  );
-                                },
-                              ).toList()),
+                  ),
+                  child: TabBar(
+                      labelColor: Colors.green,
+                      indicatorColor: Colors.green[400],
+                      indicatorWeight: 4,
+                      indicatorSize: TabBarIndicatorSize.tab,
+                      unselectedLabelColor: Colors.grey,
+                      isScrollable: true,
+                      tabs: petType.map(
+                        (type) {
+                          return Tab(
+                            text: type,
+                          );
+                        },
+                      ).toList()),
+                ),
+              ),
+              backgroundColor: Colors.green,
+              leading: IconButton(
+                icon: Icon(
+                  Icons.arrow_back,
+                  color: Colors.white,
+                ),
+              ),
+              title: Text(
+                'Pet Food',
+                style: TextStyle(color: Colors.white),
+              ),
+            ),
+            body: StreamBuilder<QuerySnapshot>(
+                stream: _firestore.collection('Store').snapshots(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    print(cartInfo);
+                    final stores = snapshot.data.documents;
+                    List<ItemPurchaseCard> allItems = [];
+                    for (var store in stores) {
+                      bool veg = store.data['Veg'];
+                      String img = store.data['Image link'];
+                      String name = store.data['Name '];
+                      int actualPrice = store.data['actualPrice'];
+                      int inflatedPrice = store.data['inflatedPrice'];
+                      String quantity = store.data['Quantity'];
+
+                      allItems.add(
+                        ItemPurchaseCard(
+                          updateQuantity: updateQuantity,
+                          addToCart: addToCart,
+                          items: cartInfo['items'],
+                          name: name,
+                          image: img,
+                          actualPrice: actualPrice,
+                          inflatedPrice: inflatedPrice,
+                          veg: veg,
+                          quantity: quantity,
+                          description: 'kkkkk',
                         ),
-                      ),
-                      backgroundColor: Colors.green,
-                      leading: IconButton(
-                        icon: Icon(
-                          Icons.arrow_back,
-                          color: Colors.white,
-                        ),
-                      ),
-                      title: Text(
-                        'Pet Food',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                    body: Column(
+                      );
+                    }
+                    return Column(
                       children: <Widget>[
                         Expanded(
                           child: Container(
@@ -155,14 +196,15 @@ class _SupplyPageState extends State<SupplyPage> {
                           ),
                         )
                       ],
-                    ),
-                    floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-                    floatingActionButton: InCartFloatingActionButton(Selected)),
-              ),
-            );
-          }
-          return Text('');
-        });
+                    );
+                  } else {
+                    return Text('');
+                  }
+                }),
+            floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+            floatingActionButton: InCartFloatingActionButton(Selected)),
+      ),
+    );
   }
 
 // Shows the filter menu on the bottom
@@ -272,7 +314,6 @@ class _SupplyPageState extends State<SupplyPage> {
                         ],
                       ),
                       child: FlatButton(
-                        onPressed: () {},
                         shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(6))),
                         color: Colors.green,
                         child: Text(
@@ -300,7 +341,7 @@ class _SupplyPageState extends State<SupplyPage> {
         builder: (BuildContext context) {
           // another class was created to update the cart as the modal sheet is stateless
           return CartModalBottomSheet(
-            cartInfo: cartInfo,
+            items: cartInfo['items'],
             updateQuantity: updateQuantity,
           );
         });
@@ -315,7 +356,7 @@ class _SupplyPageState extends State<SupplyPage> {
     }
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: cartInfo.length == 0
+      child: cartInfo['items'].length == 0
           ? filterButton(Selected)
           : Row(
               children: <Widget>[
@@ -359,44 +400,9 @@ class _SupplyPageState extends State<SupplyPage> {
                 SizedBox(
                   width: 15,
                 ),
-                GestureDetector(
-                  onTap: showCart,
-                  child: Container(
-                    height: 50,
-                    width: MediaQuery.of(context).size.width * 3 / 4 - 20,
-                    padding: EdgeInsets.all(8),
-                    decoration: BoxDecoration(color: Colors.green, borderRadius: BorderRadius.all(Radius.circular(8))),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Row(
-                          children: <Widget>[
-                            Text(
-                              //TODO: add a total number of items
-                              cartInfo.length.toString()+' items |',
-                              style: TextStyle(color: Colors.white, fontSize: 18),
-                            ),
-                            Text(
-                              '₹ 255',
-                              style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 18),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: <Widget>[
-                            Text(
-                              'View Cart ',
-                              style: TextStyle(color: Colors.white, fontSize: 18),
-                            ),
-                            Icon(
-                              Icons.shopping_basket,
-                              color: Colors.white,
-                            )
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
+                CartButton(
+                  cartInfo: cartInfo,
+                  showCart: showCart,
                 )
               ],
             ),
@@ -456,6 +462,70 @@ class _SupplyPageState extends State<SupplyPage> {
         ),
       ),
     );
+  }
+}
+
+class CartButton extends StatefulWidget {
+  CartButton({this.showCart, this.cartInfo});
+
+  Map cartInfo;
+  Function showCart;
+
+  @override
+  _CartButtonState createState() => _CartButtonState();
+}
+
+class _CartButtonState extends State<CartButton> {
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder(
+        future: Firestore.instance.collection('Users').document('ZUFQFLDZwvc1G1yKqsMj').get(),
+        builder: (BuildContext context, AsyncSnapshot user) {
+    if (user.connectionState == ConnectionState.done) {
+          print('object');
+          return GestureDetector(
+            onTap: widget.showCart,
+            child: Container(
+              height: 50,
+              width: MediaQuery.of(context).size.width * 3 / 4 - 20,
+              padding: EdgeInsets.all(8),
+              decoration: BoxDecoration(color: Colors.green, borderRadius: BorderRadius.all(Radius.circular(8))),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Row(
+                    children: <Widget>[
+                      Text(
+                        //TODO: add a total number of items
+                        widget.cartInfo['items'].length.toString() + ' items |',
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                      ),
+                      Text(
+                        '₹ 255',
+                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 18),
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: <Widget>[
+                      Text(
+                        'View Cart ',
+                        style: TextStyle(color: Colors.white, fontSize: 18),
+                      ),
+                      Icon(
+                        Icons.shopping_basket,
+                        color: Colors.white,
+                      )
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          );}
+    else{
+      return Text('hello there');
+    }
+        });
   }
 }
 
@@ -535,7 +605,7 @@ class CartCards extends StatefulWidget {
   final String name;
   Function refreshCart;
   Function updateQuantity;
-  List<Map> cartInfo;
+  List cartInfo;
   bool veg;
   String quantity;
   String description;
@@ -565,7 +635,7 @@ class _CartCardsState extends State<CartCards> {
               ),
               SizedBox(width: 10.0),
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text(widget.name, style: TextStyle(fontFamily: 'Montserrat', fontSize: 17.0, fontWeight: FontWeight.bold)),
+                Text(widget.name, style: TextStyle(fontFamily: 'Montserrat', fontSize: 10.0, fontWeight: FontWeight.bold)),
                 Row(
                   children: <Widget>[
                     widget.inflatedPrice != null
@@ -636,9 +706,9 @@ class _CartCardsState extends State<CartCards> {
 }
 
 class CartModalBottomSheet extends StatefulWidget {
-  CartModalBottomSheet({this.cartInfo, this.updateQuantity});
+  CartModalBottomSheet({this.items, this.updateQuantity});
 
-  List<Map> cartInfo;
+  List items;
   Function updateQuantity;
 
   @override
@@ -650,7 +720,7 @@ class _CartModalBottomSheetState extends State<CartModalBottomSheet> {
     setState(() {});
   }
 
-  List<CartCards> cartList({List<Map> cartInfo}) {
+  List<CartCards> cartList({List cartInfo}) {
     List<CartCards> cards = [];
     for (var q in cartInfo) {
       cards.add(CartCards(
@@ -718,13 +788,13 @@ class _CartModalBottomSheetState extends State<CartModalBottomSheet> {
               ],
             ),
           ),
-          widget.cartInfo.length == 0
+          widget.items.length == 0
               ? Center(
                   child: Text('Cart Empty'),
                 )
               : Expanded(
                   child: ListView(
-                    children: cartList(cartInfo: widget.cartInfo),
+                    children: cartList(cartInfo: widget.items),
                   ),
                 ),
           Container(
