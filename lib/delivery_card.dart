@@ -1,33 +1,84 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/painting.dart';
 
-class ItemPurchaseCard extends StatelessWidget {
-  ItemPurchaseCard({
-    this.name,
-    this.image,
-    this.actualPrice,
-    this.description,
-    this.inflatedPrice,
-    this.veg,
-    this.quantity,
-    this.items,
-    this.addToCart,
-    this.updateQuantity,
-  });
+class ItemPurchaseCard extends StatefulWidget {
+  ItemPurchaseCard({this.name, this.description, this.veg, this.items, this.addToCart, this.updateQuantity, this.variations});
 
   String name;
   Function addToCart;
   Function updateQuantity;
   List items;
-  int inflatedPrice;
-  int actualPrice;
+  Map variations;
   String description = 'jjjjjjj';
-  String image;
-  String quantity;
   bool veg;
+  bool inCart = false;
+  int itemQuantity;
+
+  @override
+  _ItemPurchaseCardState createState() => _ItemPurchaseCardState();
+}
+
+class _ItemPurchaseCardState extends State<ItemPurchaseCard> {
+  checkCart() {
+    for (var q in widget.items) {
+      if (q['name'] == widget.name) {
+        setState(() {
+          widget.inCart = true;
+          widget.itemQuantity = q['itemQuantity'];
+        });
+      }
+    }
+  }
+
+  String selectedVariation;
+
+  List<Widget> itemDetails = [];
+  List<RadioModel> sampleData = List<RadioModel>();
+
+  void getInfoColumn() {
+    widget.variations.forEach((key, value) {
+      sampleData.add(RadioModel(false, key.toString()));
+      if (selectedVariation == null) {
+        setState(() {
+          selectedVariation = key;
+        });
+      }
+      itemDetails.add(GestureDetector(
+        onTap: () {
+          setState(() {
+            selectedVariation = key;
+          });
+        },
+        child: Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(3)),
+              border: Border.all(color: key == selectedVariation ? Colors.green : Colors.grey, width: 1)),
+          child: Padding(
+            padding: const EdgeInsets.all(3),
+            child: Text(
+              key.toString(),
+              style: TextStyle(color: key == selectedVariation ? Colors.green : Colors.grey, fontSize: 11, fontWeight: FontWeight.w600),
+            ),
+          ),
+        ),
+      ));
+      itemDetails.add(SizedBox(
+        width: 5,
+      ));
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getInfoColumn();
+  }
 
   @override
   Widget build(BuildContext context) {
+    print(selectedVariation);
+    checkCart();
     return Padding(
       padding: const EdgeInsets.all(15.0),
       child: Row(
@@ -58,12 +109,12 @@ class ItemPurchaseCard extends StatelessWidget {
                           color: Colors.white,
                         ),
                         child: Image.network(
-                          image,
+                          widget.variations[selectedVariation]['image'],
                         )),
                     Positioned(
                         top: 71,
                         left: 71,
-                        child: veg
+                        child: widget.veg
                             ? Center(
                                 child: Container(
                                   padding: EdgeInsets.all(2),
@@ -94,108 +145,72 @@ class ItemPurchaseCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: <Widget>[
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: <Widget>[
-                        Text(
-                          name,
-                          style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
-                        ),
-                        SizedBox(
-                          height: 5,
-                        ),
-                        Container(
-                          height: 21,
-                          child: ListView(
-                            scrollDirection: Axis.horizontal,
-                            children: <Widget>[
-                              Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.all(Radius.circular(3)), border: Border.all(color: Colors.green, width: 1)),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(3),
-                                  child: Text(
-                                    quantity.toString(),
-                                    style: TextStyle(color: Colors.green, fontSize: 11, fontWeight: FontWeight.w600),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.all(Radius.circular(3)), border: Border.all(color: Colors.grey, width: 1)),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(3),
-                                  child: Text(
-                                    quantity.toString(),
-                                    style: TextStyle(color: Colors.grey, fontSize: 11, fontWeight: FontWeight.w400),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.all(Radius.circular(3)), border: Border.all(color: Colors.grey, width: 1)),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(3),
-                                  child: Text(
-                                    quantity.toString(),
-                                    style: TextStyle(color: Colors.grey, fontSize: 11, fontWeight: FontWeight.w400),
-                                  ),
-                                ),
-                              ),
-                              SizedBox(
-                                width: 5,
-                              ),
-                              Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.all(Radius.circular(3)), border: Border.all(color: Colors.grey, width: 1)),
-                                child: Padding(
-                                  padding: const EdgeInsets.all(3),
-                                  child: Text(
-                                    quantity.toString(),
-                                    style: TextStyle(color: Colors.grey, fontSize: 11, fontWeight: FontWeight.w400),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
+                    Text(
+                      widget.name,
+                      style: TextStyle(fontWeight: FontWeight.w700, fontSize: 15),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Container(
+                      height: 21,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: sampleData.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return Padding(
+                            padding: const EdgeInsets.only(right: 5.0),
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  sampleData.forEach((element) => element.isSelected = false);
+                                  sampleData[index].isSelected = true;
+                                  selectedVariation = sampleData[index].buttonText;
+                                });
+                              },
+                              child: RadioItem(sampleData[index]),
+                            ),
+                          );
+                        },
+                      ),
                     ),
                     Row(
                       children: <Widget>[
                         Text(
-                          '₹ ' + actualPrice.toString(),
+                          '₹ ' + widget.variations[selectedVariation]['originalPrice'].toString(),
                           style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16),
                         ),
                         SizedBox(
                           width: 10,
                         ),
-                        Text('₹ ' + inflatedPrice.toString(),
+                        Text('₹ ' + widget.variations[selectedVariation]['discountedPrice'].toString(),
                             style: TextStyle(color: Colors.grey, decoration: TextDecoration.lineThrough, fontSize: 16)),
                       ],
                     ),
                   ],
                 ),
-              ), //
+              )
             ],
           ),
-          QuantityButton(
-            updateQuantity: updateQuantity,
-            items: items,
-            addToCart: addToCart,
-            name: name,
-            veg: veg,
-            actualPrice: actualPrice,
-            description: description,
-            inflatedPrice: inflatedPrice,
-            image: image,
-          ),
+          widget.inCart
+              ? QuantityButton(
+                  updateQuantity: widget.updateQuantity,
+                  name: widget.name,
+                  items: widget.items,
+                  itemQuantity: widget.itemQuantity,
+                  inflatedPrice: widget.variations[selectedVariation]['originalPrice'],
+                  actualPrice: widget.variations[selectedVariation]['discountedPrice'],
+                  veg: widget.veg,
+                  image: widget.variations[selectedVariation]['image'],
+                )
+              : AddToCartButton(
+                  addToCart: widget.addToCart,
+                  name: widget.name,
+                  inflatedPrice: widget.variations[selectedVariation]['originalPrice'],
+                  actualPrice: widget.variations[selectedVariation]['discountedPrice'],
+                  veg: widget.veg,
+                  image: widget.variations[selectedVariation]['image'],
+                )
         ],
       ),
     );
@@ -244,7 +259,7 @@ class AddToCartButton extends StatelessWidget {
 
 class QuantityButton extends StatefulWidget {
   QuantityButton(
-      {this.quantity = 0,
+      {this.quantity = 1,
       this.addToCart,
       this.name,
       this.inflatedPrice,
@@ -253,7 +268,8 @@ class QuantityButton extends StatefulWidget {
       this.veg,
       this.image,
       this.updateQuantity,
-      this.items});
+      this.items,
+      this.itemQuantity});
 
   int quantity;
   Function addToCart;
@@ -274,82 +290,92 @@ class QuantityButton extends StatefulWidget {
 }
 
 class _QuantityButtonState extends State<QuantityButton> {
-  checkCart() {
-    for (var q in widget.items) {
-      if (q['name'] == widget.name) {
-        setState(() {
-          widget.inCart = true;
-          widget.itemQuantity = q['itemQuantity'];
-        });
-      }
-    }
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 40,
+      width: 90,
+      decoration: BoxDecoration(border: Border.all(color: Colors.green, width: 2), borderRadius: BorderRadius.all(Radius.circular(4))),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          GestureDetector(
+            onTap: () {
+              Map i = {
+                'name': widget.name,
+                'actualPrice': widget.actualPrice,
+                'inflatedPrice': widget.inflatedPrice,
+                'veg': widget.veg,
+                'description': widget.description,
+                'image': widget.image,
+                'quantity': widget.quantity,
+                'itemQuantity': widget.itemQuantity
+              };
+              widget.updateQuantity(i, 'subtract');
+            },
+            child: Text(
+              '-',
+              style: TextStyle(color: Colors.green, fontWeight: FontWeight.w800, fontSize: 25),
+            ),
+          ),
+          Text(
+            widget.itemQuantity.toString(),
+            style: TextStyle(color: Colors.green, fontSize: 17, fontWeight: FontWeight.w800),
+          ),
+          GestureDetector(
+            onTap: () {
+              Map i = {
+                'name': widget.name,
+                'actualPrice': widget.actualPrice,
+                'inflatedPrice': widget.inflatedPrice,
+                'veg': widget.veg,
+                'description': widget.description,
+                'image': widget.image,
+                'quantity': widget.quantity,
+                'itemQuantity': widget.itemQuantity
+              };
+              widget.updateQuantity(i, 'add');
+            },
+            child: Text(
+              '+',
+              style: TextStyle(color: Colors.green, fontWeight: FontWeight.w800, fontSize: 25),
+            ),
+          )
+        ],
+      ),
+    );
   }
+}
+
+class RadioItem extends StatelessWidget {
+  final RadioModel _item;
+
+  RadioItem(this._item);
 
   @override
   Widget build(BuildContext context) {
-    //Check if item is present in cart and show either add to cart button or the quantity button
-    checkCart();
-    return widget.inCart != true
-        ? AddToCartButton(
-            list: widget.items,
-            addToCart: widget.addToCart,
-            name: widget.name,
-            actualPrice: widget.actualPrice,
-            description: widget.description,
-            inflatedPrice: widget.inflatedPrice,
-            image: widget.image,
-          )
-        : Container(
-            height: 40,
-            width: 90,
-            decoration: BoxDecoration(border: Border.all(color: Colors.green, width: 2), borderRadius: BorderRadius.all(Radius.circular(4))),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: <Widget>[
-                GestureDetector(
-                  onTap: () {
-                    Map i = {
-                      'name': widget.name,
-                      'actualPrice': widget.actualPrice,
-                      'inflatedPrice': widget.inflatedPrice,
-                      'veg': widget.veg,
-                      'description': widget.description,
-                      'image': widget.image,
-                      'quantity': widget.quantity,
-                      'itemQuantity': widget.itemQuantity
-                    };
-                    widget.updateQuantity(i, 'subtract');
-                  },
-                  child: Text(
-                    '-',
-                    style: TextStyle(color: Colors.green, fontWeight: FontWeight.w800, fontSize: 25),
-                  ),
-                ),
-                Text(
-                  widget.itemQuantity.toString(),
-                  style: TextStyle(color: Colors.green, fontSize: 17, fontWeight: FontWeight.w800),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Map i = {
-                      'name': widget.name,
-                      'actualPrice': widget.actualPrice,
-                      'inflatedPrice': widget.inflatedPrice,
-                      'veg': widget.veg,
-                      'description': widget.description,
-                      'image': widget.image,
-                      'quantity': widget.quantity,
-                      'itemQuantity': widget.itemQuantity
-                    };
-                    widget.updateQuantity(i, 'add');
-                  },
-                  child: Text(
-                    '+',
-                    style: TextStyle(color: Colors.green, fontWeight: FontWeight.w800, fontSize: 25),
-                  ),
-                )
-              ],
-            ),
-          );
+    return Center(
+      child: Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(3)), border: Border.all(color: _item.isSelected ? Colors.green : Colors.grey, width: 1)),
+        child: Padding(
+          padding: const EdgeInsets.all(3),
+          child: Text(
+            _item.buttonText,
+            style: TextStyle(color: _item.isSelected ? Colors.green : Colors.grey, fontSize: 11, fontWeight: FontWeight.w600),
+          ),
+        ),
+      ),
+    );
   }
+}
+
+class RadioModel {
+  bool isSelected;
+  final String buttonText;
+
+  RadioModel(
+    this.isSelected,
+    this.buttonText,
+  );
 }

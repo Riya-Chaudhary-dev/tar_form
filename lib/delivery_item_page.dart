@@ -100,6 +100,13 @@ class _SupplyPageState extends State<SupplyPage> {
     var data = await Firestore.instance.collection('Users').document('ZUFQFLDZwvc1G1yKqsMj').updateData({'cart_info': cartInfo});
   }
 
+  void nig() async {
+    var nig = await _firestore.collection('items').getDocuments();
+    for (var q in nig.documents) {
+      print(q.data);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -156,31 +163,24 @@ class _SupplyPageState extends State<SupplyPage> {
               ),
             ),
             body: StreamBuilder<QuerySnapshot>(
-                stream: _firestore.collection('Store').snapshots(),
+                stream: _firestore.collection('items').snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     print(cartInfo);
                     final stores = snapshot.data.documents;
                     List<ItemPurchaseCard> allItems = [];
                     for (var store in stores) {
-                      bool veg = store.data['Veg'];
-                      String img = store.data['Image link'];
-                      String name = store.data['Name '];
-                      int actualPrice = store.data['actualPrice'];
-                      int inflatedPrice = store.data['inflatedPrice'];
-                      String quantity = store.data['Quantity'];
-
+                      bool veg = store.data['veg'];
+                      String name = store.data['productName'];
+                      Map variations = store.data['variations'];
                       allItems.add(
                         ItemPurchaseCard(
                           updateQuantity: updateQuantity,
                           addToCart: addToCart,
                           items: cartInfo['items'],
                           name: name,
-                          image: img,
-                          actualPrice: actualPrice,
-                          inflatedPrice: inflatedPrice,
+                          variations: variations,
                           veg: veg,
-                          quantity: quantity,
                           description: 'kkkkk',
                         ),
                       );
@@ -331,7 +331,7 @@ class _SupplyPageState extends State<SupplyPage> {
   }
 
 // Shows the cart on the bottom
-  showCart() {
+  showCart(Map info) {
     showModalBottomSheet(
         isScrollControlled: true,
         context: context,
@@ -341,7 +341,7 @@ class _SupplyPageState extends State<SupplyPage> {
         builder: (BuildContext context) {
           // another class was created to update the cart as the modal sheet is stateless
           return CartModalBottomSheet(
-            items: cartInfo['items'],
+            items: info['cart_info']['items'],
             updateQuantity: updateQuantity,
           );
         });
@@ -400,10 +400,56 @@ class _SupplyPageState extends State<SupplyPage> {
                 SizedBox(
                   width: 15,
                 ),
-                CartButton(
-                  cartInfo: cartInfo,
-                  showCart: showCart,
-                )
+                FutureBuilder(
+                    future: Firestore.instance.collection('Users').document('ZUFQFLDZwvc1G1yKqsMj').get(),
+                    builder: (BuildContext context, AsyncSnapshot user) {
+                      if (user.connectionState == ConnectionState.done) {
+                        print(user.data.data);
+                        return GestureDetector(
+                          onTap: () {
+                            showCart(user.data.data);
+                          },
+                          child: Container(
+                            height: 50,
+                            width: MediaQuery.of(context).size.width * 3 / 4 - 20,
+                            padding: EdgeInsets.all(8),
+                            decoration: BoxDecoration(color: Colors.green, borderRadius: BorderRadius.all(Radius.circular(8))),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Row(
+                                  children: <Widget>[
+                                    Text(
+                                      //TODO: add a total number of items
+                                      cartInfo['items'].length.toString() + ' items |',
+                                      style: TextStyle(color: Colors.white, fontSize: 18),
+                                    ),
+                                    Text(
+                                      '₹ 255',
+                                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 18),
+                                    ),
+                                  ],
+                                ),
+                                Row(
+                                  children: <Widget>[
+                                    Text(
+                                      'View Cart ',
+                                      style: TextStyle(color: Colors.white, fontSize: 18),
+                                    ),
+                                    Icon(
+                                      Icons.shopping_basket,
+                                      color: Colors.white,
+                                    )
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      } else {
+                        return Text('hello there');
+                      }
+                    })
               ],
             ),
     );
@@ -481,50 +527,50 @@ class _CartButtonState extends State<CartButton> {
     return FutureBuilder(
         future: Firestore.instance.collection('Users').document('ZUFQFLDZwvc1G1yKqsMj').get(),
         builder: (BuildContext context, AsyncSnapshot user) {
-    if (user.connectionState == ConnectionState.done) {
-          print('object');
-          return GestureDetector(
-            onTap: widget.showCart,
-            child: Container(
-              height: 50,
-              width: MediaQuery.of(context).size.width * 3 / 4 - 20,
-              padding: EdgeInsets.all(8),
-              decoration: BoxDecoration(color: Colors.green, borderRadius: BorderRadius.all(Radius.circular(8))),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Row(
-                    children: <Widget>[
-                      Text(
-                        //TODO: add a total number of items
-                        widget.cartInfo['items'].length.toString() + ' items |',
-                        style: TextStyle(color: Colors.white, fontSize: 18),
-                      ),
-                      Text(
-                        '₹ 255',
-                        style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 18),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    children: <Widget>[
-                      Text(
-                        'View Cart ',
-                        style: TextStyle(color: Colors.white, fontSize: 18),
-                      ),
-                      Icon(
-                        Icons.shopping_basket,
-                        color: Colors.white,
-                      )
-                    ],
-                  ),
-                ],
+          if (user.connectionState == ConnectionState.done) {
+            print(user.data.data);
+            return GestureDetector(
+              onTap: widget.showCart,
+              child: Container(
+                height: 50,
+                width: MediaQuery.of(context).size.width * 3 / 4 - 20,
+                padding: EdgeInsets.all(8),
+                decoration: BoxDecoration(color: Colors.green, borderRadius: BorderRadius.all(Radius.circular(8))),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: <Widget>[
+                    Row(
+                      children: <Widget>[
+                        Text(
+                          //TODO: add a total number of items
+                          widget.cartInfo['items'].length.toString() + ' items |',
+                          style: TextStyle(color: Colors.white, fontSize: 18),
+                        ),
+                        Text(
+                          '₹ 255',
+                          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w600, fontSize: 18),
+                        ),
+                      ],
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Text(
+                          'View Cart ',
+                          style: TextStyle(color: Colors.white, fontSize: 18),
+                        ),
+                        Icon(
+                          Icons.shopping_basket,
+                          color: Colors.white,
+                        )
+                      ],
+                    ),
+                  ],
+                ),
               ),
-            ),
-          );}
-    else{
-      return Text('hello there');
-    }
+            );
+          } else {
+            return Text('hello there');
+          }
         });
   }
 }

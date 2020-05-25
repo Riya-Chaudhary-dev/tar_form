@@ -8,6 +8,7 @@ import 'package:tar_form/login_page.dart';
 import 'package:tar_form/registration.dart';
 import 'package:tar_form/travelItinerary.dart';
 import 'package:tar_form/travel_log.dart';
+import 'delivery_card.dart';
 import 'package:tar_form/SummaryPage.dart';
 
 void main() => runApp(MyApp());
