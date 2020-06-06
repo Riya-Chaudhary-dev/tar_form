@@ -22,7 +22,7 @@ class ItemPurchaseCard extends StatefulWidget {
 class _ItemPurchaseCardState extends State<ItemPurchaseCard> {
   checkCart() {
     for (var q in widget.items) {
-      if (q['name'] == widget.name) {
+      if (q['name'] == widget.name && q['variation'] == selectedVariation) {
         setState(() {
           widget.inCart = true;
           widget.itemQuantity = q['itemQuantity'];
@@ -38,28 +38,26 @@ class _ItemPurchaseCardState extends State<ItemPurchaseCard> {
 
   void getInfoColumn() {
     widget.variations.forEach((key, value) {
-      sampleData.add(RadioModel(false, key.toString()));
       if (selectedVariation == null) {
         setState(() {
           selectedVariation = key;
         });
       }
-      itemDetails.add(GestureDetector(
-        onTap: () {
-          setState(() {
-            selectedVariation = key;
-          });
-        },
-        child: Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(3)),
-              border: Border.all(color: key == selectedVariation ? Colors.green : Colors.grey, width: 1)),
-          child: Padding(
-            padding: const EdgeInsets.all(3),
-            child: Text(
-              key.toString(),
-              style: TextStyle(color: key == selectedVariation ? Colors.green : Colors.grey, fontSize: 11, fontWeight: FontWeight.w600),
-            ),
+      if (key != selectedVariation) {
+        sampleData.add(RadioModel(false, key.toString()));
+      } else {
+        sampleData.add(RadioModel(true, key.toString()));
+      }
+
+      itemDetails.add(Container(
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(3)),
+            border: Border.all(color: key == selectedVariation ? Colors.green : Colors.grey, width: 1)),
+        child: Padding(
+          padding: const EdgeInsets.all(3),
+          child: Text(
+            key.toString(),
+            style: TextStyle(color: key == selectedVariation ? Colors.green : Colors.grey, fontSize: 11, fontWeight: FontWeight.w600),
           ),
         ),
       ));
@@ -79,6 +77,8 @@ class _ItemPurchaseCardState extends State<ItemPurchaseCard> {
   Widget build(BuildContext context) {
     print(selectedVariation);
     checkCart();
+    print('pr' + widget.inCart.toString());
+
     return Padding(
       padding: const EdgeInsets.all(15.0),
       child: Row(
@@ -166,6 +166,7 @@ class _ItemPurchaseCardState extends State<ItemPurchaseCard> {
                                   sampleData.forEach((element) => element.isSelected = false);
                                   sampleData[index].isSelected = true;
                                   selectedVariation = sampleData[index].buttonText;
+                                  widget.inCart = false;
                                 });
                               },
                               child: RadioItem(sampleData[index]),
@@ -201,6 +202,7 @@ class _ItemPurchaseCardState extends State<ItemPurchaseCard> {
                   inflatedPrice: widget.variations[selectedVariation]['originalPrice'],
                   actualPrice: widget.variations[selectedVariation]['discountedPrice'],
                   veg: widget.veg,
+                  variation: selectedVariation,
                   image: widget.variations[selectedVariation]['image'],
                 )
               : AddToCartButton(
@@ -210,6 +212,7 @@ class _ItemPurchaseCardState extends State<ItemPurchaseCard> {
                   actualPrice: widget.variations[selectedVariation]['discountedPrice'],
                   veg: widget.veg,
                   image: widget.variations[selectedVariation]['image'],
+                  variation: selectedVariation,
                 )
         ],
       ),
@@ -218,11 +221,13 @@ class _ItemPurchaseCardState extends State<ItemPurchaseCard> {
 }
 
 class AddToCartButton extends StatelessWidget {
-  AddToCartButton({this.name, this.list, this.actualPrice, this.inflatedPrice, this.image, this.description, this.veg, this.addToCart});
+  AddToCartButton(
+      {this.name, this.list, this.actualPrice, this.inflatedPrice, this.image, this.description, this.veg, this.addToCart, this.variation});
 
   Function addToCart;
   String name;
   List list;
+  String variation;
   int inflatedPrice;
   int actualPrice;
   String description = 'jjjjjjj';
@@ -243,7 +248,8 @@ class AddToCartButton extends StatelessWidget {
             'veg': veg,
             'description': description,
             'image': image,
-            'itemQuantity': 1
+            'itemQuantity': 1,
+            'variation': variation
           };
           addToCart(i);
         },
@@ -269,12 +275,13 @@ class QuantityButton extends StatefulWidget {
       this.image,
       this.updateQuantity,
       this.items,
+      this.variation,
       this.itemQuantity});
 
   int quantity;
   Function addToCart;
   Function updateQuantity;
-
+  String variation;
   String name;
   List items;
   int inflatedPrice;
@@ -309,7 +316,8 @@ class _QuantityButtonState extends State<QuantityButton> {
                 'description': widget.description,
                 'image': widget.image,
                 'quantity': widget.quantity,
-                'itemQuantity': widget.itemQuantity
+                'itemQuantity': widget.itemQuantity,
+                'variation': widget.variation
               };
               widget.updateQuantity(i, 'subtract');
             },
@@ -332,7 +340,8 @@ class _QuantityButtonState extends State<QuantityButton> {
                 'description': widget.description,
                 'image': widget.image,
                 'quantity': widget.quantity,
-                'itemQuantity': widget.itemQuantity
+                'itemQuantity': widget.itemQuantity,
+                'variation': widget.variation
               };
               widget.updateQuantity(i, 'add');
             },

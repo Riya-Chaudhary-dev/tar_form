@@ -73,7 +73,7 @@ class _SupplyPageState extends State<SupplyPage> {
   updateQuantity(Map info, String action) {
     Map toRemove;
     for (var q in cartInfo['items']) {
-      if (q['name'] == info['name'] && q['actualPrice'] == info['actualPrice']) {
+      if (q['name'] == info['name'] && q['variation'] == info['variation']) {
         if (action == 'add') {
           setState(() {
             q['itemQuantity'] += 1;
@@ -98,13 +98,6 @@ class _SupplyPageState extends State<SupplyPage> {
 
   void getUserCart() async {
     var data = await Firestore.instance.collection('Users').document('ZUFQFLDZwvc1G1yKqsMj').updateData({'cart_info': cartInfo});
-  }
-
-  void nig() async {
-    var nig = await _firestore.collection('items').getDocuments();
-    for (var q in nig.documents) {
-      print(q.data);
-    }
   }
 
   @override
@@ -166,7 +159,6 @@ class _SupplyPageState extends State<SupplyPage> {
                 stream: _firestore.collection('items').snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    print(cartInfo);
                     final stores = snapshot.data.documents;
                     List<ItemPurchaseCard> allItems = [];
                     for (var store in stores) {
@@ -331,7 +323,7 @@ class _SupplyPageState extends State<SupplyPage> {
   }
 
 // Shows the cart on the bottom
-  showCart(Map info) {
+  showCart() {
     showModalBottomSheet(
         isScrollControlled: true,
         context: context,
@@ -341,7 +333,6 @@ class _SupplyPageState extends State<SupplyPage> {
         builder: (BuildContext context) {
           // another class was created to update the cart as the modal sheet is stateless
           return CartModalBottomSheet(
-            items: info['cart_info']['items'],
             updateQuantity: updateQuantity,
           );
         });
@@ -404,10 +395,9 @@ class _SupplyPageState extends State<SupplyPage> {
                     future: Firestore.instance.collection('Users').document('ZUFQFLDZwvc1G1yKqsMj').get(),
                     builder: (BuildContext context, AsyncSnapshot user) {
                       if (user.connectionState == ConnectionState.done) {
-                        print(user.data.data);
                         return GestureDetector(
                           onTap: () {
-                            showCart(user.data.data);
+                            showCart();
                           },
                           child: Container(
                             height: 50,
@@ -643,7 +633,8 @@ class CartCards extends StatefulWidget {
       this.cartInfo,
       this.veg,
       this.description,
-      this.refreshCart});
+      this.refreshCart,
+      this.variation});
 
   final String image;
   final int originalPrice;
@@ -656,6 +647,7 @@ class CartCards extends StatefulWidget {
   String quantity;
   String description;
   int itemQuantity;
+  String variation;
 
   @override
   _CartCardsState createState() => _CartCardsState();
@@ -714,18 +706,14 @@ class _CartCardsState extends State<CartCards> {
                           setState(() {
                             widget.itemQuantity--;
                           });
-                          widget.updateQuantity({
-                            'name': widget.name,
-                            'actualPrice': widget.originalPrice,
-                          }, 'subtract');
+                          widget
+                              .updateQuantity({'name': widget.name, 'actualPrice': widget.originalPrice, 'variation': widget.variation}, 'subtract');
                         })
                     : IconButton(
                         icon: Icon(Icons.delete),
                         onPressed: () {
-                          widget.updateQuantity({
-                            'name': widget.name,
-                            'actualPrice': widget.originalPrice,
-                          }, 'subtract');
+                          widget
+                              .updateQuantity({'name': widget.name, 'actualPrice': widget.originalPrice, 'variation': widget.variation}, 'subtract');
                           widget.refreshCart();
                         },
                       ),
@@ -737,10 +725,7 @@ class _CartCardsState extends State<CartCards> {
                       setState(() {
                         widget.itemQuantity++;
                       });
-                      widget.updateQuantity({
-                        'name': widget.name,
-                        'actualPrice': widget.originalPrice,
-                      }, 'add');
+                      widget.updateQuantity({'name': widget.name, 'actualPrice': widget.originalPrice, 'variation': widget.variation}, 'add');
                     })
               ],
             )
@@ -752,10 +737,10 @@ class _CartCardsState extends State<CartCards> {
 }
 
 class CartModalBottomSheet extends StatefulWidget {
-  CartModalBottomSheet({this.items, this.updateQuantity});
+  CartModalBottomSheet({this.updateQuantity});
 
-  List items;
   Function updateQuantity;
+  List<CartCards> itemCards = [];
 
   @override
   _CartModalBottomSheetState createState() => _CartModalBottomSheetState();
@@ -766,7 +751,8 @@ class _CartModalBottomSheetState extends State<CartModalBottomSheet> {
     setState(() {});
   }
 
-  List<CartCards> cartList({List cartInfo}) {
+  void cartList({List cartInfo}) {
+    print("the " + cartInfo.toString());
     List<CartCards> cards = [];
     for (var q in cartInfo) {
       cards.add(CartCards(
@@ -781,103 +767,114 @@ class _CartModalBottomSheetState extends State<CartModalBottomSheet> {
         description: 'kkkkk',
         itemQuantity: q['itemQuantity'],
         refreshCart: refreshCart,
+        variation: q['variation'],
       ));
     }
-    return cards;
+    widget.itemCards = cards;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: MediaQuery.of(context).size.height / 1.2,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.end,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(16.0),
-                topRight: Radius.circular(16.0),
-              ),
-            ),
-            padding: EdgeInsets.all(10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    Icon(
-                      Icons.shopping_cart,
-                      color: Colors.black,
+    return StreamBuilder(
+        stream: Firestore.instance.collection('Users').document('ZUFQFLDZwvc1G1yKqsMj').snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            cartList(cartInfo: snapshot.data.data['cart_info']['items']);
+            print(snapshot.data.data['cart_info']['items']);
+            return Container(
+              height: MediaQuery.of(context).size.height / 1.2,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(16.0),
+                        topRight: Radius.circular(16.0),
+                      ),
                     ),
-                    Text(
-                      ' Cart',
-                      style: TextStyle(color: Colors.black, fontSize: 17, fontWeight: FontWeight.w600),
+                    padding: EdgeInsets.all(10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Row(
+                          children: <Widget>[
+                            Icon(
+                              Icons.shopping_cart,
+                              color: Colors.black,
+                            ),
+                            Text(
+                              ' Cart',
+                              style: TextStyle(color: Colors.black, fontSize: 17, fontWeight: FontWeight.w600),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: <Widget>[
+                            Icon(
+                              Icons.close,
+                              color: Colors.green,
+                            ),
+                            Text(
+                              'Clear All',
+                              style: TextStyle(color: Colors.green),
+                            ),
+                          ],
+                        )
+                      ],
                     ),
-                  ],
-                ),
-                Row(
-                  children: <Widget>[
-                    Icon(
-                      Icons.close,
-                      color: Colors.green,
-                    ),
-                    Text(
-                      'Clear All',
-                      style: TextStyle(color: Colors.green),
-                    ),
-                  ],
-                )
-              ],
-            ),
-          ),
-          widget.items.length == 0
-              ? Center(
-                  child: Text('Cart Empty'),
-                )
-              : Expanded(
-                  child: ListView(
-                    children: cartList(cartInfo: widget.items),
                   ),
-                ),
-          Container(
-            height: 65,
-            width: MediaQuery.of(context).size.width,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              boxShadow: [
-                BoxShadow(color: Colors.grey[400], blurRadius: 7.0, offset: Offset(0.0, 0.75)),
-              ],
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Container(
-                height: 20,
-                width: MediaQuery.of(context).size.width - 20,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.all(Radius.circular(6)),
-                  boxShadow: [
-                    BoxShadow(color: Colors.grey[400], blurRadius: 7.0, offset: Offset(0.0, 0.75)),
-                  ],
-                ),
-                child: FlatButton(
-                  onPressed: () {},
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(6))),
-                  color: Colors.green,
-                  child: Text(
-                    'Checkout',
-                    style: TextStyle(color: Colors.white, fontSize: 17),
-                  ),
-                ),
+                  widget.itemCards.length == 0
+                      ? Center(
+                          child: Text('Cart Empty'),
+                        )
+                      : Expanded(
+                          child: ListView(
+                            children: widget.itemCards,
+                          ),
+                        ),
+                  Container(
+                    height: 65,
+                    width: MediaQuery.of(context).size.width,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      boxShadow: [
+                        BoxShadow(color: Colors.grey[400], blurRadius: 7.0, offset: Offset(0.0, 0.75)),
+                      ],
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Container(
+                        height: 20,
+                        width: MediaQuery.of(context).size.width - 20,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.all(Radius.circular(6)),
+                          boxShadow: [
+                            BoxShadow(color: Colors.grey[400], blurRadius: 7.0, offset: Offset(0.0, 0.75)),
+                          ],
+                        ),
+                        child: FlatButton(
+                          onPressed: () {},
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(6))),
+                          color: Colors.green,
+                          child: Text(
+                            'Checkout',
+                            style: TextStyle(color: Colors.white, fontSize: 17),
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
               ),
-            ),
-          )
-        ],
-      ),
-    );
+            );
+          } else {
+            return Text('hello there');
+          }
+        });
   }
 }
